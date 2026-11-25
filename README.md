@@ -4,13 +4,14 @@ Portfolio web de POPUPS.
 
 ## Verlo localmente
 
-Abrir `index.html` en el navegador manteniendo las carpetas `assets`, `oficina-virtual` y `mi-amp` junto a los archivos HTML.
+Abrir `index.html` en el navegador manteniendo las carpetas `assets`, `appi`, `oficina-virtual` y `mi-amp` junto a los archivos HTML.
 
 ## Publicación
 
 Este repositorio está preparado para GitHub Pages. Las URLs previstas son:
 
 - Portfolio principal: https://somospopups.github.io/Portfolio/
+- Caso APPI: https://somospopups.github.io/Portfolio/appi/
 - Landing Oficina Virtual: https://somospopups.github.io/Portfolio/oficina-virtual/
 - Caso MI AMP: https://somospopups.github.io/Portfolio/mi-amp/
 
