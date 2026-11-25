@@ -1,0 +1,2971 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POPUPS · Caso 07 — MI AMP | Suite DSP de Guitarra y Bajo en C++20</title>
+  <meta name="description" content="Caso de estudio MI AMP por POPUPS Audio: suite dual de amplificación para guitarra y bajo en VST3, AU y Standalone. 18 cabezales, 19 cabinas con .WAV IR, 27 pedales boutique y motor DSP en C++20 / JUCE 8." />
+  <meta name="theme-color" content="#F2EEE6" />
+  <link rel="canonical" href="https://somospopups.github.io/Portfolio/mi-amp/" />
+
+  <!-- Open Graph / Social Share -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:site_name" content="POPUPS · Portfolio" />
+  <meta property="og:url" content="https://somospopups.github.io/Portfolio/mi-amp/" />
+  <meta property="og:title" content="MI AMP — También construimos instrumentos | POPUPS Audio" />
+  <meta property="og:description" content="Suite DSP de guitarra y bajo en C++20 / JUCE 8: 18 cabezales, 19 cabinas con carga .WAV IR, 27 pedales boutique y microfonía dual MI-57 / MI-87." />
+  <meta property="og:image" content="https://somospopups.github.io/Portfolio/mi-amp/assets/og-preview.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="MI AMP — Suite DSP de guitarra y bajo con cabezal Mint Tolex, caja 4x12 y pedal MI Green Drive" />
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MI AMP — También construimos instrumentos | POPUPS Audio" />
+  <meta name="twitter:description" content="18 cabezales, 19 cabinas con .WAV IR, 27 pedales boutique y microfonía dual en VST3, AU y Standalone." />
+  <meta name="twitter:image" content="https://somospopups.github.io/Portfolio/mi-amp/assets/og-preview.jpg" />
+
+  <style>
+    @font-face {
+      font-family: "Space Grotesk";
+      src: url("./assets/spacegrotesk.woff2") format("woff2");
+      font-weight: 400 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "DM Sans";
+      src: url("./assets/dmsans.woff2") format("woff2");
+      font-weight: 400 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Space Mono";
+      src: url("./assets/spacemono400.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Space Mono";
+      src: url("./assets/spacemono700.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --paper: #F2EEE6;
+      --paper-2: #FAF8F3;
+      --aluminum: #E7E1D4;
+      --ink: #141617;
+      --ink-soft: #4F5557;
+      --ink-faint: #7E8485;
+      --line: rgba(20, 22, 23, 0.14);
+      --line-strong: rgba(20, 22, 23, 0.28);
+      --chassis: #131618;
+      --chassis-2: #1B2023;
+      --chassis-line: rgba(242, 238, 230, 0.14);
+      --mint: #46A888;
+      --mint-bright: #8FD7BE;
+      --mint-bg: rgba(70, 168, 136, 0.12);
+      --signal: #DF5628;
+      --amber: #D2923E;
+      --brass: #B5955C;
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-sans: "DM Sans", system-ui, sans-serif;
+      --font-mono: "Space Mono", ui-monospace, monospace;
+      --max: 1220px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper);
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background-color: var(--paper);
+      background-image:
+        linear-gradient(to right, rgba(20, 22, 23, 0.045) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(20, 22, 23, 0.045) 1px, transparent 1px);
+      background-size: 40px 40px;
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+    img { display: block; max-width: 100%; }
+
+    /* Top scroll progress bar */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      z-index: 95;
+      background: rgba(20, 22, 23, 0.08);
+      pointer-events: none;
+    }
+
+    .scroll-progress-bar {
+      width: 100%;
+      height: 100%;
+      transform-origin: left center;
+      transform: scaleX(0);
+      background: linear-gradient(90deg, var(--signal) 0%, var(--amber) 38%, var(--mint) 100%);
+      will-change: transform;
+    }
+
+    /* Parallax drafting marks in outer margins */
+    .parallax-marks {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .pm-item {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: rgba(20, 22, 23, 0.24);
+      white-space: nowrap;
+      will-change: transform;
+    }
+
+    .pm-cross {
+      width: 12px;
+      height: 12px;
+      position: relative;
+      display: inline-block;
+    }
+    .pm-cross::before, .pm-cross::after {
+      content: "";
+      position: absolute;
+      background: rgba(20, 22, 23, 0.26);
+    }
+    .pm-cross::before { left: 5px; top: 0; width: 1px; height: 11px; }
+    .pm-cross::after { top: 5px; left: 0; width: 11px; height: 1px; }
+
+    @media (max-width: 1280px) {
+      .parallax-marks { display: none; }
+    }
+
+    /* Page layout container */
+    .container {
+      position: relative;
+      z-index: 2;
+      width: min(var(--max), calc(100% - 44px));
+      margin: 0 auto;
+    }
+
+    /* ==================== NAVIGATION (INDUSTRIAL PRECISION BAR) ==================== */
+    .topbar-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: rgba(242, 238, 230, 0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      width: min(var(--max), calc(100% - 44px));
+      margin: 0 auto;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .brand-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--signal);
+      box-shadow: 0 0 0 3px rgba(223, 86, 40, 0.16);
+      animation: pilotPulse 2.8s ease-in-out infinite;
+    }
+
+    @keyframes pilotPulse {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(223, 86, 40, 0.16); }
+      50%      { box-shadow: 0 0 0 6px rgba(223, 86, 40, 0.06); }
+    }
+
+    .brand-tag {
+      padding: 3px 7px;
+      border: 1px solid var(--line-strong);
+      font-size: 10px;
+      color: var(--ink-soft);
+      background: var(--paper-2);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .nav-links a {
+      padding: 6px 0;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: var(--mint);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.24s var(--ease);
+    }
+
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border: 1px solid var(--line-strong);
+      background: var(--paper-2);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s var(--ease);
+    }
+
+    .nav-back:hover {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+      transform: translateY(-1px);
+    }
+
+    .nav-menu-btn {
+      display: none;
+      padding: 8px 12px;
+      border: 1px solid var(--line-strong);
+      background: var(--paper-2);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+
+    .mobile-drawer {
+      display: none;
+      flex-direction: column;
+      background: var(--paper-2);
+      border-bottom: 1px solid var(--line-strong);
+      padding: 10px 22px 18px;
+    }
+
+    .mobile-drawer.open { display: flex; }
+
+    .mobile-drawer a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 4px;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .mobile-drawer a:last-child { border-bottom: 0; }
+    .mobile-drawer a.drawer-accent { color: var(--mint); font-weight: 700; }
+
+    /* Shared editorial elements */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: var(--signal);
+      display: inline-block;
+    }
+
+    .eyebrow.mint::before { background: var(--mint); }
+    .eyebrow.light { color: rgba(242, 238, 230, 0.72); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 46px;
+      padding: 0 20px;
+      border: 1px solid var(--ink);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: transform 0.22s var(--ease), background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--ink);
+      color: var(--paper);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary:hover {
+      background: var(--mint);
+      border-color: var(--mint);
+      color: var(--ink);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: var(--paper-2);
+      color: var(--ink);
+      border-color: var(--line-strong);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--ink);
+      background: var(--aluminum);
+      transform: translateY(-2px);
+    }
+
+    .btn-mint {
+      background: var(--mint);
+      border-color: var(--mint);
+      color: var(--ink);
+    }
+
+    .btn-mint:hover {
+      background: var(--mint-bright);
+      border-color: var(--mint-bright);
+      transform: translateY(-2px);
+    }
+
+    /* ==================== HERO (SWISS INDUSTRIAL HARDWARE EDITORIAL) ==================== */
+    .hero {
+      padding: 44px 0 64px;
+    }
+
+    .hero-head {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 36px;
+      align-items: end;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--line-strong);
+    }
+
+    .hero-logo-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .hero-jack-badge {
+      display: inline-flex;
+      align-items: center;
+      background: var(--chassis);
+      padding: 7px 14px;
+      border: 1px solid var(--ink);
+    }
+
+    .hero-jack-badge img {
+      height: 22px;
+      width: auto;
+    }
+
+    .hero-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(44px, 6.4vw, 84px);
+      font-weight: 700;
+      line-height: 0.94;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+
+    .hero-title span { color: var(--mint); }
+
+    .hero-aside {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .hero-lead {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.56;
+      color: var(--ink-soft);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    @keyframes heroSlideIn {
+      0%   { opacity: 0; transform: translateY(16px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-head > div:first-child { animation: heroSlideIn 0.6s var(--ease) 0.05s backwards; }
+    .hero-aside { animation: heroSlideIn 0.6s var(--ease) 0.16s backwards; }
+    .rig-workbench { animation: heroSlideIn 0.72s var(--ease) 0.26s backwards; }
+
+    /* ==================== INTERACTIVE INDUSTRIAL RIG BENCH ==================== */
+    .rig-workbench {
+      margin-top: 28px;
+      border: 1px solid var(--line-strong);
+      background: var(--paper-2);
+      perspective: 1200px;
+    }
+
+    .bench-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--aluminum);
+    }
+
+    .bench-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .inst-toggle {
+      display: inline-flex;
+      border: 1px solid var(--line-strong);
+      background: var(--paper-2);
+    }
+
+    .inst-btn {
+      border: 0;
+      background: transparent;
+      padding: 8px 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .inst-btn.active {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .bench-body {
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      min-height: 450px;
+    }
+
+    .bench-stage {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 36px 28px 28px;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(70, 168, 136, 0.11), transparent 62%),
+        linear-gradient(to right, rgba(20, 22, 23, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(20, 22, 23, 0.04) 1px, transparent 1px),
+        #ECE7DC;
+      background-size: 100% 100%, 24px 24px, 24px 24px, 100% 100%;
+      border-right: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .bench-ruler-top {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--ink-faint);
+      pointer-events: none;
+    }
+
+    .rig-stack-3d {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: min(560px, 94%);
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: opacity 0.26s ease, transform 0.26s var(--ease);
+    }
+
+    .rig-stack-3d.swapping {
+      opacity: 0.35;
+      transform: translateY(8px) scale(0.985) !important;
+    }
+
+    .rig-head-img {
+      width: 92%;
+      height: auto;
+      position: relative;
+      z-index: 3;
+      filter: drop-shadow(0 18px 24px rgba(15, 18, 19, 0.28));
+      cursor: zoom-in;
+      transition: transform 0.3s var(--ease);
+    }
+
+    .rig-head-img:hover { transform: translateY(-2px); }
+
+    .rig-cab-wrap {
+      width: 96%;
+      max-height: 215px;
+      overflow: hidden;
+      margin-top: -10px;
+      position: relative;
+      z-index: 2;
+      mask-image: linear-gradient(to bottom, #000 68%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, #000 68%, transparent 100%);
+    }
+
+    .rig-cab-img {
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 12px 18px rgba(15, 18, 19, 0.22));
+    }
+
+    .bench-head-strip {
+      position: relative;
+      z-index: 4;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 16px;
+    }
+
+    .head-pill {
+      border: 1px solid var(--line-strong);
+      background: rgba(250, 248, 243, 0.92);
+      padding: 7px 12px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      transition: all 0.18s ease;
+    }
+
+    .head-pill:hover { border-color: var(--ink); color: var(--ink); }
+    .head-pill.active {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+
+    .bench-spec {
+      padding: 26px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      background: var(--paper-2);
+    }
+
+    .spec-code {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--mint);
+      font-weight: 700;
+    }
+
+    .bench-spec h2 {
+      margin: 6px 0 8px;
+      font-family: var(--font-display);
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .bench-spec-sub {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--ink-soft);
+    }
+
+    .spec-table {
+      margin: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 12.5px;
+    }
+
+    .spec-row dt {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    .spec-row dd {
+      margin: 0;
+      font-weight: 700;
+      color: var(--ink);
+      text-align: right;
+    }
+
+    .bench-zoom-btn {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .bench-zoom-btn:hover { background: var(--mint-bg); border-color: var(--mint); }
+
+    /* Kinetic spec KPIs strip */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1px solid var(--line-strong);
+      border-top: 0;
+      background: var(--paper-2);
+    }
+
+    .kpi-cell {
+      padding: 22px 20px;
+      border-right: 1px solid var(--line);
+    }
+
+    .kpi-cell:last-child { border-right: 0; }
+
+    .kpi-val {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4vw, 46px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+
+    .kpi-lbl {
+      margin-top: 8px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    /* ==================== SECTIONS ==================== */
+    .section {
+      padding: 76px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 36px;
+    }
+
+    .section-head h2 {
+      margin: 12px 0 0;
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4.4vw, 54px);
+      font-weight: 700;
+      line-height: 0.98;
+      letter-spacing: -0.035em;
+    }
+
+    .section-head p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+
+    /* ==================== #CASO — HYBRID PORTFOLIO CASE STUDY ==================== */
+    .case-grid {
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap: 20px;
+    }
+
+    .case-card {
+      position: relative;
+      border: 1px solid var(--line-strong);
+      background: var(--paper-2);
+      padding: 30px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .case-card h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(24px, 2.8vw, 32px);
+      line-height: 1.06;
+      letter-spacing: -0.03em;
+    }
+
+    .case-card p {
+      margin: 0;
+      font-size: 14.5px;
+      line-height: 1.62;
+      color: var(--ink-soft);
+    }
+
+    .case-facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .case-fact {
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .case-fact small {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 5px;
+    }
+
+    .case-fact b {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 16.5px;
+      color: var(--ink);
+    }
+
+    .case-list {
+      list-style: none;
+      margin: 4px 0 0;
+      padding: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .case-list li {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 10px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13.5px;
+      line-height: 1.45;
+    }
+
+    .case-list li b {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--signal);
+    }
+
+    .tech-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: auto;
+      padding-top: 6px;
+    }
+
+    .tech-chips span {
+      padding: 6px 10px;
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    /* ==================== #DSP — DARK CHASSIS SIGNAL CHAIN & LIVE OSCILLOSCOPE ==================== */
+    .dsp-band {
+      background: var(--chassis);
+      color: var(--paper);
+      padding: 80px 0;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dsp-band .section-head h2 { color: var(--paper); }
+    .dsp-band .section-head p { color: rgba(242, 238, 230, 0.72); }
+
+    .scope-panel {
+      border: 1px solid var(--chassis-line);
+      background: var(--chassis-2);
+    }
+
+    .scope-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--chassis-line);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(242, 238, 230, 0.72);
+    }
+
+    .scope-telemetry {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .scope-telemetry strong { color: var(--mint-bright); }
+
+    .scope-canvas-wrap {
+      position: relative;
+      height: 210px;
+      background:
+        linear-gradient(to right, rgba(143, 215, 190, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(143, 215, 190, 0.06) 1px, transparent 1px),
+        #0D1011;
+      background-size: 36px 36px;
+    }
+
+    #dspScope {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .dsp-stages {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      border-top: 1px solid var(--chassis-line);
+    }
+
+    .stage-btn {
+      text-align: left;
+      padding: 18px 16px;
+      border: 0;
+      border-right: 1px solid var(--chassis-line);
+      background: transparent;
+      color: rgba(242, 238, 230, 0.72);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .stage-btn:last-child { border-right: 0; }
+    .stage-btn:hover { background: rgba(255, 255, 255, 0.04); color: var(--paper); }
+
+    .stage-btn.active {
+      background: rgba(70, 168, 136, 0.16);
+      color: var(--paper);
+      box-shadow: inset 0 3px 0 var(--mint-bright);
+    }
+
+    .stage-num {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--mint-bright);
+    }
+
+    .stage-btn.active .stage-num { color: var(--signal); }
+
+    .stage-title {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--paper);
+    }
+
+    .stage-module {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: rgba(242, 238, 230, 0.56);
+    }
+
+    .stage-detail {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 24px;
+      padding: 24px 22px;
+      border-top: 1px solid var(--chassis-line);
+      background: rgba(13, 16, 17, 0.65);
+      align-items: center;
+    }
+
+    .stage-detail h3 {
+      margin: 0 0 8px;
+      font-family: var(--font-display);
+      font-size: 22px;
+      color: var(--paper);
+    }
+
+    .stage-detail p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.58;
+      color: rgba(242, 238, 230, 0.78);
+    }
+
+    .stage-files {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .stage-files code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 6px 10px;
+      border: 1px solid rgba(143, 215, 190, 0.34);
+      background: rgba(70, 168, 136, 0.1);
+      color: var(--mint-bright);
+    }
+
+    /* ==================== #CATALOGO — HARDWARE GALLERY ==================== */
+    .cat-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .cat-tabs {
+      display: inline-flex;
+      border: 1px solid var(--line-strong);
+      background: var(--paper-2);
+    }
+
+    .cat-tab {
+      border: 0;
+      background: transparent;
+      padding: 10px 18px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .cat-tab.active { background: var(--ink); color: var(--paper); }
+
+    .cat-note {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--ink-soft);
+    }
+
+    .hw-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .hw-card {
+      border: 1px solid var(--line-strong);
+      background: var(--paper-2);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.26s var(--ease), border-color 0.2s ease, box-shadow 0.26s var(--ease);
+    }
+
+    .hw-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--ink);
+      box-shadow: 0 18px 36px rgba(20, 22, 23, 0.09);
+    }
+
+    .hw-stage {
+      height: 230px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 50% 55%, rgba(20, 22, 23, 0.05), transparent 65%),
+        var(--aluminum);
+      border-bottom: 1px solid var(--line);
+      cursor: zoom-in;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hw-stage img {
+      max-height: 185px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 18px rgba(15, 18, 19, 0.25));
+      transition: transform 0.35s var(--ease);
+    }
+
+    .hw-card:hover .hw-stage img { transform: scale(1.035); }
+
+    .hw-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 4px 8px;
+      background: rgba(250, 248, 243, 0.9);
+      border: 1px solid var(--line-strong);
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .hw-meta {
+      padding: 18px 20px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 14px;
+    }
+
+    .hw-meta h3 {
+      margin: 0 0 4px;
+      font-family: var(--font-display);
+      font-size: 21px;
+      letter-spacing: -0.02em;
+    }
+
+    .hw-meta p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+
+    .hw-zoom-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mint);
+      white-space: nowrap;
+    }
+
+    .cab-strip {
+      margin-top: 22px;
+      padding: 20px 22px;
+      border: 1px solid var(--line-strong);
+      background: var(--paper-2);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .cab-thumbs {
+      display: flex;
+      gap: 14px;
+      align-items: flex-end;
+    }
+
+    .cab-thumbs img {
+      height: 82px;
+      width: auto;
+      filter: drop-shadow(0 8px 12px rgba(20, 22, 23, 0.2));
+      cursor: zoom-in;
+      transition: transform 0.22s var(--ease);
+    }
+
+    .cab-thumbs img:hover { transform: translateY(-4px) scale(1.04); }
+
+    .cab-strip h3 {
+      margin: 0 0 6px;
+      font-family: var(--font-display);
+      font-size: 20px;
+    }
+
+    .cab-strip p {
+      margin: 0;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+    }
+
+    /* ==================== #MICROFONIA — DUAL MIC INTERACTIVE LAB ==================== */
+    .mic-lab {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      border: 1px solid var(--line-strong);
+      background: var(--paper-2);
+    }
+
+    .mic-visual {
+      position: relative;
+      min-height: 360px;
+      padding: 28px;
+      background:
+        radial-gradient(circle at 28% 54%, rgba(223, 86, 40, 0.14), transparent 48%),
+        radial-gradient(circle at 74% 48%, rgba(70, 168, 136, 0.16), transparent 50%),
+        var(--chassis);
+      color: var(--paper);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      gap: 18px;
+      overflow: hidden;
+    }
+
+    .mic-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.28s var(--ease), opacity 0.28s ease;
+    }
+
+    .mic-unit img {
+      max-height: 195px;
+      width: auto;
+      filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.55));
+    }
+
+    .mic-unit.mi57 img { max-height: 105px; transform: rotate(-16deg); }
+
+    .mic-tag {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid rgba(242, 238, 230, 0.26);
+      background: rgba(19, 22, 24, 0.78);
+    }
+
+    .mic-controls {
+      padding: 30px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .eq-graph-box {
+      border: 1px solid var(--line);
+      background: var(--paper);
+      padding: 12px 14px 8px;
+    }
+
+    .eq-graph-head {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 6px;
+    }
+
+    .eq-graph-svg {
+      width: 100%;
+      height: 112px;
+      display: block;
+    }
+
+    .fader-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .fader-top {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .fader-top span:last-child { color: var(--mint); }
+
+    input[type="range"].studio-range {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: var(--aluminum);
+      border: 1px solid var(--line-strong);
+      outline: none;
+    }
+
+    input[type="range"].studio-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 24px;
+      background: var(--ink);
+      border: 2px solid var(--paper-2);
+      cursor: ew-resize;
+    }
+
+    input[type="range"].studio-range::-moz-range-thumb {
+      width: 18px;
+      height: 24px;
+      border-radius: 0;
+      background: var(--ink);
+      border: 2px solid var(--paper-2);
+      cursor: ew-resize;
+    }
+
+    /* ==================== #PEDALES — BOUTIQUE STOMPBOX CATALOG ==================== */
+    .pedal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .pedal-card {
+      border: 1px solid var(--line-strong);
+      background: var(--paper-2);
+      padding: 22px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.24s var(--ease), border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .pedal-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--ink);
+    }
+
+    .pedal-card.bypassed img {
+      filter: grayscale(0.45) brightness(0.76) drop-shadow(0 8px 12px rgba(20, 22, 23, 0.14));
+    }
+
+    .pedal-top-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    .pedal-led {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .pedal-led i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--signal);
+      box-shadow: 0 0 10px rgba(223, 86, 40, 0.85);
+      transition: background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .pedal-card.bypassed .pedal-led { color: var(--ink-faint); }
+    .pedal-card.bypassed .pedal-led i {
+      background: #9DA3A4;
+      box-shadow: none;
+    }
+
+    .pedal-img-wrap {
+      height: 185px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pedal-img-wrap img {
+      max-height: 176px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 14px 18px rgba(20, 22, 23, 0.24));
+      transition: filter 0.22s ease, transform 0.25s var(--ease);
+    }
+
+    .pedal-card:hover .pedal-img-wrap img { transform: scale(1.04); }
+
+    .pedal-card h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 19px;
+      letter-spacing: -0.02em;
+    }
+
+    .pedal-card p {
+      margin: 0;
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: var(--ink-soft);
+    }
+
+    .pedal-footer-note {
+      margin-top: 18px;
+      padding: 16px 20px;
+      border: 1px solid var(--line);
+      background: var(--aluminum);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--ink-soft);
+    }
+
+    /* ==================== #CONTACTO — EDITORIAL POPUPS CTA ==================== */
+    .cta-card {
+      border: 1px solid var(--ink);
+      background: var(--paper-2);
+      padding: 44px 40px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .cta-card h2 {
+      margin: 12px 0 12px;
+      font-family: var(--font-display);
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 0.98;
+      letter-spacing: -0.035em;
+    }
+
+    .cta-card p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--ink-soft);
+      max-width: 560px;
+    }
+
+    .cta-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cta-meta {
+      margin-top: 4px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      color: var(--ink-faint);
+    }
+
+    /* ==================== SIGUIENTE CASO (CIRCULAR 07 -> 01 APPI) ==================== */
+    .next-case-band {
+      margin-top: 56px;
+      padding: 44px 38px;
+      color: var(--paper);
+      border: 1px solid var(--ink);
+      background: linear-gradient(135deg, #161926 0%, #273447 52%, #3B7C6A 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .next-case-band::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, rgba(242, 238, 230, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(242, 238, 230, 0.06) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+
+    .next-case-top {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(242, 238, 230, 0.18);
+    }
+
+    .next-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--mint-bright);
+    }
+
+    .next-kicker::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: #C8F810;
+    }
+
+    .next-prev {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(242, 238, 230, 0.76);
+      transition: color 0.2s ease;
+    }
+
+    .next-prev:hover { color: #C8F810; }
+
+    .next-inner {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .next-copy { max-width: 610px; }
+
+    .next-copy h2 {
+      margin: 0 0 10px;
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4.6vw, 56px);
+      line-height: 0.96;
+      letter-spacing: -0.035em;
+      color: #fff;
+    }
+
+    .next-copy p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.52;
+      color: rgba(242, 238, 230, 0.82);
+    }
+
+    .next-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-next-lime {
+      background: #C8F810;
+      border-color: #C8F810;
+      color: var(--ink);
+    }
+
+    .btn-next-lime:hover {
+      background: #DCFF4F;
+      border-color: #DCFF4F;
+      transform: translateY(-2px);
+    }
+
+    .btn-next-ghost {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(242, 238, 230, 0.34);
+      color: var(--paper);
+    }
+
+    .btn-next-ghost:hover {
+      border-color: var(--paper);
+      background: rgba(255, 255, 255, 0.16);
+      transform: translateY(-2px);
+    }
+
+    /* ==================== FOOTER ==================== */
+    .footer {
+      padding: 28px 0 42px;
+      margin-top: 24px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a:hover { color: var(--ink); text-decoration: underline; }
+
+    /* ==================== LIGHTBOX ==================== */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background: rgba(14, 17, 18, 0.9);
+      backdrop-filter: blur(12px);
+    }
+
+    .lightbox.open { display: grid; }
+
+    .lightbox-box {
+      width: min(980px, 95vw);
+      background: var(--chassis-2);
+      border: 1px solid rgba(242, 238, 230, 0.25);
+      overflow: hidden;
+    }
+
+    .lightbox-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--chassis-line);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--paper);
+    }
+
+    .lightbox-close {
+      border: 1px solid rgba(242, 238, 230, 0.35);
+      background: transparent;
+      color: var(--paper);
+      padding: 5px 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .lightbox-close:hover { background: var(--mint); color: var(--ink); border-color: var(--mint); }
+
+    .lightbox-img-wrap {
+      padding: 28px;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 50% 50%, rgba(70, 168, 136, 0.12), transparent 65%), #0D1011;
+    }
+
+    .lightbox-img-wrap img {
+      max-height: 70vh;
+      width: auto;
+      object-fit: contain;
+    }
+
+
+    .bench-cue {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 4px 10px;
+      border: 1px solid rgba(70, 168, 136, 0.45);
+      background: rgba(70, 168, 136, 0.12);
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      transition: opacity 0.35s ease;
+    }
+    .bench-cue.done { opacity: 0; pointer-events: none; }
+    .bench-cue::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--mint);
+    }
+
+    .spec-matrix {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .matrix-box {
+      border: 1px solid var(--line-strong);
+      background: var(--paper-2);
+      padding: 20px 22px;
+    }
+
+    .matrix-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--line-strong);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .matrix-head span:last-child { color: var(--mint); }
+
+    .matrix-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .matrix-list li {
+      padding: 7px 9px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--ink);
+    }
+
+    .matrix-sub {
+      margin: 12px 0 0;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--ink-soft);
+    }
+
+    @media (max-width: 960px) {
+      .spec-matrix { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      .matrix-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      transition-delay: var(--rev-delay, 0ms);
+    }
+
+    .reveal.in-view { opacity: 1; transform: none; }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .nav-links, .nav-back { display: none; }
+      .nav-menu-btn { display: inline-flex; }
+      .hero-head, .bench-body, .section-head, .case-grid, .stage-detail, .mic-lab, .cta-card {
+        grid-template-columns: 1fr;
+      }
+      .bench-stage { border-right: 0; border-bottom: 1px solid var(--line); }
+      .kpi-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .kpi-cell { border-bottom: 1px solid var(--line); }
+      .dsp-stages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stage-btn { border-bottom: 1px solid var(--chassis-line); }
+      .stage-files { justify-content: flex-start; }
+      .pedal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cab-strip { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      .container, .topbar { width: calc(100% - 28px); }
+      .hero { padding: 28px 0 44px; }
+      .section, .dsp-band { padding: 56px 0; }
+      .hw-grid, .pedal-grid, .case-facts, .dsp-stages { grid-template-columns: 1fr; }
+      .cta-card, .next-case-band { padding: 28px 20px; }
+      .hero-actions .btn, .next-actions .btn { width: 100%; }
+      .mic-visual { flex-direction: column; min-height: 300px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .hero-head > div:first-child, .hero-aside, .rig-workbench, .brand-dot { animation: none !important; }
+      .parallax-marks { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" id="scrollProgress"></div></div>
+
+  <!-- Marcas técnicas de parallax en márgenes exteriores -->
+  <div class="parallax-marks" aria-hidden="true">
+    <span class="pm-item" data-depth="0.16" style="left:1.6%;top:18%">48.0 KHZ // DSP</span>
+    <span class="pm-item" data-depth="0.28" style="left:1.9%;top:50%"><span class="pm-cross"></span></span>
+    <span class="pm-item" data-depth="0.22" style="left:1.6%;top:80%">VST3 · AU</span>
+    <span class="pm-item" data-depth="0.20" style="right:1.6%;top:24%">SPEC 07.A</span>
+    <span class="pm-item" data-depth="0.30" style="right:1.9%;top:58%"><span class="pm-cross"></span></span>
+    <span class="pm-item" data-depth="0.18" style="right:1.6%;top:86%">64-BIT FLOAT</span>
+  </div>
+
+  <!-- ==================== NAVEGACIÓN ==================== -->
+  <div class="topbar-wrap" id="top">
+    <header class="topbar">
+      <a href="#top" class="brand">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span>MI AMP</span>
+        <span class="brand-tag">CASO 07</span>
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links">
+          <li><a href="#rig">Hardware</a></li>
+          <li><a href="#caso">El caso</a></li>
+          <li><a href="#dsp">Motor DSP</a></li>
+          <li><a href="#catalogo">Catálogo</a></li>
+          <li><a href="#microfonia">Micros</a></li>
+          <li><a href="#pedales">Pedales</a></li>
+        </ul>
+      </nav>
+
+      <a href="../#proyectos" class="nav-back">← Volver a proyectos</a>
+      <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="mobileDrawer">☰ MENÚ</button>
+    </header>
+
+    <nav class="mobile-drawer" id="mobileDrawer" aria-label="Menú móvil">
+      <a href="#rig"><span>01 · Banco de hardware</span><span>→</span></a>
+      <a href="#caso"><span>02 · El caso de estudio</span><span>→</span></a>
+      <a href="#dsp"><span>03 · Arquitectura DSP</span><span>→</span></a>
+      <a href="#catalogo"><span>04 · Cabezales y cabinas</span><span>→</span></a>
+      <a href="#microfonia"><span>05 · Microfonía dual</span><span>→</span></a>
+      <a href="#pedales"><span>06 · Pedales boutique</span><span>→</span></a>
+      <a href="../#proyectos" class="drawer-accent"><span>← Volver a proyectos POPUPS</span><span>↗</span></a>
+    </nav>
+  </div>
+
+  <main>
+    <!-- ==================== HERO EDITORIAL ==================== -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-head">
+          <div>
+            <div class="hero-logo-row">
+              <p class="eyebrow">CASO 07 · AUDIO CREATIVO · C++20 / JUCE 8</p>
+              <span class="hero-jack-badge"><img src="./assets/miamp_logo.webp" alt="Logotipo MI AMP con plug jack" /></span>
+            </div>
+            <h1 class="hero-title">También construimos<br /><span>instrumentos.</span></h1>
+          </div>
+
+          <div class="hero-aside">
+            <p class="hero-lead">
+              <strong>MI AMP</strong> es la suite de amplificación dual para guitarra y bajo desarrollada por <strong>POPUPS Audio</strong> en VST3, AU y Standalone: ingeniería DSP nativa envuelta en una interfaz fotorealista lista para enchufar y tocar.
+            </p>
+            <div class="hero-actions">
+              <a href="#caso" class="btn btn-primary">Leer el caso ↓</a>
+              <a href="#contacto" class="btn btn-secondary">Hablemos de tu producto ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- BANCO INTERACTIVO DE HARDWARE REAL (GUITARRA ↔ BAJO) -->
+        <div class="rig-workbench" id="rig" aria-label="Inspector interactivo de hardware real MI AMP">
+          <div class="bench-bar">
+            <span class="bench-label">BANCO DE HARDWARE REAL // INSPECTOR DE RIG <span class="bench-cue" id="benchCue">Probá cambiar cabezal</span></span>
+            <div class="inst-toggle" role="tablist" aria-label="Elegir instrumento">
+              <button type="button" class="inst-btn active" data-inst="guitar" role="tab" aria-selected="true">Guitarra · 9 cabezales</button>
+              <button type="button" class="inst-btn" data-inst="bass" role="tab" aria-selected="false">Bajo · 9 cabezales</button>
+            </div>
+          </div>
+
+          <div class="bench-body">
+            <div class="bench-stage" id="benchStage">
+              <div class="bench-ruler-top">
+                <span id="rulerLeft">CHASSIS 1:1 // 32-BIT RGBA</span>
+                <span id="rulerRight">POSICIÓN: STAGE PRINCIPAL</span>
+              </div>
+
+              <div class="rig-stack-3d" id="rigStack">
+                <img src="./assets/head_gtr_classic.webp" alt="Cabezal MI AMP CLASSIC en tolex menta" class="rig-head-img" id="rigHeadImg" />
+                <div class="rig-cab-wrap">
+                  <img src="./assets/cab_gtr_mint.webp" alt="Cabina 4x12 MI CLASSIC" class="rig-cab-img" id="rigCabImg" />
+                </div>
+              </div>
+
+              <div class="bench-head-strip" id="benchHeadStrip" aria-label="Seleccionar cabezal"></div>
+            </div>
+
+            <div class="bench-spec">
+              <div>
+                <span class="spec-code" id="specCode">SPEC 07.G01 // GUITARRA</span>
+                <h2 id="specName">MI AMP CLASSIC</h2>
+                <p class="bench-spec-sub" id="specSub">Signature 3-Channel California Mint. Tolex menta, placa de bronce cepillado y tres canales independientes con controles dinámicos.</p>
+              </div>
+
+              <dl class="spec-table">
+                <div class="spec-row"><dt>Topología</dt><dd id="specTopo">3 canales · Clean / Crunch / Lead</dd></div>
+                <div class="spec-row"><dt>Cabina emparejada</dt><dd id="specCab">4x12 MI CLASSIC (Mint Tolex)</dd></div>
+                <div class="spec-row"><dt>Controles en panel</dt><dd id="specCtrls">19 perillas + 2 switches reales</dd></div>
+                <div class="spec-row"><dt>Microfonía</dt><dd>Dual MI-57 + MI-87 · Custom .WAV IR</dd></div>
+              </dl>
+
+              <button type="button" class="bench-zoom-btn" id="benchZoomBtn">Ampliar hardware en alta resolución ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- MÉTRICAS CINÉTICAS DE INGENIERÍA -->
+        <div class="kpi-strip" id="kpiStrip">
+          <div class="kpi-cell">
+            <div class="kpi-val" data-count="18" data-suffix="">18</div>
+            <div class="kpi-lbl">Cabezales modelados (9 Gtr + 9 Bajo)</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-val" data-count="19" data-suffix="">19</div>
+            <div class="kpi-lbl">Cabinas + carga Custom .WAV IR</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-val" data-count="27" data-suffix="">27</div>
+            <div class="kpi-lbl">Pedales boutique (13 Gtr + 14 Bajo)</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-val" data-count="296" data-suffix="+">296+</div>
+            <div class="kpi-lbl">Parámetros DSP en tiempo real</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #CASO — FICHA DEL CASO DE ESTUDIO ==================== -->
+    <section class="section" id="caso">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">CASO 07 · DEL DESAFÍO A LA SUITE NATIVA</p>
+            <h2>Complejidad de estudio. Inmediatez de equipo real.</h2>
+          </div>
+          <p>
+            Construimos MI AMP de punta a punta: motor de audio en C++20, modelado de topologías, dirección de arte hardware, sistema de UI en Vidrio Equilibrado y compilación multiplataforma para Windows y macOS.
+          </p>
+        </div>
+
+        <div class="case-grid">
+          <article class="case-card">
+            <p class="eyebrow mint">07.A · EL DESAFÍO Y LA SOLUCIÓN</p>
+            <h3>Domar casi 300 parámetros DSP sin intimidar al músico.</h3>
+            <p>
+              Las herramientas de audio profesional suelen ser poderosas y, al mismo tiempo, abrumadoras: menús técnicos interminables y poca claridad visual. La oportunidad estaba en convertir un motor DSP profundo en un escenario limpio donde cada perilla, switch, pedal y micrófono se entiende al instante.
+            </p>
+            <p>
+              Diseñamos una arquitectura visual unificada sobre un escenario de <code>1550 × 768</code> con transición suave entre <strong>Guitarra</strong> y <strong>Bajo</strong>, un sistema propio de paneles translúcidos (<strong>Vidrio Equilibrado</strong> legible sobre fondo claro), buscador inteligente <strong>Tone Finder</strong> y blindaje de seguridad anti-acople para tocar en modo Standalone sin DAW.
+            </p>
+            <div class="tech-chips" aria-label="Tecnologías utilizadas">
+              <span>C++20</span>
+              <span>JUCE 8</span>
+              <span>DSP &amp; Convolución IR</span>
+              <span>VST3 · AU · Standalone</span>
+              <span>Windows &amp; macOS</span>
+              <span>Diseño Hardware 2.5D</span>
+            </div>
+          </article>
+
+          <aside class="case-card">
+            <p class="eyebrow">07.B · FICHA DEL PROYECTO</p>
+            <div class="case-facts">
+              <div class="case-fact"><small>Tipo</small><b>Suite Guitar + Bass</b></div>
+              <div class="case-fact"><small>Formatos</small><b>VST3 · AU · Standalone</b></div>
+              <div class="case-fact"><small>Motor</small><b>C++20 · JUCE 8 · DSP</b></div>
+              <div class="case-fact"><small>Estado</small><b>Producto activo</b></div>
+            </div>
+            <ul class="case-list">
+              <li><b>01</b><span>18 topologías de cabezales con preamp, tone stack, sag de potencia y GEQ</span></li>
+              <li><b>02</b><span>Selector unificado de cabinas y microfonía dual (MI-57 / MI-87 + .WAV IR)</span></li>
+              <li><b>03</b><span>Pedalboard cenital drag-and-drop con cadena dinámica de 10 slots y 27 pedales</span></li>
+              <li><b>04</b><span>Afinador cromático, Pitch Shifter / Drop polifónico y rack Studio FX master</span></li>
+              <li><b>05</b><span>Protección anti-acople y filtrado de micrófonos integrados en modo Standalone</span></li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #DSP — ARQUITECTURA & OSCILOSCOPIO EN VIVO ==================== -->
+    <section class="dsp-band" id="dsp" aria-label="Arquitectura de señal DSP de MI AMP">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow light">ARQUITECTURA DSP // CADENA DE SEÑAL EN C++20</p>
+            <h2>Cinco etapas de procesamiento, cero latencia percibida.</h2>
+          </div>
+          <p>
+            Tocá cada etapa del flujo de audio para inspeccionar cómo se transforma la señal desde el jack de entrada hasta el master estéreo y qué módulos reales de C++ la procesan.
+          </p>
+        </div>
+
+        <div class="scope-panel">
+          <div class="scope-top">
+            <span id="scopeStageLabel">ETAPA 03 // PREAMP &amp; POWER AMP VALVULAR</span>
+            <div class="scope-telemetry">
+              <span>THD: <strong id="scopeThd">4.8 %</strong></span>
+              <span>RANGO: <strong id="scopeRange">80 Hz – 6.4 kHz</strong></span>
+              <span>PRECISIÓN: <strong>FLOAT 32/64</strong></span>
+            </div>
+          </div>
+
+          <div class="scope-canvas-wrap">
+            <canvas id="dspScope" aria-label="Osciloscopio interactivo de la etapa DSP seleccionada"></canvas>
+          </div>
+
+          <div class="dsp-stages" role="tablist" aria-label="Etapas DSP">
+            <button type="button" class="stage-btn" data-stage="0">
+              <span class="stage-num">01 · INPUT</span>
+              <span class="stage-title">Entrada &amp; Blindaje</span>
+              <span class="stage-module">Tuner + Drop + Gate</span>
+            </button>
+            <button type="button" class="stage-btn" data-stage="1">
+              <span class="stage-num">02 · STOMP</span>
+              <span class="stage-title">Pedalboard 10 Slots</span>
+              <span class="stage-module">27 pedales dinámicos</span>
+            </button>
+            <button type="button" class="stage-btn active" data-stage="2">
+              <span class="stage-num">03 · AMP</span>
+              <span class="stage-title">Cabezal Valvular</span>
+              <span class="stage-module">18 topologías reales</span>
+            </button>
+            <button type="button" class="stage-btn" data-stage="3">
+              <span class="stage-num">04 · CAB/IR</span>
+              <span class="stage-title">Cabina &amp; Micros</span>
+              <span class="stage-module">MI-57/87 + .WAV IR</span>
+            </button>
+            <button type="button" class="stage-btn" data-stage="4">
+              <span class="stage-num">05 · MASTER</span>
+              <span class="stage-title">Studio FX &amp; Limiter</span>
+              <span class="stage-module">EQ · Delay · Reverb</span>
+            </button>
+          </div>
+
+          <div class="stage-detail">
+            <div>
+              <h3 id="stageDetailTitle">Modelado de 18 cabezales independientes para guitarra y bajo</h3>
+              <p id="stageDetailDesc">
+                Cada modelo replica su estructura de ganancia, curva de ecualización, compresión de válvulas de potencia (sag), controles de presencia/resonancia y funciones específicas como el GEQ de 9 bandas en PRO-450 o el doble motor Microtubes en M-900.
+              </p>
+            </div>
+            <div class="stage-files" id="stageFiles">
+              <code>MiAmpGuitarChainDSP.h</code>
+              <code>MiAmpBassChainDSP.h</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #CATALOGO — HARDWARE REAL ==================== -->
+    <section class="section" id="catalogo">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">GALERÍA DE HARDWARE // RENDER REAL DEL PLUGIN</p>
+            <h2>Cada perilla, switch y fader calibrado al milímetro.</h2>
+          </div>
+          <p>
+            El catálogo visual de MI AMP mapea cada chasis con coordenadas normalizadas para controles reales: perillas boutique, llaves rocker, toggles cromados y faders gráficos. Tocá cualquier unidad para ampliarla.
+          </p>
+        </div>
+
+        <div class="cat-controls">
+          <div class="cat-tabs" role="tablist" aria-label="Filtrar catálogo de cabezales">
+            <button type="button" class="cat-tab active" data-cat="guitar">Guitarra (Selección 4 de 9)</button>
+            <button type="button" class="cat-tab" data-cat="bass">Bajo (Selección 4 de 9)</button>
+          </div>
+          <span class="cat-note">Catálogo completo en la suite: 18 cabezales + 19 cabinas + .WAV IR</span>
+        </div>
+
+        <div class="hw-grid" id="hwGrid"></div>
+
+        <div class="cab-strip">
+          <div class="cab-thumbs">
+            <img src="./assets/cab_gtr_mint.webp" alt="Cabina 4x12 MI CLASSIC" data-zoom-title="4x12 MI CLASSIC · Mint Tolex Original Stack" />
+            <img src="./assets/cab_gtr_green.webp" alt="Cabina 4x12 GREENBACK" data-zoom-title="4x12 GREENBACK · British 25W Warm Punch" />
+            <img src="./assets/cab_bass_mint.webp" alt="Cabina 8x10 MI CLASSIC" data-zoom-title="8x10 MI CLASSIC · Mint Tolex Original Fridge" />
+            <img src="./assets/cab_bass_tangerine.webp" alt="Cabina 8x10 TANGERINE" data-zoom-title="8x10 TANGERINE · Warm Stoner Low-Mid Growl" />
+          </div>
+          <div>
+            <h3>19 cabinas reales + cargador externo de impulsos .WAV IR y salida Direct DI</h3>
+            <p>
+              Desde las 4×12 Greenback, Brit V30, Oversized y 2×12 Class-A en guitarra hasta las 1×15 Vintage, 4×10 Touring y 8×10 Classic/Mint en bajo, más carga instantánea de archivos <code>.wav</code> externos o bypass limpio <strong>CAB OFF / DIRECT DI</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="spec-matrix" aria-label="Inventario completo de cabezales y cabinas de MI AMP">
+          <div class="matrix-box">
+            <div class="matrix-head"><span>Catálogo Guitarra · 9 Cabezales</span><span>+ 10 Cabinas</span></div>
+            <ul class="matrix-list">
+              <li>MI AMP CLASSIC</li>
+              <li>MI AMP 800</li>
+              <li>PLEXI 1968</li>
+              <li>RECTO DUAL</li>
+              <li>HG-120</li>
+              <li>AC-30 CLASS-A</li>
+              <li>ROCKER</li>
+              <li>BE-100</li>
+              <li>TWIN 65</li>
+            </ul>
+            <p class="matrix-sub"><strong>Cabinas Guitarra:</strong> 4×12 Greenback, 4×12 Brit V30, 4×12 Oversized, 4×12 Hi-Gain, 2×12 Class-A, 4×12 Tangerine, 2×12 Blackface, 4×12 MI Classic, Custom .WAV IR y Cab Off.</p>
+          </div>
+
+          <div class="matrix-box">
+            <div class="matrix-head"><span>Catálogo Bajo · 9 Cabezales</span><span>+ 9 Cabinas</span></div>
+            <ul class="matrix-list">
+              <li>CLASSIC BASS</li>
+              <li>CL-300 6550</li>
+              <li>PRO-450 GEQ</li>
+              <li>BASSMAN 1968</li>
+              <li>RB-800 BI-AMP</li>
+              <li>M-900 DUAL</li>
+              <li>B-15 FLIP-TOP</li>
+              <li>OR-200 TUBE</li>
+              <li>DB-750 HYBRID</li>
+            </ul>
+            <p class="matrix-sub"><strong>Cabinas Bajo:</strong> 1×15 Vintage, 4×10 Touring, 4×10 Hi-Punch, 6×10 Heavy, 8×10 Classic, 8×10 Tangerine, 8×10 MI Classic, Custom .WAV IR y Cab Off / Direct DI.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #MICROFONIA — LAB INTERACTIVO MI-57 ↔ MI-87 ==================== -->
+    <section class="section" id="microfonia">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow mint">CAPTURA DUAL // CONVOLUCIÓN + AMBIENTE</p>
+            <h2>Dos micrófonos clásicos. Una curva en tus manos.</h2>
+          </div>
+          <p>
+            Combiná el ataque directo y el mordiente en medios del dinámico <strong>MI-57</strong> con el cuerpo grave y el aire extendido del condensador de diafragma grande <strong>MI-87</strong>, sumando ambiente de sala en tiempo real.
+          </p>
+        </div>
+
+        <div class="mic-lab">
+          <div class="mic-visual">
+            <div class="mic-unit mi57" id="mic57Unit">
+              <img src="./assets/mic_mi57.webp" alt="Micrófono dinámico MI-57" />
+              <span class="mic-tag">MI-57 // DINÁMICO</span>
+            </div>
+            <div class="mic-unit mi87" id="mic87Unit">
+              <img src="./assets/mic_mi87.webp" alt="Micrófono condensador MI-87" />
+              <span class="mic-tag">MI-87 // CONDENSADOR</span>
+            </div>
+          </div>
+
+          <div class="mic-controls">
+            <div class="eq-graph-box">
+              <div class="eq-graph-head">
+                <span>RESPUESTA EN FRECUENCIA (SIMULACIÓN VISUAL)</span>
+                <span id="micBalanceTag">50% MI-57 / 50% MI-87</span>
+              </div>
+              <svg class="eq-graph-svg" viewBox="0 0 420 112" aria-label="Curva de respuesta de mezcla de micrófonos">
+                <line x1="0" y1="28" x2="420" y2="28" stroke="rgba(20,22,23,0.1)" stroke-dasharray="3 3" />
+                <line x1="0" y1="56" x2="420" y2="56" stroke="rgba(20,22,23,0.18)" />
+                <line x1="0" y1="84" x2="420" y2="84" stroke="rgba(20,22,23,0.1)" stroke-dasharray="3 3" />
+                <path id="eqFillPath" d="" fill="rgba(70,168,136,0.16)" />
+                <path id="eqCurvePath" d="" fill="none" stroke="#141617" stroke-width="2.4" stroke-linejoin="round" />
+                <text x="6" y="106" font-family="Space Mono, monospace" font-size="8.5" fill="#7E8485">60Hz</text>
+                <text x="115" y="106" font-family="Space Mono, monospace" font-size="8.5" fill="#7E8485">250Hz</text>
+                <text x="215" y="106" font-family="Space Mono, monospace" font-size="8.5" fill="#7E8485">1.5kHz</text>
+                <text x="315" y="106" font-family="Space Mono, monospace" font-size="8.5" fill="#7E8485">5kHz</text>
+                <text x="385" y="106" font-family="Space Mono, monospace" font-size="8.5" fill="#7E8485">16kHz</text>
+              </svg>
+            </div>
+
+            <div class="fader-row">
+              <div class="fader-top">
+                <label for="micMixSlider">MIC MIX · MI-57 ↔ MI-87</label>
+                <span id="micMixVal">50 %</span>
+              </div>
+              <input type="range" id="micMixSlider" class="studio-range" min="0" max="100" value="50" />
+            </div>
+
+            <div class="fader-row">
+              <div class="fader-top">
+                <label for="roomSlider">ROOM · AMBIENTE DE SALA</label>
+                <span id="roomVal">24 %</span>
+              </div>
+              <input type="range" id="roomSlider" class="studio-range" min="0" max="100" value="24" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #PEDALES — PEDALBOARD BOUTIQUE ==================== -->
+    <section class="section" id="pedales">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">PEDALBOARD CENITAL // 27 PEDALES BOUTIQUE</p>
+            <h2>Tocá el footswitch para activar o poner en bypass.</h2>
+          </div>
+          <p>
+            El modo piso ofrece un pedalboard drag-and-drop con 10 slots reordenables: compresores, overdrives, fuzz, preamps DI de bajo, octavadores, EQ gráfico, chorus, phaser, delay y reverb de estudio.
+          </p>
+        </div>
+
+        <div class="pedal-grid" id="pedalGrid">
+          <article class="pedal-card" data-pedal="green" tabindex="0" role="button" aria-pressed="true">
+            <div class="pedal-top-bar"><span>SLOT 01 · GUITARRA</span><span class="pedal-led"><i></i><em>ON</em></span></div>
+            <div class="pedal-img-wrap"><img src="./assets/ped_green_drive.webp" alt="Pedal MI Green Drive Overdrive" /></div>
+            <h3>MI Green Drive</h3>
+            <p>Overdrive clásico con selector de clipping simétrico/asimétrico para empujar el preamp.</p>
+          </article>
+
+          <article class="pedal-card" data-pedal="bassdriver" tabindex="0" role="button" aria-pressed="true">
+            <div class="pedal-top-bar"><span>SLOT 02 · BAJO</span><span class="pedal-led"><i></i><em>ON</em></span></div>
+            <div class="pedal-img-wrap"><img src="./assets/ped_bass_driver.webp" alt="Pedal MI Bass Driver Preamp DI" /></div>
+            <h3>MI Bass Driver</h3>
+            <p>Preamp valvular analógico con Blend limpio/saturado, Presence y salida XLR DI.</p>
+          </article>
+
+          <article class="pedal-card" data-pedal="icecomp" tabindex="0" role="button" aria-pressed="true">
+            <div class="pedal-top-bar"><span>SLOT 03 · DINÁMICA</span><span class="pedal-led"><i></i><em>ON</em></span></div>
+            <div class="pedal-img-wrap"><img src="./assets/ped_ice_comp.webp" alt="Pedal MI Ice Comp Sustainer" /></div>
+            <h3>MI Ice Comp</h3>
+            <p>Compresor y sustainer transparente con control preciso de Attack, Tone y Sustain.</p>
+          </article>
+
+          <article class="pedal-card bypassed" data-pedal="dualcrunch" tabindex="0" role="button" aria-pressed="false">
+            <div class="pedal-top-bar"><span>SLOT 04 · HIGH-GAIN</span><span class="pedal-led"><i></i><em>BYPASS</em></span></div>
+            <div class="pedal-img-wrap"><img src="./assets/ped_dual_crunch.webp" alt="Pedal MI Dual Crunch High Gain Preamp" /></div>
+            <h3>MI Dual Crunch</h3>
+            <p>Preamp de alta ganancia con switch Scoop en medios y Blend para riffs pesados definidos.</p>
+          </article>
+
+          <article class="pedal-card" data-pedal="skychorus" tabindex="0" role="button" aria-pressed="true">
+            <div class="pedal-top-bar"><span>SLOT 05 · MODULACIÓN</span><span class="pedal-led"><i></i><em>ON</em></span></div>
+            <div class="pedal-img-wrap"><img src="./assets/ped_sky_chorus.webp" alt="Pedal MI Sky Chorus Analog Stereo" /></div>
+            <h3>MI Sky Chorus</h3>
+            <p>Chorus estéreo analógico con modos Stereo, Dual y Vibrato para limpios tridimensionales.</p>
+          </article>
+
+          <article class="pedal-card bypassed" data-pedal="migold" tabindex="0" role="button" aria-pressed="false">
+            <div class="pedal-top-bar"><span>SLOT 06 · BAJO OVERDRIVE</span><span class="pedal-led"><i></i><em>BYPASS</em></span></div>
+            <div class="pedal-img-wrap"><img src="./assets/ped_mi_gold.webp" alt="Pedal MI Gold Bass Overdrive" /></div>
+            <h3>MI Gold</h3>
+            <p>Overdrive boutique de bajo que conserva el peso sub-grave intacto mediante Blend paralelo.</p>
+          </article>
+        </div>
+
+        <div class="pedal-footer-note">
+          <span>CADENA ACTIVA EN DEMO: <strong id="activePedalCount">4 / 6 PEDALES ENCENDIDOS</strong></span>
+          <span>SUITE COMPLETA: 13 PEDALES GUITARRA · 14 PEDALES BAJO · TONE FINDER · AFINADOR · DROP</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #CONTACTO — CTA EDITORIAL POPUPS ==================== -->
+    <section class="section" id="contacto">
+      <div class="container">
+        <div class="cta-card">
+          <div>
+            <p class="eyebrow">POPUPS · DISEÑO + INGENIERÍA DE PRODUCTO</p>
+            <h2>Si construimos un instrumento DSP completo, imaginá tu proyecto.</h2>
+            <p>
+              Ya sea que quieras conocer más sobre <strong>MI AMP</strong> o estés buscando diseñar y programar una aplicación a medida con el mismo nivel de detalle técnico y visual, hablemos directo.
+            </p>
+          </div>
+
+          <div class="cta-actions">
+            <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20POPUPS!%20Vi%20el%20caso%20de%20MI%20AMP%20en%20el%20portfolio%20y%20me%20gustar%C3%ADa%20conversar%20con%20ustedes." class="btn btn-mint" target="_blank" rel="noopener">💬 Hablemos por WhatsApp ↗</a>
+            <a href="mailto:somospopups@gmail.com?subject=Consulta%20desde%20el%20caso%20MI%20AMP%20(POPUPS)" class="btn btn-secondary">✉ Escribir a somospopups@gmail.com</a>
+            <span class="cta-meta">Córdoba, Argentina · Respuesta directa con el equipo POPUPS.</span>
+          </div>
+        </div>
+
+        <!-- ==================== SIGUIENTE CASO CIRCULAR (07 -> 01 APPI) ==================== -->
+        <section class="next-case-band" aria-label="Navegación a otros proyectos del portfolio POPUPS">
+          <div class="next-case-top">
+            <span class="next-kicker">SIGUIENTE CASO · 01 · PLATAFORMA DE GESTIÓN</span>
+            <a href="../oficina-virtual/" class="next-prev">← ANTERIOR · 06 OFICINA VIRTUAL</a>
+          </div>
+          <div class="next-inner">
+            <div class="next-copy">
+              <h2>APPI pone tu vida y tu negocio en foco.</h2>
+              <p>Una plataforma PWA con +15 herramientas que reúne planificación, finanzas, equipo, contactos y seguimiento en un solo lugar, con uso offline por hasta 7 días.</p>
+            </div>
+            <div class="next-actions">
+              <a href="../project.html?project=appi" class="btn btn-next-lime">Ver siguiente caso ↗</a>
+              <a href="../#proyectos" class="btn btn-next-ghost">← Todos los proyectos</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== FOOTER ==================== -->
+        <footer class="footer">
+          <span>© 2026 MI AMP · POPUPS AUDIO · CÓRDOBA, ARGENTINA</span>
+          <div class="footer-links">
+            <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20POPUPS!%20Vi%20el%20caso%20de%20MI%20AMP%20en%20el%20portfolio." target="_blank" rel="noopener">WhatsApp ↗</a>
+            <a href="../">← Portfolio POPUPS</a>
+            <a href="#top">Volver arriba ↑</a>
+          </div>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <!-- Lightbox de hardware -->
+  <div class="lightbox" id="hwLightbox" role="dialog" aria-modal="true" aria-label="Vista ampliada de hardware MI AMP">
+    <div class="lightbox-box">
+      <div class="lightbox-bar">
+        <span id="lbTitle">MI AMP · HARDWARE</span>
+        <button type="button" class="lightbox-close" id="lbClose">CERRAR [ESC]</button>
+      </div>
+      <div class="lightbox-img-wrap">
+        <img id="lbImg" src="" alt="" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* 1. Menú móvil */
+      const navMenuBtn = document.getElementById('navMenuBtn');
+      const mobileDrawer = document.getElementById('mobileDrawer');
+      if (navMenuBtn && mobileDrawer) {
+        navMenuBtn.addEventListener('click', () => {
+          const open = mobileDrawer.classList.toggle('open');
+          navMenuBtn.setAttribute('aria-expanded', String(open));
+          navMenuBtn.textContent = open ? '✕ CERRAR' : '☰ MENÚ';
+        });
+        mobileDrawer.querySelectorAll('a').forEach((a) => {
+          a.addEventListener('click', () => {
+            mobileDrawer.classList.remove('open');
+            navMenuBtn.setAttribute('aria-expanded', 'false');
+            navMenuBtn.textContent = '☰ MENÚ';
+          });
+        });
+      }
+
+      /* 2. Catálogo real de cabezales y cabinas (Guitarra + Bajo) */
+      const CATALOG = {
+        guitar: [
+          {
+            code: 'SPEC 07.G01 // GUITARRA',
+            name: 'MI AMP CLASSIC',
+            short: 'CLASSIC',
+            sub: 'Signature 3-Channel California Mint. Tolex menta, placa de bronce cepillado y tres canales independientes con controles dinámicos.',
+            topo: '3 canales · Clean / Crunch / Lead',
+            cab: '4x12 MI CLASSIC (Mint Tolex)',
+            ctrls: '19 perillas + 2 switches reales',
+            headImg: './assets/head_gtr_classic.webp',
+            cabImg: './assets/cab_gtr_mint.webp',
+            tag: 'DEFAULT · MINT'
+          },
+          {
+            code: 'SPEC 07.G02 // GUITARRA',
+            name: 'MI AMP PLEXI',
+            short: 'PLEXI',
+            sub: '1968 Vintage Non-Master Super Lead. Placa dorada británica, respuesta orgánica al ataque de púa y saturación natural de etapa.',
+            topo: 'All-Valve 50W British Non-Master',
+            cab: '4x12 GREENBACK (25W Warm Punch)',
+            ctrls: '6 perillas doradas + 2 toggles',
+            headImg: './assets/head_gtr_plexi.webp',
+            cabImg: './assets/cab_gtr_green.webp',
+            tag: '1968 BRITISH'
+          },
+          {
+            code: 'SPEC 07.G03 // GUITARRA',
+            name: 'MI AMP RECTO',
+            short: 'RECTO',
+            sub: 'Dual Channel Modern High-Gain. Rejilla perforada con válvulas visibles y doble hilera de controles para paredes de guitarras.',
+            topo: 'Dual Channel Modern High-Gain',
+            cab: '4x12 MI CLASSIC / OVERSIZED',
+            ctrls: '14 perillas cromadas + 3 toggles',
+            headImg: './assets/head_gtr_recto.webp',
+            cabImg: './assets/cab_gtr_mint.webp',
+            tag: 'HIGH-GAIN'
+          },
+          {
+            code: 'SPEC 07.G04 // GUITARRA',
+            name: 'MI AMP TWIN',
+            short: 'TWIN',
+            sub: '65 Blackface Clean Headroom & Vibrato. Limpios cristalinos con enorme techo dinámico, reverb y vibrato integrados.',
+            topo: '85W Dual Channel Clean + Vibrato',
+            cab: '2x12 BLACKFACE / 4x12 CLASSIC',
+            ctrls: '11 perillas skirt + 2 switches Bright',
+            headImg: './assets/head_gtr_twin.webp',
+            cabImg: './assets/cab_gtr_green.webp',
+            tag: 'CLEAN HEADROOM'
+          }
+        ],
+        bass: [
+          {
+            code: 'SPEC 07.B01 // BAJO',
+            name: 'MI AMP CLASSIC BASS',
+            short: 'CLASSIC',
+            sub: 'Signature California Mint Tube Bass. Tono valvular gordo y articulado con Ultra Hi/Lo, lámpara piloto ámbar y EQ musical.',
+            topo: 'All-Tube Mint Bass + Ultra Hi/Lo',
+            cab: '8x10 MI CLASSIC (Mint Fridge)',
+            ctrls: '5 perillas + 3 toggles cromados',
+            headImg: './assets/head_bass_classic.webp',
+            cabImg: './assets/cab_bass_mint.webp',
+            tag: 'DEFAULT · MINT'
+          },
+          {
+            code: 'SPEC 07.B02 // BAJO',
+            name: 'MI AMP CL-300',
+            short: 'CL-300',
+            sub: '300W All-Tube 6550 Stadium Head. El peso clásico de estadio con medios seleccionables y saturación natural de válvulas 6550.',
+            topo: '300W 6550 Tube + Ultra Hi / Lo',
+            cab: '8x10 CLASSIC / MI CLASSIC',
+            ctrls: '6 perillas estriadas + 4 rockers',
+            headImg: './assets/head_bass_cl300.webp',
+            cabImg: './assets/cab_bass_mint.webp',
+            tag: '300W STADIUM'
+          },
+          {
+            code: 'SPEC 07.B03 // BAJO',
+            name: 'MI AMP PRO-450',
+            short: 'PRO-450',
+            sub: 'Touring Rack Hybrid + 9-Band GEQ. Chasis de gira en rack cromado con ganancia valvular regulable y ecualizador gráfico de 9 bandas.',
+            topo: 'Hybrid Rack + 9-Band Graphic EQ',
+            cab: '8x10 TANGERINE / 4x10 TOURING',
+            ctrls: '7 perillas + 6 botones + 10 faders',
+            headImg: './assets/head_bass_pro450.webp',
+            cabImg: './assets/cab_bass_tangerine.webp',
+            tag: 'RACK 9-BAND EQ'
+          },
+          {
+            code: 'SPEC 07.B04 // BAJO',
+            name: 'MI AMP M-900',
+            short: 'M-900',
+            sub: 'Modern Dual-Engine Microtubes + 6-Band EQ. Compresor integrado, mezcla paralela de distorsión moderna y EQ gráfico de 6 bandas.',
+            topo: 'Dual-Engine Drive + 6-Band EQ',
+            cab: '8x10 TANGERINE / 6x10 HEAVY',
+            ctrls: '7 perillas aluminio + 6 faders LED',
+            headImg: './assets/head_bass_m900.webp',
+            cabImg: './assets/cab_bass_tangerine.webp',
+            tag: 'MODERN DUAL'
+          }
+        ]
+      };
+
+      /* 3. Banco interactivo del Hero */
+      let activeInst = 'guitar';
+      let activeHeadIdx = 0;
+      const instBtns = document.querySelectorAll('.inst-btn');
+      const rigStack = document.getElementById('rigStack');
+      const rigHeadImg = document.getElementById('rigHeadImg');
+      const rigCabImg = document.getElementById('rigCabImg');
+      const benchHeadStrip = document.getElementById('benchHeadStrip');
+      const specCode = document.getElementById('specCode');
+      const specName = document.getElementById('specName');
+      const specSub = document.getElementById('specSub');
+      const specTopo = document.getElementById('specTopo');
+      const specCab = document.getElementById('specCab');
+      const specCtrls = document.getElementById('specCtrls');
+      const rulerRight = document.getElementById('rulerRight');
+      const benchZoomBtn = document.getElementById('benchZoomBtn');
+
+      function renderBench(animate) {
+        const list = CATALOG[activeInst];
+        const item = list[activeHeadIdx] || list[0];
+
+        const applyContent = () => {
+          rigHeadImg.src = item.headImg;
+          rigHeadImg.alt = item.name;
+          rigCabImg.src = item.cabImg;
+          rigCabImg.alt = item.cab;
+          specCode.textContent = item.code;
+          specName.textContent = item.name;
+          specSub.textContent = item.sub;
+          specTopo.textContent = item.topo;
+          specCab.textContent = item.cab;
+          specCtrls.textContent = item.ctrls;
+          rulerRight.textContent = `MODELO ACTIVO: ${item.name}`;
+        };
+
+        if (animate && !reducedMotion) {
+          rigStack.classList.add('swapping');
+          setTimeout(() => {
+            applyContent();
+            rigStack.classList.remove('swapping');
+          }, 140);
+        } else {
+          applyContent();
+        }
+
+        benchHeadStrip.innerHTML = list.map((h, i) =>
+          `<button type="button" class="head-pill${i === activeHeadIdx ? ' active' : ''}" data-hidx="${i}">${h.short}</button>`
+        ).join('');
+
+        benchHeadStrip.querySelectorAll('.head-pill').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            activeHeadIdx = Number(btn.dataset.hidx);
+            const cue = document.getElementById('benchCue'); if (cue) cue.classList.add('done');
+            renderBench(true);
+          });
+        });
+      }
+
+      instBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          instBtns.forEach((b) => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+          });
+          btn.classList.add('active');
+          btn.setAttribute('aria-selected', 'true');
+          activeInst = btn.dataset.inst;
+          activeHeadIdx = 0;
+          const cue = document.getElementById('benchCue'); if (cue) cue.classList.add('done');
+          renderBench(true);
+        });
+      });
+      renderBench(false);
+
+      /* 4. Lightbox de hardware */
+      const lb = document.getElementById('hwLightbox');
+      const lbImg = document.getElementById('lbImg');
+      const lbTitle = document.getElementById('lbTitle');
+      const lbClose = document.getElementById('lbClose');
+
+      function openLightbox(src, title) {
+        lbImg.src = src;
+        lbImg.alt = title;
+        lbTitle.textContent = title;
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      benchZoomBtn.addEventListener('click', () => {
+        const item = CATALOG[activeInst][activeHeadIdx];
+        openLightbox(item.headImg, `${item.name} · ${item.topo}`);
+      });
+      rigHeadImg.addEventListener('click', () => benchZoomBtn.click());
+      lbClose.addEventListener('click', closeLightbox);
+      lb.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+      document.querySelectorAll('.cab-thumbs img').forEach((img) => {
+        img.addEventListener('click', () => openLightbox(img.src, img.dataset.zoomTitle || img.alt));
+      });
+
+      /* 5. Galería de catálogo (Guitarra / Bajo) */
+      const hwGrid = document.getElementById('hwGrid');
+      const catTabs = document.querySelectorAll('.cat-tab');
+
+      function renderCatalog(catKey) {
+        const list = CATALOG[catKey];
+        hwGrid.innerHTML = list.map((h) => `
+          <article class="hw-card">
+            <div class="hw-stage" data-src="${h.headImg}" data-title="${h.name} · ${h.topo}">
+              <span class="hw-badge">${h.tag}</span>
+              <img src="${h.headImg}" alt="${h.name}" loading="lazy" />
+            </div>
+            <div class="hw-meta">
+              <div>
+                <h3>${h.name}</h3>
+                <p>${h.topo} · ${h.ctrls}</p>
+              </div>
+              <span class="hw-zoom-tag">Ampliar ↗</span>
+            </div>
+          </article>
+        `).join('');
+
+        hwGrid.querySelectorAll('.hw-stage').forEach((st) => {
+          st.addEventListener('click', () => openLightbox(st.dataset.src, st.dataset.title));
+        });
+      }
+
+      catTabs.forEach((t) => {
+        t.addEventListener('click', () => {
+          catTabs.forEach((b) => b.classList.remove('active'));
+          t.classList.add('active');
+          renderCatalog(t.dataset.cat);
+        });
+      });
+      renderCatalog('guitar');
+
+      /* 6. Osciloscopio DSP en vivo (60 fps) + Selector de 5 etapas */
+      const DSP_STAGES = [
+        {
+          label: 'ETAPA 01 // ENTRADA, AFINADOR & BLINDAJE STANDALONE',
+          thd: '0.02 %',
+          range: '20 Hz – 20 kHz',
+          title: 'Entrada protegida, afinador cromático y Pitch Shifter polifónico',
+          desc: 'Antes de tocar el primer pedal, MI AMP verifica la interfaz de audio real (bloqueando micrófonos integrados para evitar acoples en modo Standalone), ofrece afinación cromática continua y transposición polifónica Drop sin artefactos.',
+          files: ['StandaloneAudioImpl.cpp', 'XVBassTuner.h', 'XVPitchShifter.h'],
+          mode: 'clean'
+        },
+        {
+          label: 'ETAPA 02 // PEDALBOARD DINÁMICO DE 10 SLOTS',
+          thd: '2.9 %',
+          range: '45 Hz – 12 kHz',
+          title: '27 pedales boutique reordenables por drag-and-drop',
+          desc: 'La cadena de pedales procesa hasta 10 unidades simultáneas en el orden exacto que elijas: compresores ópticos/FET, overdrives, fuzz, preamps DI con blend paralelo, octavadores, EQ gráfico y modulaciones estéreo.',
+          files: ['MiAmpBoutiquePedalsDSP.h', 'PedalCatalogSpecs.h'],
+          mode: 'drive'
+        },
+        {
+          label: 'ETAPA 03 // PREAMP & POWER AMP VALVULAR',
+          thd: '4.8 %',
+          range: '80 Hz – 6.4 kHz',
+          title: 'Modelado de 18 cabezales independientes para guitarra y bajo',
+          desc: 'Cada modelo replica su estructura de ganancia, curva de ecualización, compresión de válvulas de potencia (sag), controles de presencia/resonancia y funciones específicas como el GEQ de 9 bandas en PRO-450 o el doble motor Microtubes en M-900.',
+          files: ['MiAmpGuitarChainDSP.h', 'MiAmpBassChainDSP.h'],
+          mode: 'tube'
+        },
+        {
+          label: 'ETAPA 04 // CABINAS, CONVOLUCIÓN .WAV IR & MICROFONÍA DUAL',
+          thd: '3.6 %',
+          range: '65 Hz – 5.8 kHz',
+          title: '19 cabinas dedicadas, micros MI-57 / MI-87 y carga externa .WAV IR',
+          desc: 'Motor de convolución con respuestas al impulso propias para cada parlante, mezcla continua entre micrófono dinámico y condensador, ambiente de sala regulable y soporte instantáneo para cargar tus propios impulsos .wav.',
+          files: ['MiAmpCabMicDSP.h', 'MiAmpCabIRs.h'],
+          mode: 'cab'
+        },
+        {
+          label: 'ETAPA 05 // STUDIO FX MASTER & LIMITADOR DE SEGURIDAD',
+          thd: '1.8 %',
+          range: '35 Hz – 16 kHz',
+          title: 'Rack de estudio post-cab con sanitización NaN/Inf y limitador ±0.94',
+          desc: 'La salida final suma Noise Gate, Compresor de bus, EQ paramétrico, Delay estéreo, Reverb de estudio y un limitador suave de seguridad que protege tus monitores y oídos frente a cualquier pico inesperado.',
+          files: ['MiAmpStudioFxDSP.h', 'PluginProcessor.cpp'],
+          mode: 'master'
+        }
+      ];
+
+      let activeStageIdx = 2;
+      const stageBtns = document.querySelectorAll('.stage-btn');
+      const scopeStageLabel = document.getElementById('scopeStageLabel');
+      const scopeThd = document.getElementById('scopeThd');
+      const scopeRange = document.getElementById('scopeRange');
+      const stageDetailTitle = document.getElementById('stageDetailTitle');
+      const stageDetailDesc = document.getElementById('stageDetailDesc');
+      const stageFiles = document.getElementById('stageFiles');
+
+      function selectStage(idx) {
+        activeStageIdx = idx;
+        const st = DSP_STAGES[idx];
+        stageBtns.forEach((b, i) => b.classList.toggle('active', i === idx));
+        scopeStageLabel.textContent = st.label;
+        scopeThd.textContent = st.thd;
+        scopeRange.textContent = st.range;
+        stageDetailTitle.textContent = st.title;
+        stageDetailDesc.textContent = st.desc;
+        stageFiles.innerHTML = st.files.map((f) => `<code>${f}</code>`).join('');
+      }
+
+      stageBtns.forEach((b) => {
+        b.addEventListener('click', () => selectStage(Number(b.dataset.stage)));
+      });
+
+      const scopeCanvas = document.getElementById('dspScope');
+      const sctx = scopeCanvas.getContext('2d');
+      let scopePhase = 0;
+
+      function resizeScope() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const r = scopeCanvas.getBoundingClientRect();
+        scopeCanvas.width = Math.max(300, Math.floor(r.width * dpr));
+        scopeCanvas.height = Math.max(160, Math.floor(r.height * dpr));
+        sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      resizeScope();
+      window.addEventListener('resize', resizeScope);
+
+      function sampleWave(xNorm, phase, mode) {
+        const base = Math.sin(xNorm * Math.PI * 6 + phase);
+        const h2 = Math.sin(xNorm * Math.PI * 12 + phase * 1.35) * 0.35;
+        const h3 = Math.sin(xNorm * Math.PI * 18 - phase * 0.8) * 0.18;
+        if (mode === 'clean') return base * 0.65;
+        if (mode === 'drive') return Math.tanh((base + h2 * 0.7) * 2.4) * 0.78;
+        if (mode === 'tube') return Math.tanh((base + h2 * 0.9 + h3 * 0.8) * 3.1) * 0.82;
+        if (mode === 'cab') return Math.tanh((base * 0.92 + h2 * 0.55) * 1.9) * 0.74;
+        return (Math.tanh((base + h2 * 0.45) * 1.65) * 0.68) + Math.sin(xNorm * Math.PI * 2 + phase * 0.4) * 0.14;
+      }
+
+      function drawScope() {
+        const w = scopeCanvas.getBoundingClientRect().width;
+        const h = scopeCanvas.getBoundingClientRect().height;
+        const mid = h / 2;
+        const mode = DSP_STAGES[activeStageIdx].mode;
+
+        sctx.clearRect(0, 0, w, h);
+
+        // Zero center reference line
+        sctx.strokeStyle = 'rgba(242, 238, 230, 0.14)';
+        sctx.lineWidth = 1;
+        sctx.beginPath();
+        sctx.moveTo(0, mid);
+        sctx.lineTo(w, mid);
+        sctx.stroke();
+
+        // Secondary ghost stereo trace
+        sctx.strokeStyle = 'rgba(223, 86, 40, 0.42)';
+        sctx.lineWidth = 1.5;
+        sctx.beginPath();
+        for (let x = 0; x <= w; x += 3) {
+          const xn = x / w;
+          const env = Math.sin(xn * Math.PI);
+          const y = mid - sampleWave(xn, scopePhase - 0.55, mode) * (h * 0.34) * (0.35 + 0.65 * env);
+          if (x === 0) sctx.moveTo(x, y); else sctx.lineTo(x, y);
+        }
+        sctx.stroke();
+
+        // Primary mint phosphor trace
+        sctx.strokeStyle = '#8FD7BE';
+        sctx.lineWidth = 2.4;
+        sctx.shadowColor = 'rgba(143, 215, 190, 0.55)';
+        sctx.shadowBlur = 10;
+        sctx.beginPath();
+        for (let x = 0; x <= w; x += 2) {
+          const xn = x / w;
+          const env = Math.sin(xn * Math.PI);
+          const y = mid - sampleWave(xn, scopePhase, mode) * (h * 0.38) * (0.3 + 0.7 * env);
+          if (x === 0) sctx.moveTo(x, y); else sctx.lineTo(x, y);
+        }
+        sctx.stroke();
+        sctx.shadowBlur = 0;
+
+        if (!reducedMotion) {
+          scopePhase += 0.045;
+          requestAnimationFrame(drawScope);
+        }
+      }
+      drawScope();
+
+      /* 7. Laboratorio interactivo de Microfonía Dual (MI-57 ↔ MI-87) */
+      const micMixSlider = document.getElementById('micMixSlider');
+      const roomSlider = document.getElementById('roomSlider');
+      const micMixVal = document.getElementById('micMixVal');
+      const roomVal = document.getElementById('roomVal');
+      const micBalanceTag = document.getElementById('micBalanceTag');
+      const mic57Unit = document.getElementById('mic57Unit');
+      const mic87Unit = document.getElementById('mic87Unit');
+      const eqCurvePath = document.getElementById('eqCurvePath');
+      const eqFillPath = document.getElementById('eqFillPath');
+
+      function updateMicLab() {
+        const mix = Number(micMixSlider.value) / 100; // 0 = 100% MI-57, 1 = 100% MI-87
+        const room = Number(roomSlider.value) / 100;
+        const p57 = Math.round((1 - mix) * 100);
+        const p87 = Math.round(mix * 100);
+
+        micMixVal.textContent = `${p57}% MI-57 · ${p87}% MI-87`;
+        roomVal.textContent = `${Math.round(room * 100)} %`;
+        micBalanceTag.textContent = `${p57}% MI-57 / ${p87}% MI-87`;
+
+        mic57Unit.style.opacity = (0.48 + (1 - mix) * 0.52).toFixed(2);
+        mic57Unit.style.transform = `translateY(${(mix * 10).toFixed(1)}px) scale(${(0.94 + (1 - mix) * 0.1).toFixed(3)})`;
+        mic87Unit.style.opacity = (0.48 + mix * 0.52).toFixed(2);
+        mic87Unit.style.transform = `translateY(${((1 - mix) * 10).toFixed(1)}px) scale(${(0.94 + mix * 0.1).toFixed(3)})`;
+
+        // Blend realistic frequency response curves: MI-57 (tight bass rolloff + 2.5-5kHz bite) vs MI-87 (deep warm low-end + silky 10kHz air)
+        const pts57 = [82, 66, 56, 48, 36, 30, 38, 62, 78];
+        const pts87 = [48, 42, 46, 52, 50, 44, 34, 32, 42];
+        const xs = [0, 52, 105, 158, 210, 262, 315, 368, 420];
+
+        const coords = xs.map((x, i) => {
+          let y = pts57[i] * (1 - mix) + pts87[i] * mix;
+          // Room adds gentle fullness around low-mids and air
+          if (i >= 1 && i <= 3) y -= room * 6;
+          if (i >= 6) y -= room * 4;
+          return [x, Math.max(14, Math.min(92, y))];
+        });
+
+        let d = `M ${coords[0][0]} ${coords[0][1].toFixed(1)}`;
+        for (let i = 1; i < coords.length; i++) {
+          const prev = coords[i - 1];
+          const cur = coords[i];
+          const cx = ((prev[0] + cur[0]) / 2).toFixed(1);
+          d += ` Q ${cx} ${prev[1].toFixed(1)}, ${cur[0]} ${cur[1].toFixed(1)}`;
+        }
+        eqCurvePath.setAttribute('d', d);
+        eqFillPath.setAttribute('d', `${d} L 420 96 L 0 96 Z`);
+      }
+
+      micMixSlider.addEventListener('input', updateMicLab);
+      roomSlider.addEventListener('input', updateMicLab);
+      updateMicLab();
+
+      /* 8. Pedalboard interactivo (bypass / LED) */
+      const pedalCards = document.querySelectorAll('.pedal-card');
+      const activePedalCount = document.getElementById('activePedalCount');
+
+      function updatePedalCount() {
+        const active = document.querySelectorAll('.pedal-card:not(.bypassed)').length;
+        activePedalCount.textContent = `${active} / ${pedalCards.length} PEDALES ENCENDIDOS`;
+      }
+
+      pedalCards.forEach((card) => {
+        const toggle = () => {
+          const bypassed = card.classList.toggle('bypassed');
+          card.setAttribute('aria-pressed', String(!bypassed));
+          const em = card.querySelector('.pedal-led em');
+          if (em) em.textContent = bypassed ? 'BYPASS' : 'ON';
+          updatePedalCount();
+        };
+        card.addEventListener('click', toggle);
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle();
+          }
+        });
+      });
+
+      /* 9. Motion Graphics: Scroll progress, Parallax marks, 2.5D Rig Tilt, Scroll Reveal & Kinetic KPIs */
+      const scrollProgress = document.getElementById('scrollProgress');
+      const benchStage = document.getElementById('benchStage');
+      const pmItems = Array.from(document.querySelectorAll('.pm-item')).map((el) => ({
+        el,
+        depth: parseFloat(el.dataset.depth || '0.2'),
+        topPct: parseFloat(el.style.top || '20') / 100
+      }));
+      pmItems.forEach(({ el }) => { el.style.top = '0px'; });
+
+      let targetY = window.scrollY;
+      let smoothY = window.scrollY;
+      let tiltTX = 0, tiltTY = 0, tiltCX = 0, tiltCY = 0;
+
+      if (!reducedMotion && benchStage) {
+        benchStage.addEventListener('pointermove', (e) => {
+          const r = benchStage.getBoundingClientRect();
+          tiltTX = ((e.clientX - r.left) / r.width) * 2 - 1;
+          tiltTY = ((e.clientY - r.top) / r.height) * 2 - 1;
+        }, { passive: true });
+        benchStage.addEventListener('pointerleave', () => {
+          tiltTX = 0;
+          tiltTY = 0;
+        });
+      }
+
+      window.addEventListener('scroll', () => {
+        targetY = window.scrollY;
+        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        if (scrollProgress) {
+          scrollProgress.style.transform = `scaleX(${Math.min(1, Math.max(0, targetY / max))})`;
+        }
+      }, { passive: true });
+
+      function motionLoop() {
+        smoothY += (targetY - smoothY) * 0.12;
+        const span = window.innerHeight + 100;
+
+        for (let i = 0; i < pmItems.length; i++) {
+          const it = pmItems[i];
+          const base = it.topPct * span;
+          const y = (((base - smoothY * it.depth) % span) + span) % span - 50;
+          it.el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+        }
+
+        tiltCX += (tiltTX - tiltCX) * 0.09;
+        tiltCY += (tiltTY - tiltCY) * 0.09;
+        if (rigStack && !rigStack.classList.contains('swapping')) {
+          const ry = (tiltCX * 2.4).toFixed(2);
+          const rx = (-tiltCY * 1.9).toFixed(2);
+          rigStack.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+        }
+
+        requestAnimationFrame(motionLoop);
+      }
+
+      if (!reducedMotion) requestAnimationFrame(motionLoop);
+
+      // Staggered scroll reveals
+      const revGroups = [
+        { sel: '.kpi-cell', stagger: 70 },
+        { sel: '.section-head', stagger: 0 },
+        { sel: '.case-card', stagger: 100 },
+        { sel: '.scope-panel', stagger: 0 },
+        { sel: '.cab-strip', stagger: 0 },
+        { sel: '.matrix-box', stagger: 90 },
+        { sel: '.mic-lab', stagger: 0 },
+        { sel: '.pedal-card', stagger: 65 },
+        { sel: '.cta-card', stagger: 0 },
+        { sel: '.next-case-band', stagger: 0 }
+      ];
+      const revealEls = [];
+      revGroups.forEach(({ sel, stagger }) => {
+        document.querySelectorAll(sel).forEach((el, idx) => {
+          el.classList.add('reveal');
+          if (stagger) el.style.setProperty('--rev-delay', `${idx * stagger}ms`);
+          revealEls.push(el);
+        });
+      });
+
+      if (!reducedMotion && 'IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach((en) => {
+            if (en.isIntersecting) {
+              en.target.classList.add('in-view');
+              obs.unobserve(en.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+        revealEls.forEach((el) => obs.observe(el));
+      } else {
+        revealEls.forEach((el) => el.classList.add('in-view'));
+      }
+
+      // Kinetic count-up on KPIs
+      const kpiStrip = document.getElementById('kpiStrip');
+      if (!reducedMotion && kpiStrip && 'IntersectionObserver' in window) {
+        const kObs = new IntersectionObserver((entries) => {
+          entries.forEach((en) => {
+            if (en.isIntersecting) {
+              kpiStrip.querySelectorAll('.kpi-val[data-count]').forEach((el) => {
+                const target = Number(el.dataset.count);
+                const suf = el.dataset.suffix || '';
+                const start = performance.now();
+                const dur = 850;
+                const tick = (now) => {
+                  const t = Math.min(1, (now - start) / dur);
+                  const eased = 1 - Math.pow(1 - t, 3);
+                  el.textContent = `${Math.round(target * eased)}${suf}`;
+                  if (t < 1) requestAnimationFrame(tick);
+                };
+                requestAnimationFrame(tick);
+              });
+              kObs.disconnect();
+            }
+          });
+        }, { threshold: 0.35 });
+        kObs.observe(kpiStrip);
+      }
+    })();
+  </script>
+</body>
+</html>
