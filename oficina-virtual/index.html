@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oficina Virtual — Espacio 2D Pixel Art para Equipos Remotos | POPUPS</title>
+  <title>POPUPS · Caso 06 — Oficina Virtual | Espacio 2D pixel art para equipos</title>
   <meta name="description" content="Oficina Virtual 2D multiplayer estilo pixel art hecha por POPUPS: tu oficina real pintada a medida con cielo en tiempo real, avatares propios, voz, cámara, radio sincronizada, avisos estilo Messenger y el gato de la oficina." />
   <meta name="theme-color" content="#17132c" />
   <meta property="og:type" content="website" />
@@ -2258,6 +2258,245 @@
       animation: modSwapIn 0.34s var(--ease) both;
     }
 
+
+    /* ============================================================
+       SECCIÓN HÍBRIDA DE CASO DE ESTUDIO (06) + PIE SIGUIENTE CASO (07)
+       ============================================================ */
+    .case-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .case-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      padding: 28px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .case-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 215, 111, 0.11), transparent 68%);
+    }
+
+    .case-card:hover::after { opacity: 1; }
+
+    .case-card h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.05;
+      color: var(--cream);
+      letter-spacing: -0.02em;
+    }
+
+    .case-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+
+    .case-facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .case-fact {
+      background: rgba(23, 19, 44, 0.72);
+      border: 1px solid var(--border);
+      padding: 12px 14px;
+    }
+
+    .case-fact small {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .case-fact b {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 18px;
+      color: var(--gold);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    .case-points {
+      list-style: none;
+      margin: 4px 0 0;
+      padding: 0;
+      border-top: 1px solid rgba(80, 67, 100, 0.45);
+    }
+
+    .case-points li {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(80, 67, 100, 0.35);
+      font-size: 13.5px;
+      color: var(--cream);
+      align-items: baseline;
+    }
+
+    .case-points li b {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--mint);
+    }
+
+    .case-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 6px;
+    }
+
+    .case-tech span {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      background: rgba(23, 19, 44, 0.78);
+      border: 1px solid var(--border);
+      color: var(--water);
+    }
+
+    /* Banda "Siguiente caso" al estilo POPUPS Portfolio */
+    .next-case-band {
+      position: relative;
+      overflow: hidden;
+      margin-top: 56px;
+      padding: 42px 36px;
+      border: 2px solid rgba(255, 215, 111, 0.34);
+      background: linear-gradient(135deg, #1b183a 0%, #3d3572 52%, #8e527d 100%);
+      box-shadow: 0 22px 54px rgba(8, 6, 20, 0.48);
+    }
+
+    .next-case-band::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.25;
+      background-image:
+        radial-gradient(circle at 12% 24%, #fff 0 1.2px, transparent 2px),
+        radial-gradient(circle at 76% 18%, #FFD76F 0 1.4px, transparent 2.4px),
+        radial-gradient(circle at 58% 78%, #A7E8AD 0 1.2px, transparent 2.2px);
+      background-size: 360px 240px, 480px 300px, 560px 360px;
+    }
+
+    .next-case-top {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .next-case-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .next-case-kicker::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      background: var(--mint);
+      box-shadow: 0 0 12px rgba(167, 232, 173, 0.85);
+    }
+
+    .next-case-prev {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(247, 235, 201, 0.78);
+      transition: color 0.2s ease;
+    }
+
+    .next-case-prev:hover { color: var(--gold); }
+
+    .next-case-inner {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .next-case-copy {
+      max-width: 620px;
+    }
+
+    .next-case-copy h2 {
+      margin: 0 0 10px;
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4.6vw, 54px);
+      line-height: 0.96;
+      letter-spacing: -0.025em;
+      color: var(--cream);
+    }
+
+    .next-case-copy p {
+      margin: 0;
+      color: rgba(247, 235, 201, 0.84);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .next-case-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 860px) {
+      .case-grid { grid-template-columns: 1fr; }
+      .next-case-band { padding: 30px 22px; }
+      .next-case-inner { align-items: flex-start; }
+    }
+
+    @media (max-width: 560px) {
+      .case-facts { grid-template-columns: 1fr; }
+      .next-case-actions { width: 100%; }
+      .next-case-actions .btn { width: 100%; max-width: none; }
+    }
+
     /* Respetar prefers-reduced-motion */
     @media (prefers-reduced-motion: reduce) {
       .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
@@ -2300,16 +2539,16 @@
       <nav aria-label="Navegación principal">
         <ul class="nav-links">
           <li><a href="#mundo">Oficina</a></li>
-          <li><a href="#espacios">Momentos</a></li>
+          <li><a href="#caso">El caso</a></li>
           <li><a href="#modulos">Funciones</a></li>
           <li><a href="#planes">Modalidades</a></li>
           <li><a href="#contacto">WhatsApp</a></li>
         </ul>
       </nav>
 
-      <a href="../" class="nav-status" title="Volver al Portfolio POPUPS">
+      <a href="../#proyectos" class="nav-status" title="Volver a los proyectos de POPUPS">
         <span class="live-pixel" aria-hidden="true"></span>
-        <span>← PORTFOLIO POPUPS</span>
+        <span>← VOLVER A PROYECTOS</span>
       </a>
 
       <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="mobileDrawer">☰ MENÚ</button>
@@ -2317,17 +2556,17 @@
 
     <nav class="mobile-drawer" id="mobileDrawer" aria-label="Menú móvil">
       <a href="#mundo"><span>01 · La Oficina</span><span>→</span></a>
-      <a href="#espacios"><span>02 · Momentos del día</span><span>→</span></a>
+      <a href="#caso"><span>02 · El caso de estudio</span><span>→</span></a>
       <a href="#modulos"><span>03 · Funciones</span><span>→</span></a>
       <a href="#planes"><span>04 · Modalidades</span><span>→</span></a>
       <a href="#contacto"><span>05 · Contacto</span><span>→</span></a>
-      <a href="../"><span>← Volver al Portfolio POPUPS</span><span>↗</span></a>
+      <a href="../#proyectos"><span>← Volver a proyectos POPUPS</span><span>↗</span></a>
       <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20equipo%20POPUPS!%20Vi%20la%20landing%20de%20Oficina%20Virtual%202D%20y%20me%20gustar%C3%ADa%20coordinar%20una%20demo%20para%20mi%20equipo." class="drawer-wa" id="drawerWaBtn" target="_blank" rel="noopener"><span>💬 Hablar por WhatsApp</span><span>↗</span></a>
     </nav>
 
     <!-- ==================== HERO ==================== -->
     <section class="hero">
-      <p class="eyebrow">ESPACIO 2D MULTIPLAYER · PIXEL ART EN EL NAVEGADOR</p>
+      <p class="eyebrow">CASO 06 · TRABAJO COLABORATIVO · ESPACIO 2D MULTIPLAYER</p>
       <h1 class="hero-title">Tu equipo remoto.<br />En un mismo lugar.</h1>
       <p class="lead">
         Una oficina 2D pixel art en el navegador con cielo en tiempo real, voz, cámara, radio sincronizada y avisos estilo Messenger.
@@ -2458,6 +2697,53 @@
     </section>
 
     <!-- ==================== MOMENTOS DEL DÍA Y AVATARES A MEDIDA ==================== -->
+    <!-- ==================== FICHA DEL CASO (DESAFÍO & SOLUCIÓN) ==================== -->
+    <section class="section" id="caso" aria-label="Caso de estudio Oficina Virtual">
+      <div class="section-head">
+        <p class="eyebrow">CASO 06 · POPUPS · DEL PROBLEMA AL PRODUCTO</p>
+        <h2>El desafío y qué construimos.</h2>
+        <p>Oficina Virtual nació de una necesidad real: devolverle presencia cotidiana al trabajo remoto sin obligar al equipo a vivir en videollamadas.</p>
+      </div>
+
+      <div class="case-grid">
+        <article class="case-card">
+          <p class="eyebrow">EL DESAFÍO &amp; LA SOLUCIÓN</p>
+          <h3>Hacer visible al equipo sin sumar otra app pesada.</h3>
+          <p>
+            La colaboración remota suele reducirse a ventanas cerradas y mensajes sueltos. El equipo necesitaba un lugar compartido que mostrara de un vistazo quién está, en qué momento del día trabaja y cuándo se puede conversar.
+          </p>
+          <p>
+            Construimos una oficina 2D navegable en el navegador con cielo en tiempo real, puestos ilustrados a medida, llamadas de voz y video en un clic, radio sincronizada y chat retro con zumbido estilo Messenger.
+          </p>
+          <div class="case-tech" aria-label="Tecnologías del proyecto">
+            <span>JavaScript</span>
+            <span>Node.js</span>
+            <span>WebSockets</span>
+            <span>WebRTC</span>
+            <span>Canvas 2D</span>
+            <span>Pixel art</span>
+          </div>
+        </article>
+
+        <aside class="case-card">
+          <p class="eyebrow">FICHA DEL PROYECTO</p>
+          <div class="case-facts">
+            <div class="case-fact"><small>Tipo</small><b>Espacio colaborativo</b></div>
+            <div class="case-fact"><small>Interacción</small><b>Multiplayer 2D</b></div>
+            <div class="case-fact"><small>Estética</small><b>Pixel art a medida</b></div>
+            <div class="case-fact"><small>Estado</small><b>Producto publicado</b></div>
+          </div>
+          <ul class="case-points">
+            <li><b>01</b><span>Espacio 2D con ciclo día, atardecer y noche en vivo</span></li>
+            <li><b>02</b><span>Avatares y escritorios ilustrados para cada equipo</span></li>
+            <li><b>03</b><span>Llamadas P2P de voz y cámara integradas en la sala</span></li>
+            <li><b>04</b><span>Chat general, privados y zumbido estilo Messenger</span></li>
+            <li><b>05</b><span>Acceso inmediato por navegador, sin instalaciones</span></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
     <section class="section" id="espacios">
       <div class="section-head">
         <p class="eyebrow">CICLO EN TIEMPO REAL · AVATARES Y OBJETOS A MEDIDA</p>
@@ -2801,6 +3087,24 @@
       <p class="join-note">
         También nos encontrás en <a href="mailto:somospopups@gmail.com">somospopups@gmail.com</a> · Hecho en Córdoba por <strong>POPUPS</strong>.
       </p>
+    </section>
+
+    <!-- ==================== SIGUIENTE CASO DEL PORTFOLIO ==================== -->
+    <section class="next-case-band" aria-label="Navegación a otros proyectos del portfolio POPUPS">
+      <div class="next-case-top">
+        <span class="next-case-kicker">SIGUIENTE CASO · 07 · AUDIO CREATIVO</span>
+        <a href="../project.html?project=entrenador" class="next-case-prev">← ANTERIOR · 05 MI ENTRENADOR</a>
+      </div>
+      <div class="next-case-inner">
+        <div class="next-case-copy">
+          <h2>También construimos instrumentos.</h2>
+          <p>MI AMP lleva la lógica de POPUPS al audio: amplificador y pedalboard virtual para guitarra y bajo con señal en vivo, presets y afinador integrado.</p>
+        </div>
+        <div class="next-case-actions">
+          <a href="../project.html?project=audio" class="btn btn-primary">Ver siguiente caso ↗</a>
+          <a href="../#proyectos" class="btn btn-secondary">← Todos los proyectos</a>
+        </div>
+      </div>
     </section>
 
     <!-- ==================== FOOTER ==================== -->
@@ -3553,7 +3857,7 @@
       }
 
       // Luz interactiva siguiendo el cursor dentro de las tarjetas
-      document.querySelectorAll('.adv-card, .moment-card, .step-card, .plan-card').forEach((card) => {
+      document.querySelectorAll('.adv-card, .case-card, .moment-card, .step-card, .plan-card').forEach((card) => {
         card.addEventListener('pointermove', (e) => {
           const r = card.getBoundingClientRect();
           card.style.setProperty('--mx', `${(e.clientX - r.left).toFixed(0)}px`);
@@ -3574,7 +3878,9 @@
         { sel: '.metric-cell', stagger: 70 },
         { sel: '.plan-card', stagger: 110 },
         { sel: '.faq-item', stagger: 70 },
-        { sel: '.join-card', stagger: 0 }
+        { sel: '.case-card', stagger: 100 },
+        { sel: '.join-card', stagger: 0 },
+        { sel: '.next-case-band', stagger: 0 }
       ];
 
       const allReveals = [];
