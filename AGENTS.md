@@ -119,14 +119,13 @@ Cada landing que diseñemos debe cumplir este piso de calidad antes de empaqueta
 
 | # | Key (`project.html`) | Proyecto | Estado actual | Carpeta híbrida | Anterior → Siguiente |
 |---|---|---|---|---|---|
-| 01 | `appi` | APPI | **Híbrido publicado** | **`appi/`** | `08 anton/` → `02 bondi/` |
+| 01 | `appi` | APPI | **Híbrido publicado** | **`appi/`** | `07 mi-amp/` → `02 bondi/` |
 | 02 | `bondi` | Bondi | **Híbrido publicado** | **`bondi/`** | `01 appi/` → `03 mis-sellos/` |
 | 03 | `sellos` | Mis Sellos | **Híbrido publicado** | **`mis-sellos/`** | `02 bondi/` → `04 tienda` |
 | 04 | `tienda` | Mi-Tienda | Ficha `project.html?project=tienda` | *(pendiente, ej. `mi-tienda/`)* | `03 mis-sellos/` → `05 mi-entrenador/` |
 | 05 | `entrenador` | Mi Entrenador | **Híbrido publicado** | **`mi-entrenador/`** | `04 tienda` → `06 oficina-virtual/` |
 | 06 | `office` | Oficina Virtual | **Híbrido publicado** | **`oficina-virtual/`** | `05 mi-entrenador/` → `07 mi-amp/` |
-| 07 | `audio` | MI AMP | **Híbrido publicado** | **`mi-amp/`** | `06 oficina-virtual/` → `08 anton/` |
-| 08 | `anton` | Antón · Cocina de Barrio | **Híbrido publicado** | **`anton/`** | `07 mi-amp/` → `01 appi/` |
+| 07 | `audio` | MI AMP | **Híbrido publicado** | **`mi-amp/`** | `06 oficina-virtual/` → `01 appi/` |
 
 ---
 
@@ -141,3 +140,23 @@ Cada landing que diseñemos debe cumplir este piso de calidad antes de empaqueta
 - [ ] Navegación circular verificada (`anterior → caso híbrido → siguiente` y `← Volver a proyectos`).
 - [ ] `git bundle verify` aprobado y simulación completa en clon limpio (`fetch` + `git cherry` + `cherry-pick` + idempotencia + re-validación) aprobada.
 - [ ] El ZIP contiene únicamente `<carpeta>/PUBLICAR.bat`, `<carpeta>/<bundle>.bundle` y `<carpeta>/LEEME.txt` (sin `.git`, cachés ni credenciales).
+
+---
+
+## 9. Apartado «Páginas Web a Medida» (webs creadas para clientes)
+
+El Portfolio separa los **7 productos propios (`01` a `07`)** del apartado comercial **Páginas Web a Medida**, que vive en:
+- Sección `#webs-a-medida` en la portada (`index.html`).
+- Catálogo completo y cotizador en **`webs-a-medida/index.html`**.
+- Fuente única de datos en **`assets/webs-data.js`** (`window.POPUPS_WEBS`).
+
+### Cómo sumar una nueva web a medida (en 3 pasos)
+1. Guardar una captura limpia (`1200×740` recomendado) en `assets/<slug>-shot.png`.
+2. Agregar un nuevo objeto al array `window.POPUPS_WEBS` en `assets/webs-data.js` (`id`, `number`, `name`, `category`, `location`, `year`, `url`, `displayUrl`, `caseUrl`, `image`, `tagline`, `summary`, `tags`, `highlight`).
+   - Si solo lleva acceso directo a la web en vivo, dejar `caseUrl: null`.
+   - Si además tiene página de caso dedicada (como **`anton/`**), indicar `caseUrl: '<slug>/'`.
+3. Verificar con `node --check assets/webs-data.js`: tanto `index.html#webs-a-medida` como `webs-a-medida/index.html` (incluyendo contador y filtros por rubro) se actualizan automáticamente.
+
+| # | Cliente / Sitio | Rubro | Web en vivo | Detalle opcional |
+|---|---|---|---|---|
+| 01 | Antón · Cocina de Barrio | Gastronomía | `https://anton-cocinadebarrio.netlify.app/` | `anton/` |

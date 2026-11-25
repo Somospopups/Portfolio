@@ -4,7 +4,7 @@ Portfolio web de POPUPS.
 
 ## Verlo localmente
 
-Abrir `index.html` en el navegador manteniendo las carpetas `assets`, `appi`, `bondi`, `mis-sellos`, `mi-entrenador`, `oficina-virtual`, `mi-amp` y `anton` junto a los archivos HTML.
+Abrir `index.html` en el navegador manteniendo las carpetas `assets`, `appi`, `bondi`, `mis-sellos`, `mi-entrenador`, `oficina-virtual`, `mi-amp`, `webs-a-medida` y `anton` junto a los archivos HTML.
 
 ## Publicación
 
@@ -17,7 +17,8 @@ Este repositorio está preparado para GitHub Pages. Las URLs previstas son:
 - Caso Mi Entrenador: https://somospopups.github.io/Portfolio/mi-entrenador/
 - Landing Oficina Virtual: https://somospopups.github.io/Portfolio/oficina-virtual/
 - Caso MI AMP: https://somospopups.github.io/Portfolio/mi-amp/
-- Caso Antón · Cocina de Barrio: https://somospopups.github.io/Portfolio/anton/
+- Catálogo Páginas Web a Medida: https://somospopups.github.io/Portfolio/webs-a-medida/
+- Web a medida destacada (Antón · Cocina de Barrio): https://somospopups.github.io/Portfolio/anton/
 
 La activación de GitHub Pages se realiza desde Settings → Pages del repositorio, usando la rama `main` y la carpeta `/ (root)`.
 

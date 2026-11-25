@@ -107,6 +107,39 @@
     .project-grid { display:grid; grid-template-columns:repeat(12,1fr); gap:15px; }.project-card { grid-column:span 4; padding:10px; border:1px solid rgba(5,5,5,.12); border-radius:30px; background:rgba(255,255,255,.75); transition:transform .4s var(--ease), box-shadow .4s var(--ease); }.project-card.featured { grid-column:span 8; }.project-card.wide { grid-column:span 6; }.project-card.hide { display:none; }.project-card:hover { transform:translateY(-7px); box-shadow:0 22px 45px rgba(5,5,5,.11); }.project-shot { position:relative; height:250px; overflow:hidden; border-radius:22px; background:#dfe2da; cursor:zoom-in; }.project-card.featured .project-shot { height:330px; }.project-card.wide .project-shot { height:285px; }.project-shot img { width:100%; height:100%; object-fit:cover; object-position:center; transition:transform .5s var(--ease); }.project-shot:hover img { transform:scale(1.045); }.project-shot::after { content:"Ampliar ↗"; position:absolute; right:12px; bottom:12px; padding:7px 9px; border:1px solid rgba(255,255,255,.4); border-radius:99px; color:#fff; background:rgba(5,5,5,.63); font-size:9px; font-weight:800; opacity:0; transform:translateY(5px); transition:.25s ease; }.project-shot:hover::after { opacity:1; transform:none; }.project-shot.appi img{object-position:center 26%;}.project-shot.bondi img{object-position:center 42%;}.project-shot.sellos img{object-position:center 14%;}.project-shot.tienda img{object-position:center 40%;}.project-shot.trainer img{object-position:center;object-fit:contain;background:#f1f4ee}.project-shot.office img{object-position:center 48%;}.project-shot.audio img{object-position:center 48%;}.project-shot.anton img{object-position:center 50%;}.project-body { padding:18px 9px 13px; }.project-kicker { color:#72776e; text-transform:uppercase; letter-spacing:.12em; font-size:9px; font-weight:900; }.project-body h3 { max-width:470px; margin:9px 0 7px; font-family:var(--serif); font-size:30px; font-weight:400; line-height:.95; letter-spacing:-.05em; }.project-card.featured .project-body h3 { font-size:38px; }.project-body p { max-width:450px; margin:0; color:#6c7169; font-size:12px; line-height:1.45; }.project-bottom { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:15px; }.project-tags { display:flex; flex-wrap:wrap; gap:5px; }.project-tags span { padding:6px 8px; border:1px solid rgba(5,5,5,.13); border-radius:99px; color:#757a71; font-size:9px; font-weight:800; }.project-link { color:#4f5e00; font-size:10px; font-weight:900; }.project-link:hover { color:var(--ink); }
 
     /* Method */
+
+    .custom-webs { padding:115px 0 125px; color:var(--text); background:#eaece4; border-top:1px solid var(--line); }
+    .cw-head { display:flex; align-items:end; justify-content:space-between; gap:35px; margin-bottom:38px; flex-wrap:wrap; }
+    .cw-head h2 { max-width:720px; margin:14px 0 0; font-family:var(--serif); font-size:clamp(44px, 5.6vw, 76px); font-weight:400; line-height:.91; letter-spacing:-.07em; }
+    .cw-head p { max-width:340px; margin:0; color:#646a62; font-size:13.5px; line-height:1.52; }
+    .cw-grid { display:grid; grid-template-columns:repeat(12,1fr); gap:18px; }
+    .cw-card { grid-column:span 8; display:flex; flex-direction:column; border-radius:30px; overflow:hidden; background:#10130e; color:#f4f5f0; border:1px solid rgba(5,5,5,.14); box-shadow:0 22px 52px rgba(5,5,5,.12); transition:transform .38s var(--ease), box-shadow .38s var(--ease); }
+    .cw-card.half { grid-column:span 6; }
+    .cw-card:hover { transform:translateY(-6px); box-shadow:0 30px 64px rgba(5,5,5,.18); }
+    .cw-bar { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 16px; background:#090b08; border-bottom:1px solid rgba(255,255,255,.09); }
+    .cw-dots { display:flex; gap:5px; }.cw-dots i { width:8px; height:8px; border-radius:50%; display:block; }.cw-dots i:nth-child(1){background:#e5534b}.cw-dots i:nth-child(2){background:#e9c36c}.cw-dots i:nth-child(3){background:#57ab5a}
+    .cw-url { font-size:10.5px; font-weight:700; color:rgba(244,245,240,.68); background:rgba(255,255,255,.06); padding:4px 11px; border-radius:999px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:290px; }
+    .cw-live { display:inline-flex; align-items:center; gap:5px; font-size:9.5px; font-weight:900; letter-spacing:.08em; color:var(--lime); }.cw-live i { width:6px; height:6px; border-radius:50%; background:var(--lime); display:inline-block; }
+    .cw-shot { position:relative; display:block; height:320px; overflow:hidden; background:#171d14; }.cw-shot img { width:100%; height:100%; object-fit:cover; transition:transform .5s var(--ease); }.cw-card:hover .cw-shot img { transform:scale(1.035); }
+    .cw-shot-chip { position:absolute; left:14px; bottom:14px; padding:6px 11px; border-radius:999px; background:rgba(9,11,8,.82); border:1px solid rgba(200,248,16,.38); color:var(--lime); font-size:10px; font-weight:800; }
+    .cw-body { padding:22px 24px 24px; display:flex; flex-direction:column; flex:1; }
+    .cw-kicker { color:rgba(244,245,240,.6); text-transform:uppercase; letter-spacing:.12em; font-size:9.5px; font-weight:900; }
+    .cw-body h3 { margin:9px 0 6px; font-family:var(--serif); font-size:34px; font-weight:400; line-height:.95; letter-spacing:-.05em; color:#fff; }
+    .cw-body p { margin:0; color:rgba(244,245,240,.76); font-size:13px; line-height:1.52; max-width:560px; }
+    .cw-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:15px; }.cw-tags span { padding:5px 9px; border-radius:999px; border:1px solid rgba(255,255,255,.16); color:rgba(244,245,240,.84); font-size:9.5px; font-weight:800; }
+    .cw-actions { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,.1); }
+    .cw-btn-primary { display:inline-flex; align-items:center; gap:7px; padding:11px 17px; border-radius:999px; background:var(--lime); color:var(--ink); font-size:11px; font-weight:900; transition:transform .2s var(--ease), background .2s ease; }.cw-btn-primary:hover { transform:translateY(-2px); background:#d9ff3d; }
+    .cw-btn-ghost { display:inline-flex; align-items:center; gap:7px; padding:11px 16px; border-radius:999px; border:1px solid rgba(255,255,255,.24); color:#f4f5f0; font-size:11px; font-weight:800; transition:border-color .2s ease, color .2s ease; }.cw-btn-ghost:hover { border-color:var(--lime); color:var(--lime); }
+    .cw-invite { grid-column:span 4; padding:26px; border-radius:30px; background:rgba(255,255,255,.82); border:1.5px dashed rgba(5,5,5,.22); display:flex; flex-direction:column; justify-content:space-between; gap:20px; }
+    .cw-invite.full { grid-column:span 12; flex-direction:row; align-items:center; }
+    .cw-invite-tag { display:inline-block; padding:6px 10px; border-radius:999px; background:var(--lime); color:var(--ink); font-size:9.5px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+    .cw-invite h3 { margin:14px 0 8px; font-family:var(--serif); font-size:32px; font-weight:400; line-height:.96; letter-spacing:-.05em; color:var(--ink); }
+    .cw-invite p { margin:0; color:#61675f; font-size:12.5px; line-height:1.5; }
+    .cw-invite-list { list-style:none; padding:0; margin:16px 0 0; display:grid; gap:7px; font-size:11.5px; font-weight:800; color:#2b2f29; }.cw-invite-list li::before { content:"✦ "; color:#536600; }
+    .cw-invite-actions { display:grid; gap:8px; min-width:210px; }
+    .cw-btn-dark { display:inline-flex; justify-content:center; align-items:center; gap:7px; padding:12px 16px; border-radius:999px; background:var(--ink); color:#fff; font-size:11px; font-weight:900; transition:transform .2s var(--ease), background .2s ease; }.cw-btn-dark:hover { transform:translateY(-2px); background:#232820; }
+    .cw-btn-outline { display:inline-flex; justify-content:center; align-items:center; gap:7px; padding:11px 16px; border-radius:999px; border:1px solid rgba(5,5,5,.2); color:var(--ink); font-size:11px; font-weight:800; }.cw-btn-outline:hover { border-color:var(--ink); background:rgba(5,5,5,.05); }
+    @media (max-width:900px) { .custom-webs{padding:86px 0}.cw-card,.cw-card.half,.cw-invite{grid-column:span 12}.cw-invite.full{flex-direction:column;align-items:flex-start}.cw-shot{height:240px} }
     .method { padding:130px 0; color:#fff; background:var(--ink-2); }.method-grid { display:grid; grid-template-columns:1fr 1.35fr; gap:95px; align-items:start; }.method h2 { max-width:500px; margin:16px 0 0; font-family:var(--serif); font-size:clamp(46px, 5.7vw, 78px); font-weight:400; line-height:.9; letter-spacing:-.075em; }.method-lead { max-width:350px; margin:27px 0 0; color:#9a9e9a; font-size:14px; line-height:1.55; }.steps { border-top:1px solid var(--white-line); }.step { display:grid; grid-template-columns:45px 1fr 32%; gap:20px; padding:24px 0; border-bottom:1px solid var(--white-line); transition:padding .3s var(--ease), background .25s ease; }.step:hover { padding-left:13px; padding-right:13px; background:rgba(200,248,16,.035); }.step-number { color:var(--lime); font-size:10px; font-weight:900; }.step h3 { margin:0; font-family:var(--serif); font-size:27px; font-weight:400; letter-spacing:-.045em; }.step p { margin:4px 0 0; color:#929691; font-size:12px; line-height:1.45; }.step-aside { align-self:center; color:#686e67; font-size:10px; text-align:right; }
 
     .manifesto { position:relative; overflow:hidden; padding:140px 0; color:#fff; background:linear-gradient(135deg, #1a1d3b 0%, #3b3e7b 44%, #c786af 100%); }.manifesto::before { content:""; position:absolute; inset:0; opacity:.26; background-image:radial-gradient(circle at 14% 22%,#fff 0 1px,transparent 2px),radial-gradient(circle at 74% 18%,#fff 0 1px,transparent 2px),radial-gradient(circle at 54% 70%,#fff 0 1px,transparent 2px); background-size:420px 320px,600px 420px,800px 520px; }.manifesto-inner { position:relative; }.manifesto h2 { max-width:900px; margin:0; font-family:var(--serif); font-size:clamp(52px, 8vw, 112px); font-weight:400; line-height:.87; letter-spacing:-.085em; }.manifesto h2 em { color:var(--lime); font-style:normal; }.manifesto p { max-width:430px; margin:40px 0 0 auto; color:rgba(255,255,255,.76); font-size:16px; line-height:1.5; }.manifesto-mark { position:absolute; right:-4%; bottom:-78px; color:rgba(255,255,255,.08); font-size:250px; line-height:.6; font-weight:950; letter-spacing:-.2em; pointer-events:none; }
@@ -135,6 +168,7 @@
       <a class="brand" href="#inicio" aria-label="POPUPS inicio"><img class="brand-logo" src="assets/popups-logo-crop.png" alt="POPUPS" /></a>
       <div class="nav-links">
         <a href="#proyectos">Proyectos</a>
+        <a href="#webs-a-medida">Webs a medida</a>
         <a href="#metodo">Método</a>
         <a href="#popups">POPUPS</a>
       </div>
@@ -153,7 +187,7 @@
           <p class="hero-lead">Diseñamos aplicaciones que entienden la lógica de cada negocio, automatizan lo repetitivo y convierten procesos complejos en experiencias que dan ganas de usar.</p>
           <div class="hero-actions"><a class="button primary" href="#proyectos">Explorar proyectos <span>↘</span></a><a class="button ghost" href="#contacto">Contarnos qué te quita tiempo <span>↗</span></a></div>
           <p class="hero-note">Aplicaciones a medida · Automatización · Diseño + motion</p>
-          <div class="hero-metrics"><div class="hero-metric"><b>8</b><span>proyectos destacados</span></div><div class="hero-metric"><b>01→∞</b><span>procesos que pueden crecer</span></div><div class="hero-metric"><b>100%</b><span>hecho para usarse</span></div></div>
+          <div class="hero-metrics"><div class="hero-metric"><b>7</b><span>productos propios</span></div><div class="hero-metric"><b>Webs</b><span>a medida para marcas</span></div><div class="hero-metric"><b>100%</b><span>hecho para usarse</span></div></div>
         </div>
 
         <div class="portal-stage" aria-label="Vista previa de un proyecto de POPUPS">
@@ -192,11 +226,23 @@
           <article class="project-card" data-category="producto app"><div class="project-shot bondi" data-full="assets/bondi-nosplash.png" data-caption="Bondi · mapa de Córdoba"><img src="assets/bondi-nosplash.png" alt="Mapa real de Bondi con Córdoba y sus calles" loading="lazy" /></div><div class="project-body"><span class="project-kicker">02 · Producto digital</span><h3>Bondi encuentra tu próximo viaje.</h3><p>Transporte público de Córdoba con líneas, paradas, recorridos y arribos en tiempo real.</p><div class="project-bottom"><div class="project-tags"><span>Mapa</span><span>Datos en vivo</span></div><a class="project-link" href="bondi/">Ver caso completo ↗</a></div></div></article>
           <article class="project-card wide" data-category="producto app"><div class="project-shot sellos" data-full="assets/sellos-shot2.png" data-caption="Mis Sellos · landing y tarjeta digital"><img src="assets/sellos-shot2.png" alt="Pantalla real de Mis Sellos con tarjeta de fidelidad digital" loading="lazy" /></div><div class="project-body"><span class="project-kicker">03 · Fidelización</span><h3>Mis Sellos vive en el celular.</h3><p>La tarjeta digital que permite sellar en dos toques y entender quién dejó de venir.</p><div class="project-bottom"><div class="project-tags"><span>QR 30s</span><span>6 rubros 3D</span></div><a class="project-link" href="mis-sellos/">Ver caso completo ↗</a></div></div></article>
           <article class="project-card wide" data-category="producto app"><div class="project-shot tienda" data-full="assets/tienda-3-panel.jpg" data-caption="Mi-Tienda · panel operativo"><img src="assets/tienda-3-panel.jpg" alt="Panel real de Mi-Tienda con ventas, pedidos y stock" loading="lazy" /></div><div class="project-body"><span class="project-kicker">04 · Comercio digital</span><h3>Mi-Tienda convierte catálogo en operación.</h3><p>Tienda online y panel autogestionable para vender, administrar pedidos y entender el negocio.</p><div class="project-bottom"><div class="project-tags"><span>Catálogo</span><span>Pedidos</span><span>Panel admin</span></div><a class="project-link" href="project.html?project=tienda">Ver caso completo ↗</a></div></div></article>
-          <article class="project-card wide" data-category="app"><div class="project-shot trainer" data-full="assets/mi-entrenador-dashboard.png" data-caption="Mi Entrenador · dashboard del espacio"><img src="assets/mi-entrenador-dashboard.png" alt="Dashboard real de Mi Entrenador con actividad del equipo y métricas del espacio" loading="lazy" /></div><div class="project-body"><span class="project-kicker">05 · Fitness</span><h3>Mi Entrenador une profe y alumno.</h3><p>Planes, equipo, cobros y progreso en una experiencia diaria diseñada para que cada alumno sepa qué hacer.</p><div class="project-bottom"><div class="project-tags"><span>3 niveles</span><span>Planes diarios</span></div><a class="project-link" href="mi-entrenador/">Ver caso completo ↗</a></div></div></article>
-          <article class="project-card wide" data-category="producto app"><div class="project-shot office" data-full="assets/office-shot.png" data-caption="Oficina Virtual · espacio 2D multiplayer al atardecer"><img src="assets/office-shot.png" alt="Oficina Virtual en estilo pixel art con puestos de trabajo, avatares y cielo en tiempo real" loading="lazy" /></div><div class="project-body"><span class="project-kicker">06 · Trabajo colaborativo</span><h3>Oficina Virtual hace visible al equipo.</h3><p>Un espacio 2D multiplayer en el navegador con cielo en tiempo real, videollamadas, radio y chat estilo Messenger.</p><div class="project-bottom"><div class="project-tags"><span>Multiplayer</span><span>Pixel art</span></div><a class="project-link" href="oficina-virtual/">Ver caso completo ↗</a></div></div></article>
+          <article class="project-card" data-category="app"><div class="project-shot trainer" data-full="assets/mi-entrenador-dashboard.png" data-caption="Mi Entrenador · dashboard del espacio"><img src="assets/mi-entrenador-dashboard.png" alt="Dashboard real de Mi Entrenador con actividad del equipo y métricas del espacio" loading="lazy" /></div><div class="project-body"><span class="project-kicker">05 · Fitness</span><h3>Mi Entrenador une profe y alumno.</h3><p>Planes, equipo, cobros y progreso en una experiencia diaria diseñada para que cada alumno sepa qué hacer.</p><div class="project-bottom"><div class="project-tags"><span>3 niveles</span><span>Planes diarios</span></div><a class="project-link" href="mi-entrenador/">Ver caso completo ↗</a></div></div></article>
+          <article class="project-card" data-category="producto app"><div class="project-shot office" data-full="assets/office-shot.png" data-caption="Oficina Virtual · espacio 2D multiplayer al atardecer"><img src="assets/office-shot.png" alt="Oficina Virtual en estilo pixel art con puestos de trabajo, avatares y cielo en tiempo real" loading="lazy" /></div><div class="project-body"><span class="project-kicker">06 · Trabajo colaborativo</span><h3>Oficina Virtual hace visible al equipo.</h3><p>Un espacio 2D multiplayer en el navegador con cielo en tiempo real, videollamadas, radio y chat estilo Messenger.</p><div class="project-bottom"><div class="project-tags"><span>Multiplayer</span><span>Pixel art</span></div><a class="project-link" href="oficina-virtual/">Ver caso completo ↗</a></div></div></article>
           <article class="project-card" data-category="experimento producto"><div class="project-shot audio" data-full="assets/miamp-shot.png" data-caption="MI AMP · suite DSP de guitarra y bajo"><img src="assets/miamp-shot.png" alt="Suite MI AMP con cabezal Mint Classic y caja 4x12" loading="lazy" /></div><div class="project-body"><span class="project-kicker">07 · Audio creativo</span><h3>También construimos instrumentos.</h3><p>Suite DSP de guitarra y bajo en C++20 con 18 cabezales, 19 cabinas con .WAV IR y 27 pedales boutique.</p><div class="project-bottom"><div class="project-tags"><span>C++20 / DSP</span><span>VST3 · AU</span></div><a class="project-link" href="mi-amp/">Ver caso completo ↗</a></div></div></article>
-          <article class="project-card featured" data-category="producto"><div class="project-shot anton" data-full="assets/anton-shot.png" data-caption="Antón · Cocina de Barrio (Alta Córdoba)"><img src="assets/anton-shot.png" alt="Web interactiva de Antón Cocina de Barrio con pizza 3D de masa madre y pedidos por WhatsApp" loading="lazy" /></div><div class="project-body"><span class="project-kicker">08 · Gastronomía · Cliente real</span><h3>Antón convierte antojo en pedidos sin comisiones.</h3><p>Web interactiva para Antón Cocina de Barrio (Alta Córdoba): pizza giratoria 3D, armado en 8 pasos y 4 canales de venta directos a WhatsApp.</p><div class="project-bottom"><div class="project-tags"><span>Pizza 3D</span><span>4 canales</span><span>WhatsApp 0%</span></div><a class="project-link" href="anton/">Ver caso completo ↗</a></div></div></article>
         </div>
+      </div>
+    </section>
+
+    <section class="custom-webs" id="webs-a-medida">
+      <div class="container">
+        <div class="cw-head">
+          <div>
+            <span class="eyebrow dark">Páginas web a medida</span>
+            <h2>Sitios diseñados desde cero para <span class="muted">marcas reales.</span></h2>
+          </div>
+          <p>Además de nuestros productos propios, creamos páginas web a medida con identidad, velocidad y acceso directo a cada sitio publicado.</p>
+        </div>
+        <div class="cw-grid" id="customWebsGrid"></div>
       </div>
     </section>
 
@@ -306,6 +352,65 @@
       const body = encodeURIComponent(`Nombre: ${data.get('name')}\nEmpresa/proyecto: ${data.get('company') || '-'}\nEmail: ${data.get('email')}\nTeléfono: ${data.get('phone') || '-'}\n\nProceso: ${data.get('message') || '-'}`);
       note.textContent = 'Abriendo tu correo…'; location.href = `mailto:somospopups@gmail.com?subject=${subject}&body=${body}`;
     });
+  </script>
+  <script src="assets/webs-data.js"></script>
+  <script>
+    (function () {
+      const grid = document.getElementById('customWebsGrid');
+      const webs = Array.isArray(window.POPUPS_WEBS) ? window.POPUPS_WEBS : [];
+      if (!grid) return;
+      function esc(s) {
+        return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+      const single = webs.length === 1;
+      const cards = webs.map(function (w) {
+        const tags = (w.tags || []).map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('');
+        const caseLink = w.caseUrl ? '<a class="cw-btn-ghost" href="' + esc(w.caseUrl) + '">Ver caso completo →</a>' : '';
+        return (
+          '<article class="cw-card' + (single ? '' : ' half') + '">' +
+            '<div class="cw-bar">' +
+              '<div class="cw-dots" aria-hidden="true"><i></i><i></i><i></i></div>' +
+              '<a class="cw-url" href="' + esc(w.url) + '" target="_blank" rel="noopener">' + esc(w.displayUrl) + '</a>' +
+              '<span class="cw-live"><i></i>ONLINE</span>' +
+            '</div>' +
+            '<a class="cw-shot" href="' + esc(w.url) + '" target="_blank" rel="noopener" aria-label="Abrir web de ' + esc(w.name) + '">' +
+              '<img src="' + esc(w.image) + '" alt="Vista real de ' + esc(w.name) + '" loading="lazy" />' +
+              (w.highlight ? '<span class="cw-shot-chip">' + esc(w.highlight) + '</span>' : '') +
+            '</a>' +
+            '<div class="cw-body">' +
+              '<span class="cw-kicker">Web ' + esc(w.number) + ' · ' + esc(w.category) + ' · ' + esc(w.location) + '</span>' +
+              '<h3>' + esc(w.name) + '</h3>' +
+              '<p>' + esc(w.summary) + '</p>' +
+              '<div class="cw-tags">' + tags + '</div>' +
+              '<div class="cw-actions">' +
+                '<a class="cw-btn-primary" href="' + esc(w.url) + '" target="_blank" rel="noopener">Abrir web en vivo ↗</a>' +
+                caseLink +
+              '</div>' +
+            '</div>' +
+          '</article>'
+        );
+      }).join('');
+
+      const invite =
+        '<aside class="cw-invite' + (single ? '' : ' full') + '">' +
+          '<div>' +
+            '<span class="cw-invite-tag">Catálogo en crecimiento</span>' +
+            '<h3>¿Querés una web a medida para tu negocio?</h3>' +
+            '<p>Cero plantillas repetidas. Diseñamos la presencia digital de tu marca lista para convertir visitas en consultas o pedidos por WhatsApp.</p>' +
+            '<ul class="cw-invite-list">' +
+              '<li>Diseño e interacción 100% a medida</li>' +
+              '<li>Carga ultrarrápida desde cualquier celular</li>' +
+              '<li>Pedidos y consultas directas sin comisiones</li>' +
+            '</ul>' +
+          '</div>' +
+          '<div class="cw-invite-actions">' +
+            '<a class="cw-btn-dark" href="webs-a-medida/">Explorar catálogo Webs a Medida →</a>' +
+            '<a class="cw-btn-outline" href="#contacto">Cotizar mi web ↗</a>' +
+          '</div>' +
+        '</aside>';
+
+      grid.innerHTML = cards + invite;
+    })();
   </script>
 </body>
 </html>

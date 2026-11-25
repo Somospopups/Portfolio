@@ -1,0 +1,1030 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Páginas web a medida — POPUPS Studio</title>
+  <meta name="description" content="Catálogo de páginas web a medida diseñadas y programadas por POPUPS en Córdoba: sitios desde cero, cero plantillas, interacción real y ventas directas por WhatsApp." />
+  <meta name="theme-color" content="#0B0D09" />
+  <link rel="icon" type="image/svg+xml" href="./assets/icon.svg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:title" content="Páginas web a medida — POPUPS Studio" />
+  <meta property="og:description" content="Sitios diseñados desde cero para marcas reales. Cero plantillas, interacción memorable y pedidos directos sin comisiones." />
+  <meta property="og:image" content="https://somospopups.github.io/Portfolio/webs-a-medida/assets/og-preview.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <style>
+    @font-face {
+      font-family: "Fraunces";
+      src: url("./assets/fraunces600.woff2") format("woff2");
+      font-weight: 600;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Fraunces";
+      src: url("./assets/fraunces700.woff2") format("woff2");
+      font-weight: 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "DM Sans";
+      src: url("./assets/dmsans.woff2") format("woff2");
+      font-weight: 400 800;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Space Mono";
+      src: url("./assets/spacemono400.woff2") format("woff2");
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Space Mono";
+      src: url("./assets/spacemono700.woff2") format("woff2");
+      font-weight: 700;
+      font-display: swap;
+    }
+
+    :root {
+      --bg: #0b0d09;
+      --bg-2: #12150f;
+      --paper: #f3f4ef;
+      --stone: #e9ece3;
+      --ink: #11140f;
+      --muted: #666c62;
+      --lime: #c8f810;
+      --lime-hi: #d8ff3e;
+      --line-dark: rgba(244, 245, 240, 0.12);
+      --line-light: rgba(17, 20, 15, 0.11);
+      --serif: "Fraunces", Georgia, serif;
+      --sans: "DM Sans", system-ui, -apple-system, sans-serif;
+      --mono: "Space Mono", ui-monospace, monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --max: 1200px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      background: var(--bg);
+      color: #f4f5f0;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; }
+    .container { width: min(var(--max), calc(100% - 36px)); margin: 0 auto; }
+
+    /* ==================== TOPBAR ==================== */
+    .topbar-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: rgba(11, 13, 9, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      min-height: 64px;
+      padding: 10px 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .back-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(244, 245, 240, 0.2);
+      background: rgba(244, 245, 240, 0.05);
+      font-size: 12px;
+      font-weight: 700;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .back-pill:hover { border-color: var(--lime); background: rgba(200, 248, 16, 0.08); }
+    .badge-chip {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(200, 248, 16, 0.34);
+      background: rgba(200, 248, 16, 0.1);
+      color: var(--lime);
+    }
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(244, 245, 240, 0.75);
+    }
+    .topbar-nav a:hover { color: var(--lime); }
+    .topbar-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: var(--lime);
+      color: #0b0d09;
+      font-size: 12.5px;
+      font-weight: 800;
+      white-space: nowrap;
+      transition: transform 0.2s var(--ease), background 0.2s ease;
+    }
+    .topbar-cta:hover { background: var(--lime-hi); transform: translateY(-1px); }
+
+    /* ==================== SHARED ==================== */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--lime);
+    }
+    .eyebrow.dark { color: #3c4d00; }
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--lime);
+      box-shadow: 0 0 0 4px rgba(200, 248, 16, 0.18);
+    }
+    .eyebrow.dark .eyebrow-dot {
+      background: #4e6300;
+      box-shadow: 0 0 0 4px rgba(78, 99, 0, 0.14);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 22px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 800;
+      border: 1.5px solid transparent;
+      transition: transform 0.22s var(--ease), background 0.2s ease, border-color 0.2s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-lime { background: var(--lime); color: #0b0d09; }
+    .btn-lime:hover { background: var(--lime-hi); }
+    .btn-ghost {
+      background: rgba(244, 245, 240, 0.06);
+      border-color: rgba(244, 245, 240, 0.22);
+      color: #f4f5f0;
+    }
+    .btn-ghost:hover { border-color: var(--lime); color: var(--lime); }
+    .btn-dark { background: #11140f; color: #f4f5f0; }
+    .btn-dark:hover { background: #232920; }
+    .btn-outline-dark {
+      background: transparent;
+      border-color: rgba(17, 20, 15, 0.22);
+      color: #11140f;
+    }
+    .btn-outline-dark:hover { border-color: #11140f; background: rgba(17, 20, 15, 0.05); }
+
+    /* ==================== HERO ==================== */
+    .hero {
+      position: relative;
+      padding: 68px 0 74px;
+      background:
+        radial-gradient(760px 440px at 85% 20%, rgba(200, 248, 16, 0.12), transparent 65%),
+        radial-gradient(560px 380px at 8% 85%, rgba(45, 97, 23, 0.22), transparent 65%),
+        var(--bg);
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 40px;
+      align-items: end;
+    }
+    .hero h1 {
+      margin: 16px 0 0;
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: clamp(44px, 6.2vw, 78px);
+      line-height: 0.94;
+      letter-spacing: -0.045em;
+    }
+    .hero h1 em { font-style: italic; color: var(--lime); font-weight: 600; }
+    .hero-lead {
+      margin: 22px 0 0;
+      max-width: 590px;
+      font-size: 16.5px;
+      line-height: 1.62;
+      color: rgba(244, 245, 240, 0.78);
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+    .hero-stats {
+      display: grid;
+      gap: 12px;
+      background: rgba(244, 245, 240, 0.04);
+      border: 1px solid var(--line-dark);
+      border-radius: 26px;
+      padding: 22px;
+    }
+    .hstat {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .hstat:last-child { padding-bottom: 0; border-bottom: 0; }
+    .hstat b {
+      font-family: var(--serif);
+      font-size: 32px;
+      color: var(--lime);
+      line-height: 1;
+    }
+    .hstat span {
+      font-size: 13px;
+      color: rgba(244, 245, 240, 0.76);
+      text-align: right;
+    }
+
+    /* ==================== CATALOG SECTION ==================== */
+    .catalog {
+      padding: 84px 0;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .sec-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 28px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .sec-head h2 {
+      margin: 12px 0 0;
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: clamp(34px, 4.6vw, 54px);
+      line-height: 0.96;
+      letter-spacing: -0.045em;
+    }
+    .sec-head p {
+      margin: 0;
+      max-width: 390px;
+      font-size: 14.5px;
+      line-height: 1.56;
+      color: var(--muted);
+    }
+
+    .cat-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 26px;
+    }
+    .cat-filter {
+      padding: 9px 15px;
+      border-radius: 999px;
+      border: 1px solid rgba(17, 20, 15, 0.16);
+      background: rgba(255, 255, 255, 0.65);
+      color: #4f554b;
+      font-size: 12px;
+      font-weight: 800;
+      transition: all 0.2s ease;
+    }
+    .cat-filter:hover, .cat-filter.active {
+      background: var(--lime);
+      color: #0b0d09;
+      border-color: #0b0d09;
+    }
+
+    .webs-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 22px;
+    }
+    .web-card {
+      grid-column: span 8;
+      background: #10130e;
+      color: #f4f5f0;
+      border-radius: 30px;
+      border: 1px solid rgba(17, 20, 15, 0.14);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 22px 54px rgba(17, 20, 15, 0.12);
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+    }
+    .web-card.compact { grid-column: span 6; }
+    .web-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 30px 66px rgba(17, 20, 15, 0.2);
+    }
+
+    .browser-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 18px;
+      background: #0a0c08;
+      border-bottom: 1px solid rgba(244, 245, 240, 0.09);
+    }
+    .browser-dots { display: flex; align-items: center; gap: 6px; }
+    .browser-dots i { width: 9px; height: 9px; border-radius: 999px; display: block; }
+    .browser-dots i:nth-child(1) { background: #e5534b; }
+    .browser-dots i:nth-child(2) { background: #e9c36c; }
+    .browser-dots i:nth-child(3) { background: #57ab5a; }
+    .browser-url {
+      flex: 1;
+      max-width: 360px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(244, 245, 240, 0.06);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(244, 245, 240, 0.72);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+    }
+    .browser-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--lime);
+      flex-shrink: 0;
+    }
+    .browser-live span {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--lime);
+      display: inline-block;
+    }
+
+    .web-shot {
+      position: relative;
+      display: block;
+      aspect-ratio: 16 / 9.8;
+      overflow: hidden;
+      background: #161b13;
+    }
+    .web-shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.55s var(--ease);
+    }
+    .web-card:hover .web-shot img { transform: scale(1.035); }
+    .web-shot-pill {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(11, 13, 9, 0.84);
+      border: 1px solid rgba(200, 248, 16, 0.35);
+      color: var(--lime);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      backdrop-filter: blur(8px);
+    }
+
+    .web-body {
+      padding: 24px 26px 26px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .web-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(244, 245, 240, 0.62);
+    }
+    .web-body h3 {
+      margin: 10px 0 4px;
+      font-family: var(--serif);
+      font-size: clamp(26px, 2.8vw, 34px);
+      line-height: 1;
+      letter-spacing: -0.035em;
+      color: #fff;
+    }
+    .web-tagline {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--lime);
+    }
+    .web-desc {
+      margin: 12px 0 0;
+      font-size: 14.5px;
+      line-height: 1.58;
+      color: rgba(244, 245, 240, 0.76);
+    }
+    .web-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 16px;
+    }
+    .web-tags span {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(244, 245, 240, 0.16);
+      background: rgba(244, 245, 240, 0.05);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: rgba(244, 245, 240, 0.85);
+    }
+    .web-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(244, 245, 240, 0.1);
+    }
+
+    /* Next available slot invite card */
+    .next-slot {
+      grid-column: span 4;
+      background: #fff;
+      border: 2px dashed rgba(17, 20, 15, 0.22);
+      border-radius: 30px;
+      padding: 28px 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .next-slot.full { grid-column: span 12; flex-direction: row; align-items: center; }
+    .next-slot-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: var(--stone);
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #3f5000;
+      width: fit-content;
+    }
+    .next-slot h3 {
+      margin: 14px 0 10px;
+      font-family: var(--serif);
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+    .next-slot p {
+      margin: 0;
+      font-size: 14.5px;
+      line-height: 1.56;
+      color: var(--muted);
+    }
+    .slot-list {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 0;
+      display: grid;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #2b3028;
+    }
+    .slot-list li::before { content: "✦ "; color: #546c00; }
+
+    /* ==================== PILLARS ==================== */
+    .pillars {
+      padding: 84px 0;
+      background: var(--bg-2);
+      border-top: 1px solid var(--line-dark);
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 34px;
+    }
+    .pillar {
+      background: rgba(244, 245, 240, 0.04);
+      border: 1px solid var(--line-dark);
+      border-radius: 24px;
+      padding: 24px 22px;
+    }
+    .pillar-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--lime);
+    }
+    .pillar h3 {
+      margin: 12px 0 8px;
+      font-family: var(--serif);
+      font-size: 24px;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+    .pillar p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.58;
+      color: rgba(244, 245, 240, 0.72);
+    }
+
+    /* ==================== INTERACTIVE QUOTE BUILDER ==================== */
+    .quote-sec {
+      padding: 86px 0;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .quote-card {
+      background: #10130e;
+      color: #f4f5f0;
+      border-radius: 32px;
+      padding: 38px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 34px;
+      align-items: start;
+      box-shadow: 0 26px 64px rgba(17, 20, 15, 0.16);
+    }
+    .quote-card h2 {
+      margin: 12px 0 8px;
+      font-family: var(--serif);
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+    }
+    .quote-card h2 em { font-style: italic; color: var(--lime); }
+    .quote-sub {
+      margin: 0 0 22px;
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: rgba(244, 245, 240, 0.74);
+    }
+    .q-label {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--lime);
+      margin: 16px 0 9px;
+    }
+    .q-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .q-chip {
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(244, 245, 240, 0.2);
+      background: rgba(244, 245, 240, 0.05);
+      color: #f4f5f0;
+      font-size: 12.5px;
+      font-weight: 700;
+      transition: all 0.18s ease;
+    }
+    .q-chip:hover { border-color: var(--lime); }
+    .q-chip.active {
+      background: var(--lime);
+      color: #0b0d09;
+      border-color: var(--lime);
+    }
+
+    .quote-preview {
+      background: rgba(244, 245, 240, 0.05);
+      border: 1px solid rgba(200, 248, 16, 0.24);
+      border-radius: 24px;
+      padding: 24px;
+    }
+    .qp-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--lime);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .qp-bubble {
+      background: #172716;
+      border: 1px solid rgba(200, 248, 16, 0.24);
+      border-radius: 16px 16px 4px 16px;
+      padding: 15px 16px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: #eff6e8;
+      margin-bottom: 18px;
+    }
+    .qp-actions { display: grid; gap: 10px; }
+
+    /* ==================== FOOTER BRIDGE ==================== */
+    .bridge {
+      padding: 46px 0 54px;
+      background: #0b0d09;
+      border-top: 1px solid var(--line-dark);
+    }
+    .bridge-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .bridge h2 {
+      margin: 8px 0 0;
+      font-family: var(--serif);
+      font-size: clamp(28px, 3.6vw, 40px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+    .footer {
+      padding: 22px 0;
+      background: #070806;
+      color: rgba(244, 245, 240, 0.58);
+      font-family: var(--mono);
+      font-size: 11px;
+      border-top: 1px solid rgba(244, 245, 240, 0.08);
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .footer a:hover { color: var(--lime); }
+
+    @media (max-width: 980px) {
+      .topbar-nav { display: none; }
+      .hero-grid, .quote-card { grid-template-columns: 1fr; }
+      .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+      .web-card, .web-card.compact, .next-slot { grid-column: span 12; }
+      .next-slot.full { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 560px) {
+      .pillars-grid { grid-template-columns: 1fr; }
+      .quote-card { padding: 24px 20px; }
+      .web-body { padding: 20px; }
+      .badge-chip { display: none; }
+      .browser-url { max-width: 170px; font-size: 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar-wrap">
+    <div class="container topbar">
+      <div class="topbar-left">
+        <a href="../#webs-a-medida" class="back-pill">← Volver a POPUPS</a>
+        <span class="badge-chip">CATÁLOGO · WEBS A MEDIDA</span>
+      </div>
+      <nav class="topbar-nav" aria-label="Secciones de Webs a Medida">
+        <a href="#catalogo">Webs creadas</a>
+        <a href="#diferencial">Diferencial</a>
+        <a href="#cotizador">Cotizar mi web</a>
+      </nav>
+      <a href="#cotizador" class="topbar-cta">Pedir mi web ↗</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow"><span class="eyebrow-dot"></span>Apartado exclusivo · POPUPS Studio</span>
+          <h1>Páginas web <em>a medida.</em></h1>
+          <p class="hero-lead">
+            Además de nuestras apps y plataformas propias, diseñamos y programamos sitios web desde cero para marcas y comercios reales.
+            Acá reunimos el acceso directo a cada web creada por POPUPS.
+          </p>
+          <div class="hero-actions">
+            <a href="#catalogo" class="btn btn-lime">Explorar webs publicadas ↓</a>
+            <a href="#cotizador" class="btn btn-ghost">Cotizar una web para mi negocio →</a>
+          </div>
+        </div>
+
+        <aside class="hero-stats" aria-label="Resumen del catálogo">
+          <div class="hstat">
+            <b id="websCount">01</b>
+            <span>webs en producción con acceso directo</span>
+          </div>
+          <div class="hstat">
+            <b>0%</b>
+            <span>plantillas genéricas ni comisiones de venta</span>
+          </div>
+          <div class="hstat">
+            <b>100%</b>
+            <span>identidad, velocidad mobile y contacto directo</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ==================== DYNAMIC CATALOG ==================== -->
+    <section class="catalog" id="catalogo">
+      <div class="container">
+        <div class="sec-head">
+          <div>
+            <span class="eyebrow dark"><span class="eyebrow-dot"></span>Accesos directos en vivo</span>
+            <h2>Webs creadas por POPUPS.</h2>
+          </div>
+          <p>Cada proyecto tiene su propia dirección de arte, interacción pensada para el rubro y acceso directo al sitio publicado.</p>
+        </div>
+
+        <div class="cat-filters" id="catFilters" role="tablist" aria-label="Filtrar webs por rubro"></div>
+        <div class="webs-grid" id="websGrid"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 4 PILLARS ==================== -->
+    <section class="pillars" id="diferencial">
+      <div class="container">
+        <span class="eyebrow"><span class="eyebrow-dot"></span>Por qué una web POPUPS</span>
+        <div class="sec-head" style="margin-bottom:0">
+          <h2 style="color:#f4f5f0">No usamos plantillas repetidas.<br />Construimos <em>tu vidriera digital.</em></h2>
+          <p style="color:rgba(244,245,240,0.72)">Cada decisión visual y técnica responde a cómo compra tu cliente real desde el celular.</p>
+        </div>
+
+        <div class="pillars-grid">
+          <article class="pillar">
+            <span class="pillar-num">01 · IDENTIDAD</span>
+            <h3>Diseño desde cero</h3>
+            <p>Tipografía, paleta, fotografía y narrativa pensadas exclusivamente para que tu negocio no se parezca a ninguno.</p>
+          </article>
+          <article class="pillar">
+            <span class="pillar-num">02 · INTERACCIÓN</span>
+            <h3>Experiencia que retiene</h3>
+            <p>Elementos interactivos, vistas 3D, recorridos al hacer scroll y micro-animaciones que despiertan ganas de explorar.</p>
+          </article>
+          <article class="pillar">
+            <span class="pillar-num">03 · CONVERSIÓN</span>
+            <h3>Ventas sin comisiones</h3>
+            <p>Pedidos y consultas pre-armadas directo a tu WhatsApp o tienda propia, sin regalar margen a plataformas intermedias.</p>
+          </article>
+          <article class="pillar">
+            <span class="pillar-num">04 · INGENIERÍA</span>
+            <h3>Rápida en cualquier celular</h3>
+            <p>Imágenes optimizadas en WebP, código limpio, carga instantánea en 4G y datos estructurados para Google.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE QUOTE BUILDER ==================== -->
+    <section class="quote-sec" id="cotizador">
+      <div class="container">
+        <div class="quote-card">
+          <div>
+            <span class="eyebrow"><span class="eyebrow-dot"></span>Armá tu consulta en 20 segundos</span>
+            <h2>¿Querés una web a medida <em>para tu marca?</em></h2>
+            <p class="quote-sub">Elegí tu rubro y qué te gustaría sumar. Te armamos el mensaje listo para enviarnos por WhatsApp y coordinamos una propuesta concreta.</p>
+
+            <span class="q-label">1. ¿De qué es tu negocio?</span>
+            <div class="q-chips" id="rubroChips">
+              <button type="button" class="q-chip active" data-val="Gastronomía / Café / Bar">Gastronomía / Café</button>
+              <button type="button" class="q-chip" data-val="Comercio / Marca propia">Comercio / Marca</button>
+              <button type="button" class="q-chip" data-val="Estudio / Servicios profesionales">Servicios / Estudio</button>
+              <button type="button" class="q-chip" data-val="Salud / Fitness / Estética">Salud / Fitness</button>
+              <button type="button" class="q-chip" data-val="Otro emprendimiento">Otro proyecto</button>
+            </div>
+
+            <span class="q-label">2. ¿Qué te gustaría incluir? (podés marcar varios)</span>
+            <div class="q-chips" id="extraChips">
+              <button type="button" class="q-chip active" data-val="carta o catálogo interactivo">Carta / Catálogo interactivo</button>
+              <button type="button" class="q-chip active" data-val="pedidos directos por WhatsApp">Pedidos por WhatsApp</button>
+              <button type="button" class="q-chip" data-val="interacciones y animaciones a medida">Animaciones / 3D</button>
+              <button type="button" class="q-chip" data-val="tarjeta de fidelidad Mis Sellos">Sumar Mis Sellos</button>
+              <button type="button" class="q-chip" data-val="sección mayorista B2B">Canal B2B / Mayorista</button>
+            </div>
+          </div>
+
+          <div class="quote-preview">
+            <div class="qp-head">
+              <span>MENSAJE LISTO PARA POPUPS</span>
+              <span>351 766-9967</span>
+            </div>
+            <div class="qp-bubble" id="quoteBubble"></div>
+            <div class="qp-actions">
+              <a id="quoteWaBtn" href="#" target="_blank" rel="noopener" class="btn btn-lime">Enviar consulta por WhatsApp ↗</a>
+              <a href="mailto:somospopups@gmail.com?subject=Consulta%20por%20p%C3%A1gina%20web%20a%20medida" class="btn btn-ghost">Escribir a somospopups@gmail.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== BRIDGE BACK TO PORTFOLIO ==================== -->
+    <section class="bridge">
+      <div class="container bridge-inner">
+        <div>
+          <span class="eyebrow">Portfolio POPUPS</span>
+          <h2>¿Querés ver también nuestros productos y apps propias?</h2>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a href="../#proyectos" class="btn btn-lime">Ver los 7 productos propios ↗</a>
+          <a href="../" class="btn btn-ghost">← Volver al inicio</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© 2026 POPUPS · PÁGINAS WEB A MEDIDA · CÓRDOBA, ARGENTINA</span>
+      <span><a href="../#proyectos">Productos</a> · <a href="../#webs-a-medida">Webs a medida</a> · <a href="mailto:somospopups@gmail.com">somospopups@gmail.com</a></span>
+    </div>
+  </footer>
+
+  <script src="../assets/webs-data.js"></script>
+  <script>
+    (function () {
+      const webs = Array.isArray(window.POPUPS_WEBS) ? window.POPUPS_WEBS : [];
+      const countEl = document.getElementById('websCount');
+      const filtersEl = document.getElementById('catFilters');
+      const gridEl = document.getElementById('websGrid');
+
+      if (countEl) {
+        countEl.textContent = String(webs.length).padStart(2, '0');
+      }
+
+      const categories = ['Todas'].concat(
+        Array.from(new Set(webs.map(function (w) { return w.category; })))
+      );
+      let activeCat = 'Todas';
+
+      function esc(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function renderFilters() {
+        filtersEl.innerHTML = categories.map(function (cat) {
+          const on = cat === activeCat;
+          return '<button type="button" class="cat-filter' + (on ? ' active' : '') + '" data-cat="' + esc(cat) + '" role="tab" aria-selected="' + (on ? 'true' : 'false') + '">' + esc(cat) + '</button>';
+        }).join('');
+
+        filtersEl.querySelectorAll('.cat-filter').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            activeCat = btn.getAttribute('data-cat');
+            renderFilters();
+            renderGrid();
+          });
+        });
+      }
+
+      function renderGrid() {
+        const list = activeCat === 'Todas'
+          ? webs
+          : webs.filter(function (w) { return w.category === activeCat; });
+
+        const singleFeatured = list.length === 1;
+        const cardsHtml = list.map(function (w) {
+          const imgPath = '../' + w.image;
+          const caseBtn = w.caseUrl
+            ? '<a href="../' + esc(w.caseUrl) + '" class="btn btn-ghost">Ver caso completo →</a>'
+            : '';
+          const tagsHtml = (w.tags || []).map(function (t) {
+            return '<span>' + esc(t) + '</span>';
+          }).join('');
+
+          return (
+            '<article class="web-card' + (singleFeatured ? '' : ' compact') + '">' +
+              '<div class="browser-bar">' +
+                '<div class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></div>' +
+                '<a href="' + esc(w.url) + '" target="_blank" rel="noopener" class="browser-url">' + esc(w.displayUrl) + '</a>' +
+                '<span class="browser-live"><span></span>ONLINE</span>' +
+              '</div>' +
+              '<a href="' + esc(w.url) + '" target="_blank" rel="noopener" class="web-shot" aria-label="Abrir ' + esc(w.name) + ' en vivo">' +
+                '<img src="' + esc(imgPath) + '" alt="Vista previa de ' + esc(w.name) + '" loading="lazy" />' +
+                (w.highlight ? '<span class="web-shot-pill">' + esc(w.highlight) + '</span>' : '') +
+              '</a>' +
+              '<div class="web-body">' +
+                '<div class="web-meta">' +
+                  '<span>WEB ' + esc(w.number) + ' · ' + esc(w.category) + '</span>' +
+                  '<span>' + esc(w.location) + ' · ' + esc(w.year) + '</span>' +
+                '</div>' +
+                '<h3>' + esc(w.name) + '</h3>' +
+                '<p class="web-tagline">' + esc(w.tagline) + '</p>' +
+                '<p class="web-desc">' + esc(w.summary) + '</p>' +
+                '<div class="web-tags">' + tagsHtml + '</div>' +
+                '<div class="web-actions">' +
+                  '<a href="' + esc(w.url) + '" target="_blank" rel="noopener" class="btn btn-lime">Abrir web en vivo ↗</a>' +
+                  caseBtn +
+                '</div>' +
+              '</div>' +
+            '</article>'
+          );
+        }).join('');
+
+        const slotClass = singleFeatured ? 'next-slot' : 'next-slot full';
+        const inviteHtml =
+          '<aside class="' + slotClass + '">' +
+            '<div>' +
+              '<span class="next-slot-badge">✦ PRÓXIMO LUGAR DISPONIBLE</span>' +
+              '<h3>¿Tu marca es la próxima?</h3>' +
+              '<p>Diseñamos tu web desde cero, lista para convertir visitas de Instagram y Google en consultas o pedidos reales por WhatsApp.</p>' +
+              '<ul class="slot-list">' +
+                '<li>Identidad visual 100% propia</li>' +
+                '<li>Mobile-first y carga instantánea</li>' +
+                '<li>Dominio, SEO local y publicación resuelta</li>' +
+              '</ul>' +
+            '</div>' +
+            '<div style="display:grid;gap:10px;min-width:220px">' +
+              '<a href="#cotizador" class="btn btn-dark">Armar mi consulta →</a>' +
+              '<a href="https://wa.me/5493517669967?text=%C2%A1Hola%20POPUPS!%20Vi%20el%20cat%C3%A1logo%20de%20P%C3%A1ginas%20Web%20a%20Medida%20y%20quiero%20cotizar%20una%20web%20para%20mi%20negocio." target="_blank" rel="noopener" class="btn btn-outline-dark">WhatsApp directo ↗</a>' +
+            '</div>' +
+          '</aside>';
+
+        gridEl.innerHTML = cardsHtml + inviteHtml;
+      }
+
+      renderFilters();
+      renderGrid();
+
+      // Quote configurator
+      const rubroBtns = document.querySelectorAll('#rubroChips .q-chip');
+      const extraBtns = document.querySelectorAll('#extraChips .q-chip');
+      const bubble = document.getElementById('quoteBubble');
+      const waBtn = document.getElementById('quoteWaBtn');
+
+      let selectedRubro = 'Gastronomía / Café / Bar';
+
+      function updateQuote() {
+        const extras = Array.from(extraBtns)
+          .filter(function (b) { return b.classList.contains('active'); })
+          .map(function (b) { return b.getAttribute('data-val'); });
+        const extrasTxt = extras.length
+          ? ' Me gustaría incluir: ' + extras.join(', ') + '.'
+          : '';
+        const msg = '¡Hola POPUPS! Vi el apartado de Páginas Web a Medida y quiero cotizar una web para mi negocio (' + selectedRubro + ').' + extrasTxt + ' ¿Cómo arrancamos?';
+        bubble.textContent = msg;
+        waBtn.href = 'https://wa.me/5493517669967?text=' + encodeURIComponent(msg);
+      }
+
+      rubroBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          rubroBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          selectedRubro = btn.getAttribute('data-val');
+          updateQuote();
+        });
+      });
+
+      extraBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          btn.classList.toggle('active');
+          updateQuote();
+        });
+      });
+
+      updateQuote();
+    })();
+  </script>
+</body>
+</html>
