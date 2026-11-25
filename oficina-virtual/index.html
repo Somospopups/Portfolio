@@ -1,0 +1,3634 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oficina Virtual — Espacio 2D Pixel Art para Equipos Remotos | POPUPS</title>
+  <meta name="description" content="Oficina Virtual 2D multiplayer estilo pixel art hecha por POPUPS: tu oficina real pintada a medida con cielo en tiempo real, avatares propios, voz, cámara, radio sincronizada, avisos estilo Messenger y el gato de la oficina." />
+  <meta name="theme-color" content="#17132c" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:site_name" content="Oficina Virtual · POPUPS" />
+  <meta property="og:title" content="Oficina Virtual — Tu equipo remoto, en un mismo lugar | POPUPS" />
+  <meta property="og:description" content="Espacio 2D multiplayer en pixel art hecho a medida para equipos remotos: puestos con doble monitor, cielo en tiempo real, voz, cámara, radio sincronizada y avisos estilo Messenger." />
+  <link rel="canonical" href="https://somospopups.github.io/Portfolio/oficina-virtual/" />
+  <meta property="og:url" content="https://somospopups.github.io/Portfolio/oficina-virtual/" />
+  <meta property="og:image" content="https://somospopups.github.io/Portfolio/oficina-virtual/assets/og-preview.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Oficina Virtual 2D en pixel art al atardecer con cuatro puestos de trabajo y la mascota de la oficina" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Oficina Virtual — Tu equipo remoto, en un mismo lugar | POPUPS" />
+  <meta name="twitter:description" content="Tu oficina real en 2D pixel art con cielo en tiempo real, voz, cámara, radio sincronizada y avisos estilo Messenger." />
+  <meta name="twitter:image" content="https://somospopups.github.io/Portfolio/oficina-virtual/assets/og-preview.jpg" />
+  <link rel="icon" type="image/webp" href="./assets/office_icon.webp" />
+  <style>
+    /* ============================================================
+       FUENTES EMBEBIDAS 100% OFFLINE (Pixelify Sans, DM Sans, Space Mono)
+       ============================================================ */
+    @font-face {
+      font-family: 'Pixelify Sans';
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+      src: url(./assets/pixelify.woff2) format('woff2');
+    }
+    @font-face {
+      font-family: 'DM Sans';
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+      src: url(./assets/dmsans.woff2) format('woff2');
+    }
+    @font-face {
+      font-family: 'Space Mono';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(./assets/spacemono400.woff2) format('woff2');
+    }
+    @font-face {
+      font-family: 'Space Mono';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url(./assets/spacemono700.woff2) format('woff2');
+    }
+
+    /* ============================================================
+       DESIGN SYSTEM — ESTÉTICA EXACTA DE PIXEL BLOCK
+       ============================================================ */
+    :root {
+      --bg: #17132c;
+      --bg-deep: #110d22;
+      --surface: #231d3c;
+      --surface-hover: #2b2448;
+      --border: #504364;
+      --border-soft: #362d50;
+      --gold: #ffd76f;
+      --gold-bright: #ffe494;
+      --cream: #f7ebc9;
+      --muted: #c1b8d1;
+      --mint: #a7e8ad;
+      --grass: #8bbf79;
+      --water: #75beba;
+      --stone: #494360;
+      --rose: #f6a2be;
+
+      --font-display: 'Pixelify Sans', monospace, sans-serif;
+      --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Space Mono', monospace;
+
+      --max-w: 1120px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg);
+      color: var(--cream);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--cream);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Fondo LED Matrix Pixel sutil */
+    #led-matrix {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      opacity: 0.055;
+      pointer-events: none;
+    }
+
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: calc(var(--max-w) + 64px);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-align: center;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 7.2vw, 88px);
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4.4vw, 46px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-size: 25px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+    }
+
+    .lead {
+      font-family: var(--font-body);
+      font-size: clamp(16px, 2vw, 18px);
+      line-height: 1.6;
+      letter-spacing: -0.02em;
+      color: var(--muted);
+      text-align: center;
+      max-width: 630px;
+      text-wrap: balance;
+    }
+
+    /* Botones Pixel Block (0px border-radius, altura 52px) */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 52px;
+      min-width: 208px;
+      padding: 0 24px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      border-radius: 0;
+      cursor: pointer;
+      transition: transform 0.16s var(--ease), background-color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+      user-select: none;
+    }
+
+    .btn-primary {
+      background-color: var(--gold);
+      border: 1px solid var(--gold);
+      color: var(--bg);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--gold-bright);
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 0 rgba(80, 67, 100, 0.75);
+    }
+
+    .btn-primary:active { transform: translateY(0); box-shadow: none; }
+
+    .btn-secondary {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--cream);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--surface-hover);
+      border-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 0 rgba(17, 13, 34, 0.9);
+    }
+
+    .btn-secondary:active { transform: translateY(0); box-shadow: none; }
+
+    .btn-mint {
+      background-color: var(--mint);
+      border: 1px solid var(--mint);
+      color: var(--bg);
+    }
+
+    .btn-mint:hover {
+      filter: brightness(1.06);
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 0 rgba(17, 13, 34, 0.9);
+    }
+
+    /* ============================================================
+       NAVEGACIÓN SUPERIOR
+       ============================================================ */
+    .nav {
+      width: 100%;
+      padding: 18px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-family: var(--font-display);
+      font-size: 25px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--cream);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-ico {
+      width: 26px;
+      height: 24px;
+      image-rendering: pixelated;
+      display: block;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    /* Menú desplegable compacto en celular (< 960px) */
+    .nav-menu-btn {
+      display: none;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+    }
+
+    .nav-menu-btn:hover,
+    .nav-menu-btn[aria-expanded="true"] {
+      border-color: var(--gold);
+      background: var(--surface-hover);
+    }
+
+    .mobile-drawer {
+      display: none;
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--gold);
+      padding: 12px;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 10px;
+      box-shadow: 0 12px 32px rgba(8, 6, 20, 0.55);
+    }
+
+    .mobile-drawer.open { display: flex; }
+
+    .mobile-drawer a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: var(--bg-deep);
+      border: 1px solid var(--border-soft);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cream);
+      text-decoration: none;
+    }
+
+    .mobile-drawer a:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .mobile-drawer a.drawer-wa {
+      background: rgba(167, 232, 173, 0.12);
+      border-color: var(--mint);
+      color: var(--mint);
+      font-weight: 700;
+    }
+
+    /* Pista visual sutil en la escena hero hasta la primera interacción */
+    .hero-hint-ping {
+      position: absolute;
+      left: 50.4%;
+      top: 71.5%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      background: var(--gold);
+      box-shadow: 0 0 0 3px rgba(17, 13, 34, 0.9), 0 0 12px rgba(255, 215, 111, 0.95);
+      pointer-events: none;
+      z-index: 6;
+      animation: hintPulse 1.6s steps(2, end) infinite;
+      transition: opacity 0.3s ease;
+    }
+
+    .hero-hint-ping.hidden {
+      opacity: 0;
+      animation: none;
+    }
+
+    @keyframes hintPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.95; }
+      50% { transform: translate(-50%, -50%) scale(1.35); opacity: 0.45; }
+    }
+
+    a.nav-status {
+      transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+    a.nav-status:hover {
+      border-color: var(--gold);
+      color: var(--cream);
+      transform: translateY(-1px);
+    }
+
+    .nav-status {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-pixel {
+      width: 7px;
+      height: 7px;
+      background-color: var(--mint);
+      display: inline-block;
+      animation: pbtwinkle 1.6s steps(2, end) infinite;
+    }
+
+    /* ============================================================
+       HERO
+       ============================================================ */
+    .hero {
+      width: 100%;
+      padding: 16px 0 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero-title { max-width: 960px; }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    /* ============================================================
+       ESCENARIO HERO INTERACTIVO — OFICINA VIRTUAL REAL (v190)
+       ============================================================ */
+    .world-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 4px 0 48px;
+    }
+
+    .world-stage {
+      width: 100%;
+      max-width: 780px;
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 10px;
+      box-shadow: 0 22px 60px rgba(8, 6, 20, 0.55);
+      transition: border-color 0.25s ease;
+    }
+
+    .world-stage.is-night {
+      border-color: #6b8cff;
+    }
+
+    .world-stage.buzzing {
+      animation: pbbuzz 0.42s linear 1;
+    }
+
+    @keyframes pbbuzz {
+      0%, 100% { transform: translate(0, 0); }
+      12% { transform: translate(-7px, 4px); }
+      25% { transform: translate(7px, -4px); }
+      37% { transform: translate(-6px, -3px); }
+      50% { transform: translate(6px, 4px); }
+      62% { transform: translate(-5px, 2px); }
+      75% { transform: translate(5px, -3px); }
+      87% { transform: translate(-3px, 2px); }
+    }
+
+    @keyframes pbtwinkle {
+      0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 0.72; transform: translate(-50%, -50%) scale(0.9); }
+    }
+
+    @keyframes heartFloat {
+      0% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -44px) scale(1.15); }
+    }
+
+    @keyframes particlePop {
+      0% { opacity: 1; transform: translate(0, 0); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)); }
+    }
+
+    .world-toast {
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-6px);
+      z-index: 20;
+      padding: 7px 14px;
+      background: rgba(17, 13, 34, 0.95);
+      border: 1px solid var(--gold);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      white-space: nowrap;
+      max-width: calc(100% - 28px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s var(--ease);
+    }
+
+    .world-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .hero-office-viewport {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-deep);
+      border: 1px solid var(--border-soft);
+    }
+
+    .hero-office-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.22s ease;
+    }
+
+    .hero-fx-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 15;
+      overflow: hidden;
+    }
+
+    .fx-pixel {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      animation: particlePop 0.52s steps(6, end) forwards;
+    }
+
+    .fx-heart {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 15px;
+      color: var(--rose);
+      text-shadow: 2px 2px 0 var(--bg);
+      animation: heartFloat 0.9s steps(6, end) forwards;
+    }
+
+    /* 3 estrellas pixel coleccionables integradas sobre la oficina real */
+    .hero-star {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 38px;
+      height: 38px;
+      padding: 4px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 12;
+      animation: pbtwinkle 2.1s steps(2, end) infinite;
+      filter: drop-shadow(0 0 8px rgba(255, 215, 111, 0.95));
+      transition: transform 0.14s ease;
+    }
+
+    .hero-star:hover {
+      transform: translate(-50%, -50%) scale(1.22);
+      filter: drop-shadow(0 0 12px rgba(255, 228, 148, 1));
+    }
+
+    .hero-star svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      image-rendering: pixelated;
+    }
+
+    .hero-stage-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 10px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    /* Barra HUD interactiva debajo del escenario (DNA exacto de Pixel Block) */
+    .world-hud {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .hud-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      background: var(--bg);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+    }
+
+    .hud-btn:hover, .hud-btn.active {
+      background: var(--gold);
+      color: var(--bg);
+    }
+
+    .hud-btn.hud-muted {
+      border-color: var(--border);
+      color: var(--muted);
+      background: var(--surface);
+    }
+
+    .hud-btn.hud-muted:hover {
+      border-color: var(--cream);
+      color: var(--cream);
+      background: var(--surface-hover);
+    }
+
+    .hud-btn.hud-buzz {
+      border-color: var(--rose);
+      color: var(--rose);
+      background: var(--surface);
+    }
+
+    .hud-btn.hud-buzz:hover {
+      background: var(--rose);
+      color: var(--bg);
+    }
+
+    .hud-segmented {
+      display: inline-flex;
+      border: 1px solid var(--gold);
+      background: var(--bg);
+    }
+
+    .hud-segmented .hud-btn {
+      border: none;
+      border-right: 1px solid rgba(255, 215, 111, 0.28);
+      padding: 8px 13px;
+      color: var(--cream);
+      background: transparent;
+    }
+
+    .hud-segmented .hud-btn:last-child { border-right: none; }
+    .hud-segmented .hud-btn:hover { background: rgba(255, 215, 111, 0.14); color: var(--gold); }
+    .hud-segmented .hud-btn.active { background: var(--gold); color: var(--bg); }
+
+    .hud-sep {
+      width: 1px;
+      height: 22px;
+      background: var(--border);
+      margin: 0 2px;
+    }
+
+    .strip-block {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .strip-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .hud-sep { display: none; }
+    }
+
+    .hud-counter {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--cream);
+      padding: 8px 12px;
+      border: 1px solid transparent;
+    }
+
+    .hud-counter.won {
+      color: var(--mint);
+      border-color: var(--mint);
+      background: rgba(167, 232, 173, 0.08);
+    }
+
+    .loading-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .loading-text {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .loading-bar {
+      display: flex;
+      gap: 5px;
+      padding: 6px;
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+    }
+
+    .load-block {
+      width: 24px;
+      height: 11px;
+      background: #2b2448;
+      transition: background-color 0.25s ease;
+    }
+
+    .load-block.filled { background: var(--gold); }
+    .load-block.blink {
+      background: var(--mint);
+      animation: blinkBlock 1.2s steps(2, end) infinite;
+    }
+
+    @keyframes blinkBlock {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
+
+    .secret-unlock {
+      display: none;
+      margin-top: 6px;
+      padding: 12px 18px;
+      background: rgba(167, 232, 173, 0.1);
+      border: 1px solid var(--mint);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--mint);
+      text-align: center;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .secret-unlock.visible { display: flex; }
+
+    .secret-apply {
+      background: var(--mint);
+      color: var(--bg);
+      border: none;
+      padding: 6px 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+    }
+
+    .secret-apply:hover { background: var(--gold); }
+
+    /* ============================================================
+       TRÍPTICO DE MOMENTOS DEL DÍA (#espacios)
+       ============================================================ */
+    .moments-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .moment-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.16s ease, transform 0.16s var(--ease);
+    }
+
+    .moment-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .moment-shot {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-deep);
+      padding: 0;
+      cursor: zoom-in;
+      overflow: hidden;
+      display: block;
+    }
+
+    .moment-shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.28s var(--ease);
+    }
+
+    .moment-shot:hover img {
+      transform: scale(1.03);
+    }
+
+    .moment-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 2px 4px 4px;
+    }
+
+    .moment-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .moment-meta h3 {
+      font-size: 20px;
+    }
+
+    .moment-meta p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       3 TARJETAS DE PROPUESTA DE VALOR
+       ============================================================ */
+    .adventure-cards {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      padding: 8px 0 64px;
+    }
+
+    .adv-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      transition: transform 0.18s var(--ease), border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .adv-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--gold);
+      box-shadow: 0 6px 0 var(--bg-deep);
+    }
+
+    .adv-icon {
+      font-family: var(--font-display);
+      font-size: 28px;
+      line-height: 1.2;
+      color: var(--gold);
+    }
+
+    .adv-card:nth-child(2) .adv-icon { color: var(--mint); }
+    .adv-card:nth-child(3) .adv-icon { color: var(--water); }
+
+    .adv-card p {
+      font-size: 16px;
+      line-height: 1.58;
+      letter-spacing: -0.02em;
+      color: var(--muted);
+      max-width: 290px;
+    }
+
+    /* ============================================================
+       SECCIONES GENERALES
+       ============================================================ */
+    .section {
+      width: 100%;
+      padding: 72px 0;
+      border-top: 1px solid rgba(80, 67, 100, 0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .section-head {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      max-width: 700px;
+    }
+
+    /* ============================================================
+       VISOR REAL DE LA OFICINA ORIGINAL (v190)
+       ============================================================ */
+    .scene-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .scene-tab {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 10px 15px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .scene-tab:hover { border-color: var(--gold); color: var(--cream); }
+
+    .scene-tab.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--bg);
+      font-weight: 700;
+    }
+
+    .real-frame {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .real-viewport {
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      aspect-ratio: 4 / 3;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-deep);
+      border: 1px solid var(--border-soft);
+    }
+
+    .real-bg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.25s ease;
+    }
+
+    /* Hotspots interactivos precisos sobre los personajes y objetos reales dentro de la escena */
+    .real-hotspot {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      background: transparent;
+      border: 2px solid transparent;
+      cursor: pointer;
+      z-index: 3;
+      padding: 0;
+      transition: border-color 0.16s ease, background-color 0.16s ease;
+    }
+
+    .real-hotspot:hover,
+    .real-hotspot:focus-visible,
+    .real-hotspot.talking {
+      z-index: 7;
+      border-color: rgba(255, 215, 111, 0.85);
+      background: rgba(255, 215, 111, 0.08);
+      outline: none;
+    }
+
+    .hotspot-bubble {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fffdf5;
+      color: var(--bg);
+      border: 2px solid var(--bg);
+      padding: 6px 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: 4px 4px 0 rgba(16, 19, 26, 0.92);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.16s ease, transform 0.16s ease;
+      z-index: 9;
+    }
+
+    .real-hotspot.talking .hotspot-bubble {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-2px);
+    }
+
+    /* Tira del equipo real + objetos interactivos debajo del visor */
+    .roster-strip {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .roster-btn {
+      background: var(--bg-deep);
+      border: 1px solid var(--border-soft);
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: var(--cream);
+      transition: border-color 0.15s ease, transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    .roster-btn:hover,
+    .roster-btn.active {
+      border-color: var(--gold);
+      background: var(--surface-hover);
+      transform: translateY(-2px);
+    }
+
+    .roster-btn img {
+      height: 52px;
+      width: auto;
+      object-fit: contain;
+      image-rendering: auto;
+      display: block;
+    }
+
+    .roster-name {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--cream);
+      letter-spacing: 0.04em;
+    }
+
+    .roster-role {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--mint);
+      letter-spacing: 0.04em;
+    }
+
+    .real-hud-top {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .real-pill {
+      background: rgba(23, 19, 44, 0.88);
+      border: 1px solid var(--border);
+      padding: 5px 10px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.07em;
+      color: var(--cream);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .real-pill.gold { border-color: var(--gold); color: var(--gold); }
+
+    /* Sprites reales posicionados dentro de la escena */
+    .real-actor {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      z-index: 3;
+      transition: left 0.45s var(--ease), top 0.45s var(--ease), transform 0.15s ease;
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+
+    .real-actor:hover {
+      z-index: 6;
+      filter: drop-shadow(0 0 6px rgba(255, 215, 111, 0.85));
+    }
+
+    .real-actor img {
+      image-rendering: pixelated;
+      display: block;
+      height: clamp(54px, 10.5vw, 106px);
+      width: auto;
+      pointer-events: none;
+    }
+
+    .real-actor.is-cat img {
+      height: clamp(32px, 6.2vw, 60px);
+    }
+
+    .actor-tag {
+      margin-top: 3px;
+      background: rgba(23, 19, 44, 0.9);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--cream);
+      white-space: nowrap;
+      letter-spacing: 0.04em;
+    }
+
+    .actor-bubble {
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--cream);
+      color: var(--bg);
+      border: 2px solid var(--bg);
+      padding: 4px 8px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: 3px 3px 0 rgba(17, 13, 34, 0.85);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.16s ease;
+      z-index: 8;
+    }
+
+    .real-actor.talking .actor-bubble { opacity: 1; }
+
+    .real-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .key-strip {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .key-chip {
+      background: var(--bg-deep);
+      border: 1px solid var(--border-soft);
+      padding: 10px 8px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .key-cap {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--bg);
+      background: var(--gold);
+      padding: 2px 7px;
+      letter-spacing: 0.04em;
+    }
+
+    .key-desc {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    /* ============================================================
+       MÓDULOS INTERACTIVOS (4 CARTUCHOS)
+       ============================================================ */
+    .module-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .mod-tab {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 11px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .mod-tab:hover { border-color: var(--gold); color: var(--cream); }
+
+    .mod-tab.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--bg);
+      font-weight: 700;
+    }
+
+    .module-panel {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 0.86fr 1.14fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .mod-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: left;
+    }
+
+    .mod-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 5px 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--mint);
+      letter-spacing: 0.06em;
+    }
+
+    .mod-copy h3 { font-size: 29px; }
+    .mod-copy > p { color: var(--muted); font-size: 16px; line-height: 1.6; }
+
+    .mod-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .mod-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 15px;
+      color: var(--cream);
+    }
+
+    .mod-list li::before {
+      content: "▸";
+      color: var(--gold);
+      font-family: var(--font-mono);
+      flex-shrink: 0;
+    }
+
+    .mod-visual {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .mod-shot-btn {
+      position: relative;
+      width: 100%;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-deep);
+      padding: 0;
+      cursor: zoom-in;
+      overflow: hidden;
+      display: block;
+    }
+
+    .mod-shot-btn img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.28s var(--ease);
+    }
+
+    .mod-shot-btn:hover img {
+      transform: scale(1.02);
+    }
+
+    .mod-zoom-tag {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      background: rgba(17, 13, 34, 0.9);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      padding: 4px 7px;
+      pointer-events: none;
+    }
+
+    /* Lightbox modal pixel-block para ver capturas reales en grande */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      background: rgba(11, 8, 24, 0.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox-card {
+      width: 100%;
+      max-width: 1020px;
+      background: var(--surface);
+      border: 2px solid var(--gold);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.75);
+    }
+
+    .lightbox-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--border);
+    }
+
+    .lightbox-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--cream);
+    }
+
+    .lightbox-close {
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      padding: 6px 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .mod-metric-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-soft);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .mod-metric-bar strong { color: var(--gold); }
+
+    /* ============================================================
+       CÓMO FUNCIONA (3 NIVELES + MÉTRICAS)
+       ============================================================ */
+    .steps-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .step-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.16s ease, transform 0.16s var(--ease);
+    }
+
+    .step-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+
+    .step-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 0.12em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .step-tag span { color: var(--mint); }
+    .step-card p { color: var(--muted); font-size: 15px; line-height: 1.6; }
+
+    .metrics-strip {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1px solid var(--border);
+      background: var(--bg-deep);
+    }
+
+    .metric-cell {
+      padding: 22px 16px;
+      text-align: center;
+      border-right: 1px solid var(--border-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .metric-cell:last-child { border-right: none; }
+
+    .metric-val {
+      font-family: var(--font-display);
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.1;
+    }
+
+    .metric-cell:nth-child(2) .metric-val { color: var(--mint); }
+    .metric-cell:nth-child(3) .metric-val { color: var(--water); }
+    .metric-cell:nth-child(4) .metric-val { color: var(--cream); }
+
+    .metric-lbl {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ============================================================
+       MODALIDADES / PLANES SIN PRECIOS (COTIZACIÓN / DEMO)
+       ============================================================ */
+    .pricing-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .plan-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 30px 24px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      transition: transform 0.18s var(--ease), border-color 0.18s ease;
+    }
+
+    .plan-card:hover { transform: translateY(-3px); }
+
+    .plan-card.featured {
+      border-color: var(--gold);
+      box-shadow: 0 8px 0 var(--bg-deep);
+    }
+
+    .plan-ribbon {
+      position: absolute;
+      top: -1px;
+      right: 18px;
+      background: var(--gold);
+      color: var(--bg);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+    }
+
+    .plan-tier {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .plan-scope {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--mint);
+      background: var(--bg);
+      border: 1px solid var(--border-soft);
+      padding: 6px 10px;
+      width: fit-content;
+      letter-spacing: 0.06em;
+    }
+
+    .plan-desc { font-size: 15px; color: var(--muted); line-height: 1.55; }
+
+    .plan-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-soft);
+      flex: 1;
+    }
+
+    .plan-features li {
+      font-size: 14px;
+      color: var(--cream);
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+    }
+
+    .plan-features li::before {
+      content: "✓";
+      color: var(--mint);
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    .plan-card .btn {
+      width: 100%;
+      min-width: 0;
+      height: 46px;
+      margin-top: 6px;
+    }
+
+    /* ============================================================
+       FAQ ACORDEÓN
+       ============================================================ */
+    .faq-list {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      transition: border-color 0.15s ease;
+    }
+
+    .faq-item.open { border-color: var(--gold); }
+
+    .faq-q {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 20px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--cream);
+    }
+
+    .faq-plus {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .faq-a {
+      display: none;
+      padding: 0 22px 20px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .faq-item.open .faq-a { display: block; }
+
+    /* ============================================================
+       CONTACTO WHATSAPP + FORMULARIO (EXACTO DNA PIXEL BLOCK)
+       ============================================================ */
+    .join-card {
+      width: 100%;
+      max-width: 720px;
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .join-copy {
+      max-width: 500px;
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .wa-direct-row {
+      width: 100%;
+      max-width: 460px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .wa-direct-row .btn {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .form-divider {
+      width: 100%;
+      max-width: 460px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin: 4px 0;
+    }
+
+    .form-divider::before,
+    .form-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border-soft);
+    }
+
+    .join-form {
+      width: 100%;
+      max-width: 460px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      width: 100%;
+    }
+
+    .field label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      text-align: left;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      background-color: var(--cream);
+      color: var(--bg);
+      border: 1px solid rgba(136, 136, 136, 0.25);
+      border-radius: 0;
+      padding: 11px 12px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder { color: var(--border); }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(255, 215, 111, 0.35);
+    }
+
+    .field textarea { min-height: 82px; resize: vertical; }
+
+    .bonus-pill {
+      display: none;
+      padding: 8px 12px;
+      background: var(--bg);
+      border: 1px solid var(--mint);
+      color: var(--mint);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .bonus-pill.visible { display: block; }
+
+    .submit-btn {
+      width: 100%;
+      height: 50px;
+      background-color: var(--gold);
+      border: 1px solid var(--gold);
+      color: var(--bg);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      border-radius: 0;
+      cursor: pointer;
+      transition: background-color 0.15s ease, transform 0.12s ease;
+    }
+
+    .submit-btn:hover { background-color: var(--gold-bright); transform: translateY(-1px); }
+    .submit-btn.success { background-color: var(--mint); border-color: var(--mint); color: var(--bg); }
+    .submit-btn.error { background-color: var(--rose); border-color: var(--rose); color: var(--bg); }
+
+    .form-feedback {
+      display: none;
+      padding: 16px;
+      background: var(--bg);
+      border: 1px solid var(--mint);
+      color: var(--cream);
+      font-size: 14px;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .form-feedback.visible { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+
+    .form-feedback strong {
+      color: var(--mint);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+    }
+
+    .feedback-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .fb-link {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 9px 12px;
+      text-decoration: none;
+      border: 1px solid var(--gold);
+      background: var(--gold);
+      color: var(--bg);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .fb-link.ghost {
+      background: var(--surface);
+      color: var(--cream);
+      border-color: var(--border);
+      font-weight: 400;
+    }
+
+    .fb-link.ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+    .join-note {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .join-note a { color: var(--gold); text-decoration: none; }
+    .join-note a:hover { text-decoration: underline; }
+
+    /* Botón flotante WhatsApp estilo Pixel HUD */
+    .wa-float {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 20;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 15px;
+      background: var(--bg);
+      border: 1px solid var(--mint);
+      color: var(--cream);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      box-shadow: 4px 4px 0 rgba(17, 13, 34, 0.9);
+      transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .wa-float:hover {
+      background: var(--mint);
+      color: var(--bg);
+      transform: translateY(-2px);
+    }
+
+    .wa-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--mint);
+      display: inline-block;
+    }
+
+    .wa-float:hover .wa-dot { background: var(--bg); }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      width: 100%;
+      padding: 36px 0 46px;
+      margin-top: 32px;
+      border-top: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .back-top {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      text-decoration: none;
+      padding: 6px 0;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s ease;
+    }
+
+    .back-top.muted { color: var(--muted); }
+    .back-top:hover { border-bottom-color: var(--gold); color: var(--gold); }
+
+    @media (max-width: 960px) {
+      .nav-links { display: none; }
+      .nav-menu-btn { display: inline-flex; }
+      .module-panel { grid-template-columns: 1fr; padding: 26px; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 480px; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .moments-grid { grid-template-columns: 1fr; }
+      .key-strip { grid-template-columns: repeat(3, 1fr); }
+      .roster-strip { grid-template-columns: repeat(3, 1fr); }
+      .metrics-strip { grid-template-columns: repeat(2, 1fr); }
+      .metric-cell:nth-child(2) { border-right: none; }
+      .metric-cell:nth-child(1), .metric-cell:nth-child(2) { border-bottom: 1px solid var(--border-soft); }
+    }
+
+    @media (max-width: 760px) {
+      .page-wrap { padding: 0 20px; }
+      .nav { justify-content: space-between; flex-direction: row; flex-wrap: wrap; gap: 10px; padding: 20px 0 12px; }
+      .nav-status { display: none; }
+      .adventure-cards { grid-template-columns: 1fr; padding-bottom: 40px; }
+      .join-card { padding: 28px 18px; }
+      .field-row { grid-template-columns: 1fr; }
+      .footer { flex-direction: column; text-align: center; padding-bottom: 78px; }
+      .world-hud { margin-top: 6px; }
+      .btn { width: 100%; max-width: 300px; }
+      .key-strip { grid-template-columns: repeat(2, 1fr); }
+      .real-viewport { aspect-ratio: 4 / 3; }
+      .roster-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+
+
+    /* ============================================================
+       MOTION GRAPHICS, PARALLAX & SCROLL-REVEAL ENGINE (60FPS)
+       ============================================================ */
+    /* 1. Barra de progreso de lectura pixel en el borde superior */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      z-index: 90;
+      background: rgba(80, 67, 100, 0.28);
+      pointer-events: none;
+    }
+
+    .scroll-progress-bar {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold) 0%, var(--mint) 55%, var(--water) 100%);
+      transform-origin: left center;
+      transform: scaleX(0);
+      box-shadow: 0 0 10px rgba(255, 215, 111, 0.65);
+      will-change: transform;
+    }
+
+    /* 2. Capa flotante de profundidad parallax en márgenes laterales */
+    .parallax-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .px-float {
+      position: absolute;
+      opacity: 0.34;
+      will-change: transform;
+    }
+
+    .px-float-inner {
+      display: block;
+      animation: pxDrift var(--dur, 6s) ease-in-out infinite alternate;
+    }
+
+    @keyframes pxDrift {
+      0%   { transform: translateY(0px); }
+      100% { transform: translateY(-14px); }
+    }
+
+    .px-sq {
+      width: var(--sz, 8px);
+      height: var(--sz, 8px);
+      background: var(--col, var(--gold));
+      box-shadow: 0 0 12px var(--col, var(--gold));
+    }
+
+    .px-ring {
+      width: var(--sz, 14px);
+      height: var(--sz, 14px);
+      border: 2px solid var(--col, var(--water));
+    }
+
+    .px-plus {
+      width: var(--sz, 12px);
+      height: var(--sz, 12px);
+      position: relative;
+    }
+
+    .px-plus::before,
+    .px-plus::after {
+      content: "";
+      position: absolute;
+      background: var(--col, var(--mint));
+    }
+
+    .px-plus::before { left: 4px; top: 0; width: 4px; height: 12px; }
+    .px-plus::after  { left: 0; top: 4px; width: 12px; height: 4px; }
+
+    @media (max-width: 1180px) {
+      .parallax-layer { opacity: 0.45; }
+    }
+
+    @media (max-width: 760px) {
+      .parallax-layer { display: none; }
+    }
+
+    /* 3. Hero Stage 2.5D Mouse Tilt + Ambient Motes + Equalizer + Crossfade */
+    .world-section {
+      perspective: 1100px;
+    }
+
+    .world-stage {
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .hero-office-img {
+      transform: scale(1.045);
+      will-change: transform, opacity, filter;
+      transition: opacity 0.28s ease, filter 0.28s ease;
+    }
+
+    .hero-office-img.swapping {
+      opacity: 0.55;
+      filter: brightness(1.18) saturate(1.15);
+    }
+
+    .hero-motes {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 4;
+      overflow: hidden;
+    }
+
+    .hero-mote {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--gold);
+      opacity: 0;
+      animation: moteRise var(--mdur, 7s) linear infinite;
+      animation-delay: var(--mdel, 0s);
+    }
+
+    .world-stage.is-night .hero-mote {
+      background: var(--water);
+      box-shadow: 0 0 6px var(--water);
+    }
+
+    @keyframes moteRise {
+      0%   { transform: translateY(20px); opacity: 0; }
+      18%  { opacity: 0.65; }
+      80%  { opacity: 0.45; }
+      100% { transform: translateY(-140px); opacity: 0; }
+    }
+
+    /* Micro ecualizador en vivo dentro del pill superior del Hero */
+    .live-eq {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 10px;
+      margin-left: 2px;
+    }
+
+    .live-eq i {
+      display: block;
+      width: 2px;
+      background: var(--mint);
+      animation: eqDance 0.9s steps(3, end) infinite;
+    }
+
+    .live-eq i:nth-child(1) { height: 5px; animation-delay: 0s; }
+    .live-eq i:nth-child(2) { height: 10px; animation-delay: 0.22s; }
+    .live-eq i:nth-child(3) { height: 7px; animation-delay: 0.44s; }
+
+    @keyframes eqDance {
+      0%, 100% { transform: scaleY(0.35); transform-origin: bottom; }
+      50%      { transform: scaleY(1); transform-origin: bottom; }
+    }
+
+    /* 4. Entrada coreografiada del Hero al cargar */
+    @keyframes heroFadeUp {
+      0%   { opacity: 0; transform: translateY(18px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero .eyebrow      { animation: heroFadeUp 0.55s var(--ease) 0.05s backwards; }
+    .hero .hero-title   { animation: heroFadeUp 0.65s var(--ease) 0.14s backwards; }
+    .hero .lead         { animation: heroFadeUp 0.65s var(--ease) 0.24s backwards; }
+    .hero .hero-actions { animation: heroFadeUp 0.65s var(--ease) 0.34s backwards; }
+    .world-section      { animation: heroFadeUp 0.75s var(--ease) 0.42s backwards; }
+
+    /* Brillo animado en el CTA principal */
+    .btn-primary {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -130%;
+      width: 55%;
+      height: 100%;
+      background: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, 0.42) 50%, transparent 100%);
+      animation: btnShine 4.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes btnShine {
+      0%, 72% { left: -130%; }
+      100%    { left: 165%; }
+    }
+
+    /* 5. Scroll-Reveal con stagger fluido */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.62s var(--ease), transform 0.62s var(--ease);
+      transition-delay: var(--rev-delay, 0ms);
+      will-change: opacity, transform;
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 6. Luz interactiva siguiendo al cursor dentro de las cards */
+    .adv-card, .moment-card, .step-card, .plan-card, .join-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .adv-card::after, .moment-card::after, .step-card::after, .plan-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 215, 111, 0.11), transparent 68%);
+    }
+
+    .adv-card:hover::after, .moment-card:hover::after, .step-card:hover::after, .plan-card:hover::after {
+      opacity: 1;
+    }
+
+    .plan-card.featured {
+      overflow: visible;
+    }
+
+    .plan-card.featured::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      pointer-events: none;
+      border: 1px solid rgba(255, 215, 111, 0.45);
+      animation: featuredPulse 3.2s ease-in-out infinite;
+    }
+
+    @keyframes featuredPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 215, 111, 0.0); }
+      50%      { box-shadow: 0 0 26px 2px rgba(255, 215, 111, 0.22); }
+    }
+
+    /* Micro-salto 16-bit en los avatares al pasar el mouse */
+    .roster-btn:hover img {
+      animation: spriteHop 0.48s steps(2, end) infinite;
+    }
+
+    @keyframes spriteHop {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-5px); }
+    }
+
+    /* Transición animada al cambiar tabs en #modulos */
+    @keyframes modSwapIn {
+      0%   { opacity: 0; transform: translateY(10px) scale(0.99); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .mod-anim-in {
+      animation: modSwapIn 0.34s var(--ease) both;
+    }
+
+    /* Respetar prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .hero .eyebrow, .hero .hero-title, .hero .lead, .hero .hero-actions, .world-section,
+      .btn-primary::after, .px-float-inner, .hero-mote, .live-eq i, .plan-card.featured::before,
+      .roster-btn:hover img, .mod-anim-in { animation: none !important; }
+      .parallax-layer, .hero-motes { display: none !important; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pbloop, .live-pixel, .load-block.blink { animation: none !important; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" id="scrollProgressBar"></div></div>
+  <canvas id="led-matrix" aria-hidden="true"></canvas>
+
+  <!-- Capa flotante de profundidad parallax (márgenes laterales) -->
+  <div class="parallax-layer" id="parallaxLayer" aria-hidden="true">
+    <span class="px-float" data-depth="0.14" style="left:3.5%;top:16%"><span class="px-float-inner px-plus" style="--col:#FFD76F;--dur:5.4s"></span></span>
+    <span class="px-float" data-depth="0.28" style="left:6.2%;top:42%"><span class="px-float-inner px-ring" style="--col:#75BEBA;--sz:14px;--dur:6.8s"></span></span>
+    <span class="px-float" data-depth="0.20" style="left:2.8%;top:68%"><span class="px-float-inner px-sq" style="--col:#A7E8AD;--sz:7px;--dur:4.9s"></span></span>
+    <span class="px-float" data-depth="0.34" style="left:5.5%;top:88%"><span class="px-float-inner px-plus" style="--col:#F6A2BE;--dur:6.2s"></span></span>
+    <span class="px-float" data-depth="0.18" style="right:4.0%;top:22%"><span class="px-float-inner px-ring" style="--col:#FFD76F;--sz:12px;--dur:6.4s"></span></span>
+    <span class="px-float" data-depth="0.32" style="right:6.0%;top:48%"><span class="px-float-inner px-plus" style="--col:#75BEBA;--dur:5.1s"></span></span>
+    <span class="px-float" data-depth="0.16" style="right:3.2%;top:72%"><span class="px-float-inner px-sq" style="--col:#F6A2BE;--sz:8px;--dur:7.2s"></span></span>
+    <span class="px-float" data-depth="0.26" style="right:5.2%;top:92%"><span class="px-float-inner px-sq" style="--col:#A7E8AD;--sz:6px;--dur:5.8s"></span></span>
+  </div>
+
+  <div class="page-wrap" id="hero">
+    <!-- ==================== NAVEGACIÓN ==================== -->
+    <header class="nav">
+      <a href="#hero" class="brand">
+        <img class="brand-ico" src="./assets/office_icon.webp" alt="" aria-hidden="true" />
+        <span>OFICINA VIRTUAL</span>
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links">
+          <li><a href="#mundo">Oficina</a></li>
+          <li><a href="#espacios">Momentos</a></li>
+          <li><a href="#modulos">Funciones</a></li>
+          <li><a href="#planes">Modalidades</a></li>
+          <li><a href="#contacto">WhatsApp</a></li>
+        </ul>
+      </nav>
+
+      <a href="../" class="nav-status" title="Volver al Portfolio POPUPS">
+        <span class="live-pixel" aria-hidden="true"></span>
+        <span>← PORTFOLIO POPUPS</span>
+      </a>
+
+      <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="mobileDrawer">☰ MENÚ</button>
+    </header>
+
+    <nav class="mobile-drawer" id="mobileDrawer" aria-label="Menú móvil">
+      <a href="#mundo"><span>01 · La Oficina</span><span>→</span></a>
+      <a href="#espacios"><span>02 · Momentos del día</span><span>→</span></a>
+      <a href="#modulos"><span>03 · Funciones</span><span>→</span></a>
+      <a href="#planes"><span>04 · Modalidades</span><span>→</span></a>
+      <a href="#contacto"><span>05 · Contacto</span><span>→</span></a>
+      <a href="../"><span>← Volver al Portfolio POPUPS</span><span>↗</span></a>
+      <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20equipo%20POPUPS!%20Vi%20la%20landing%20de%20Oficina%20Virtual%202D%20y%20me%20gustar%C3%ADa%20coordinar%20una%20demo%20para%20mi%20equipo." class="drawer-wa" id="drawerWaBtn" target="_blank" rel="noopener"><span>💬 Hablar por WhatsApp</span><span>↗</span></a>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+      <p class="eyebrow">ESPACIO 2D MULTIPLAYER · PIXEL ART EN EL NAVEGADOR</p>
+      <h1 class="hero-title">Tu equipo remoto.<br />En un mismo lugar.</h1>
+      <p class="lead">
+        Una oficina 2D pixel art en el navegador con cielo en tiempo real, voz, cámara, radio sincronizada y avisos estilo Messenger.
+      </p>
+      <div class="hero-actions">
+        <a href="#contacto" class="btn btn-primary">Pedir demo por WhatsApp ↓</a>
+        <a href="#modulos" class="btn btn-secondary">Ver funciones ↓</a>
+      </div>
+    </section>
+
+    <!-- ==================== ESCENARIO INTERACTIVO DE OFICINA VIRTUAL (REAL v190) ==================== -->
+    <section class="world-section" id="mundo" aria-label="Escenario interactivo de Oficina Virtual">
+      <div class="world-stage" id="worldStage">
+        <div class="world-toast" id="worldToast" role="status" aria-live="polite"></div>
+
+        <div class="hero-office-viewport" id="heroOfficeViewport">
+          <img class="hero-office-img" id="heroOfficeImg" src="" alt="Oficina Virtual 2D en pixel art con cuatro puestos de doble monitor, estantes con LED azul, ventanal en vivo y el gato de la oficina" />
+
+          <div class="real-hud-top">
+            <span class="real-pill"><span class="live-pixel"></span><span id="heroSceneStatus">EN LA OFICINA · 4 EN LÍNEA</span><span class="live-eq" aria-hidden="true"><i></i><i></i><i></i></span></span>
+            <span class="real-pill gold" id="heroClock">☀ 10:42 · CÓRDOBA</span>
+          </div>
+
+          <!-- Hotspots interactivos sobre cada puesto y objeto real (SIN nombres personales) -->
+          <button type="button" class="real-hotspot" id="hsP1" style="left:27.4%;top:55%;width:17%;height:42%" aria-label="Interactuar con puesto frontal izquierdo">
+            <span class="hotspot-bubble">💻 Puesto 01: "Modo foco total en doble monitor"</span>
+          </button>
+
+          <button type="button" class="real-hotspot" id="hsP2" style="left:42.7%;top:45%;width:12%;height:27%" aria-label="Interactuar con puesto trasero izquierdo">
+            <span class="hotspot-bubble">✦ Puesto 02: "¡Entrá con tu DNI y sentate con E!"</span>
+          </button>
+
+          <span class="hero-hint-ping" id="heroHintPing" aria-hidden="true"></span>
+
+          <button type="button" class="real-hotspot" id="hsP3" style="left:59.4%;top:45%;width:12%;height:27%" aria-label="Interactuar con puesto trasero derecho">
+            <span class="hotspot-bubble">⚡ Puesto 03: "¡Probá el botón Zumbido estilo MSN!"</span>
+          </button>
+
+          <button type="button" class="real-hotspot" id="hsP4" style="left:72.1%;top:55%;width:18%;height:42%" aria-label="Interactuar con puesto frontal derecho">
+            <span class="hotspot-bubble">🎵 Puesto 04: "Puse Lo-Fi en la Radio sincronizada"</span>
+          </button>
+
+          <button type="button" class="real-hotspot is-cat" id="hsCat" style="left:50.4%;top:77%;width:11%;height:14%" aria-label="Acariciar al gato de la oficina">
+            <span class="hotspot-bubble">♥ Miau ♥ ¡Ronroneo +100% moral del equipo!</span>
+          </button>
+
+          <!-- 3 Estrellas pixel coleccionables escondidas en la oficina -->
+          <button type="button" class="hero-star" data-star="0" style="left:14%;top:15%" aria-label="Recolectar estrella 1">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="6" y="1" width="4" height="14" fill="#FFD76F"/><rect x="1" y="6" width="14" height="4" fill="#FFD76F"/><rect x="4" y="4" width="8" height="8" fill="#FFD76F"/><rect x="6" y="4" width="3" height="3" fill="#FFF4CF"/></svg>
+          </button>
+          <button type="button" class="hero-star" data-star="1" style="left:50.4%;top:27%" aria-label="Recolectar estrella 2">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="6" y="1" width="4" height="14" fill="#FFD76F"/><rect x="1" y="6" width="14" height="4" fill="#FFD76F"/><rect x="4" y="4" width="8" height="8" fill="#FFD76F"/><rect x="6" y="4" width="3" height="3" fill="#FFF4CF"/></svg>
+          </button>
+          <button type="button" class="hero-star" data-star="2" style="left:89%;top:15%" aria-label="Recolectar estrella 3">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="6" y="1" width="4" height="14" fill="#FFD76F"/><rect x="1" y="6" width="14" height="4" fill="#FFD76F"/><rect x="4" y="4" width="8" height="8" fill="#FFD76F"/><rect x="6" y="4" width="3" height="3" fill="#FFF4CF"/></svg>
+          </button>
+
+          <div class="hero-motes" id="heroMotes" aria-hidden="true">
+            <span class="hero-mote" style="left:14%;top:64%;--mdur:6.2s;--mdel:0.2s"></span>
+            <span class="hero-mote" style="left:28%;top:78%;--mdur:7.8s;--mdel:1.4s"></span>
+            <span class="hero-mote" style="left:41%;top:55%;--mdur:5.8s;--mdel:2.6s"></span>
+            <span class="hero-mote" style="left:50%;top:48%;--mdur:6.9s;--mdel:0.8s"></span>
+            <span class="hero-mote" style="left:61%;top:72%;--mdur:7.2s;--mdel:3.1s"></span>
+            <span class="hero-mote" style="left:75%;top:60%;--mdur:6.4s;--mdel:1.9s"></span>
+            <span class="hero-mote" style="left:86%;top:74%;--mdur:8.1s;--mdel:0.5s"></span>
+            <span class="hero-mote" style="left:48%;top:82%;--mdur:6.6s;--mdel:3.8s"></span>
+          </div>
+          <div class="hero-fx-layer" id="heroFxLayer" aria-hidden="true"></div>
+        </div>
+
+        <div class="hero-stage-footer">
+          <span id="heroCaption">TOCÁ CUALQUIER PUESTO, EL GATO O BUSCÁ LAS 3 ESTRELLAS ★ EN LA OFICINA</span>
+          <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20equipo%20POPUPS!%20Vi%20la%20landing%20de%20Oficina%20Virtual%202D%20y%20me%20gustar%C3%ADa%20coordinar%20una%20demo%20para%20mi%20equipo." id="heroDemoWa" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;">AGENDAR DEMO EN VIVO ↗</a>
+        </div>
+      </div>
+
+      <div class="world-hud" role="group" aria-label="Controles interactivos de la oficina">
+        <div class="hud-segmented" role="group" aria-label="Momento del día">
+          <button type="button" class="hud-btn active" data-hero-scene="ofi_dia">☀ DÍA</button>
+          <button type="button" class="hud-btn" data-hero-scene="ofi_ata">🌇 ATARDECER</button>
+          <button type="button" class="hud-btn" data-hero-scene="ofi_noc">☾ NOCHE</button>
+        </div>
+        <span class="hud-sep" aria-hidden="true"></span>
+        <button type="button" class="hud-btn hud-buzz" id="btnBuzz" title="Sacudir toda la oficina estilo Messenger (tecla 4)">💨 ZUMBIDO</button>
+        <button type="button" class="hud-btn hud-muted" id="btnReset" aria-label="Reiniciar estrellas recolectadas">↺ REINICIAR</button>
+        <button type="button" class="hud-btn hud-muted" id="btnSound" aria-pressed="true">♪ SONIDO: ON</button>
+        <span class="hud-counter" id="starCounter" aria-live="polite">ESTRELLAS 0 / 3</span>
+      </div>
+
+      <div class="secret-unlock" id="secretUnlock" role="status">
+        <span>★ BONUS DESBLOQUEADO · TU PERSONAJE PIXEL-ART DE REGALO AL PEDIR DEMO</span>
+        <button type="button" class="secret-apply" id="btnApplyCode">SUMAR A MI CONSULTA →</button>
+      </div>
+
+      <div class="loading-block" aria-label="Estado de la oficina virtual">
+        <p class="loading-text" id="loadingText">CONECTANDO PUESTOS, VENTANAL EN VIVO Y RADIO DE LA OFICINA...</p>
+        <div class="loading-bar" id="loadingBar" aria-hidden="true">
+          <div class="load-block filled"></div>
+          <div class="load-block filled"></div>
+          <div class="load-block filled"></div>
+          <div class="load-block filled"></div>
+          <div class="load-block blink"></div>
+          <div class="load-block"></div>
+          <div class="load-block"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 3 TARJETAS DE PROPUESTA DE VALOR ==================== -->
+    <section class="adventure-cards" id="beneficios" aria-label="Propuesta de valor">
+      <article class="adv-card">
+        <div class="adv-icon" aria-hidden="true">✦</div>
+        <h3>Presencia real, sin invadir.</h3>
+        <p>Ves al instante quién está en su PC, disponible o en reunión, sin videollamadas eternas ni mensajes perdidos.</p>
+      </article>
+
+      <article class="adv-card">
+        <div class="adv-icon" aria-hidden="true">▣</div>
+        <h3>Tu local pintado a medida.</h3>
+        <p>Ilustramos tu oficina real, los escritorios, la iluminación día/noche, cada integrante del equipo y hasta la mascota en pixel art.</p>
+      </article>
+
+      <article class="adv-card">
+        <div class="adv-icon" aria-hidden="true">↗</div>
+        <h3>Directo en el navegador.</h3>
+        <p>Sin instalar apps. Corre gratis vía P2P (WebRTC) o en tu propio servidor Node + WebSockets.</p>
+      </article>
+    </section>
+
+    <!-- ==================== MOMENTOS DEL DÍA Y AVATARES A MEDIDA ==================== -->
+    <section class="section" id="espacios">
+      <div class="section-head">
+        <p class="eyebrow">CICLO EN TIEMPO REAL · AVATARES Y OBJETOS A MEDIDA</p>
+        <h2>Un espacio vivo todo el día.</h2>
+        <p class="lead">
+          El ventanal acompaña la hora real de tu ciudad y transforma toda la iluminación. Tocá cualquier escena para ampliarla.
+        </p>
+      </div>
+
+      <div class="moments-grid">
+        <article class="moment-card">
+          <button type="button" class="moment-shot zoomable-shot" data-title="MAÑANA · DÍA — VENTANAL LUMINOSO Y 4 PUESTOS ACTIVOS" data-scene-key="ofi_dia" aria-label="Ampliar escena de Día">
+            <img data-scene-img="ofi_dia" src="" alt="Oficina Virtual de día con cielo celeste por el ventanal" />
+            <span class="mod-zoom-tag">🔍 AMPLIAR</span>
+          </button>
+          <div class="moment-meta">
+            <span class="moment-tag">☀ MAÑANA · DÍA</span>
+            <h3>Luz natural y foco.</h3>
+            <p>Cielo despejado con nubes sobre el horizonte y todo el equipo sentado en sus puestos de doble monitor.</p>
+          </div>
+        </article>
+
+        <article class="moment-card">
+          <button type="button" class="moment-shot zoomable-shot" data-title="ATARDECER — CIELO DORADO, AMBIENTE CÁLIDO Y MASCOTA FELIZ" data-scene-key="ofi_ata" aria-label="Ampliar escena de Atardecer">
+            <img data-scene-img="ofi_ata" src="" alt="Oficina Virtual al atardecer con cielo dorado por el ventanal y luz cálida" />
+            <span class="mod-zoom-tag">🔍 AMPLIAR</span>
+          </button>
+          <div class="moment-meta">
+            <span class="moment-tag">🌇 ATARDECER</span>
+            <h3>Pausa de media tarde.</h3>
+            <p>Tonos cálidos sobre el skyline, luz de media tarde en los puestos y el gato de la oficina repartiendo corazones.</p>
+          </div>
+        </article>
+
+        <article class="moment-card">
+          <button type="button" class="moment-shot zoomable-shot" data-title="NOCHE — CIELO ESTRELLADO, LEDS AZULES Y MONITORES ENCENDIDOS" data-scene-key="ofi_noc" aria-label="Ampliar escena de Noche">
+            <img data-scene-img="ofi_noc" src="" alt="Oficina Virtual de noche con luna, estrellas, LEDs azules y monitores brillando" />
+            <span class="mod-zoom-tag">🔍 AMPLIAR</span>
+          </button>
+          <div class="moment-meta">
+            <span class="moment-tag">☾ NOCHE · LEDS</span>
+            <h3>Modo nocturno real.</h3>
+            <p>Luna y edificios iluminados en el ventanal, brillo azul en los estantes, reflejo en monitores y siesta en el pasillo.</p>
+          </div>
+        </article>
+      </div>
+
+      <!-- Sprites reales a medida -->
+      <div class="strip-block">
+        <p class="strip-label">AVATARES Y MASCOTA ILUSTRADOS A MEDIDA · TOCÁ UNO PARA PROBARLO ARRIBA</p>
+        <div class="roster-strip" aria-label="Ejemplos de avatares y objetos ilustrados a medida">
+        <button type="button" class="roster-btn" data-hero-target="hsP2">
+          <img src="./assets/avatar_01.webp" alt="Avatar pixel art personalizado 01" />
+          <span class="roster-name">AVATAR 01</span>
+          <span class="roster-role">● A MEDIDA</span>
+        </button>
+        <button type="button" class="roster-btn" data-hero-target="hsP3">
+          <img src="./assets/avatar_02.webp" alt="Avatar pixel art personalizado 02" />
+          <span class="roster-name">AVATAR 02</span>
+          <span class="roster-role">● A MEDIDA</span>
+        </button>
+        <button type="button" class="roster-btn" data-hero-target="hsP4">
+          <img src="./assets/avatar_03.webp" alt="Avatar pixel art personalizado 03" />
+          <span class="roster-name">AVATAR 03</span>
+          <span class="roster-role">● A MEDIDA</span>
+        </button>
+        <button type="button" class="roster-btn" data-hero-target="hsP1">
+          <img src="./assets/avatar_04.webp" alt="Avatar pixel art personalizado 04" />
+          <span class="roster-name">AVATAR 04</span>
+          <span class="roster-role">● A MEDIDA</span>
+        </button>
+        <button type="button" class="roster-btn" data-hero-target="hsCat">
+          <img src="./assets/mascota.webp" alt="Mascota de la oficina en pixel art" />
+          <span class="roster-name">MASCOTA</span>
+          <span class="roster-role">♥ INTERACTIVA</span>
+        </button>
+
+      </div>
+
+      </div>
+
+      <div class="strip-block">
+        <p class="strip-label">ATAJOS DIRECTOS DENTRO DE LA OFICINA</p>
+        <div class="key-strip" aria-label="Atajos reales de Oficina Virtual">
+        <div class="key-chip"><span class="key-cap">WASD</span><span class="key-desc">Caminar por la oficina</span></div>
+        <div class="key-chip"><span class="key-cap">E</span><span class="key-desc">Sentarse · Mascota · Acciones</span></div>
+        <div class="key-chip"><span class="key-cap">M</span><span class="key-desc">Micro abierto del equipo</span></div>
+        <div class="key-chip"><span class="key-cap">P</span><span class="key-desc">Radio DJ sincronizada</span></div>
+        <div class="key-chip"><span class="key-cap">4</span><span class="key-desc">Zumbido estilo MSN</span></div>
+        <div class="key-chip"><span class="key-cap">ENTER</span><span class="key-desc">Chat · /w susurro · voz</span></div>
+      </div>
+      </div>
+    </section>
+
+    <!-- ==================== MÓDULOS REALES DEL PROYECTO (CAPTURAS REALES v190) ==================== -->
+    <section class="section" id="modulos">
+      <div class="section-head">
+        <p class="eyebrow">FUNCIONES REALES · TODO EN UNA SOLA PANTALLA</p>
+        <h2>Todo lo que tu equipo necesita, sin salir del mapa.</h2>
+        <p class="lead">
+          Nada invade la oficina: chat, cámaras, radio y avisos viven prolijos en los bordes. Tocá cada captura para ampliarla.
+        </p>
+      </div>
+
+      <div class="module-tabs" role="tablist" aria-label="Funcionalidades de Oficina Virtual">
+        <button type="button" class="mod-tab active" role="tab" aria-selected="true" data-mod="espacio">01 · Oficina en Vivo</button>
+        <button type="button" class="mod-tab" role="tab" aria-selected="false" data-mod="llamada">02 · Voz, Cam &amp; Radio</button>
+        <button type="button" class="mod-tab" role="tab" aria-selected="false" data-mod="msn">03 · Chat &amp; Avisos MSN</button>
+        <button type="button" class="mod-tab" role="tab" aria-selected="false" data-mod="deploy">04 · Privacidad &amp; Red</button>
+      </div>
+
+      <div class="module-panel" id="modulePanel" role="tabpanel">
+        <div class="mod-copy" id="modCopy"></div>
+        <div class="mod-visual">
+          <div id="modShotHost" style="width:100%;"></div>
+          <div class="mod-metric-bar">
+            <span id="modMetricLabel">ENTORNO EN TIEMPO REAL</span>
+            <strong id="modMetricVal">DÍA · ATARDECER · NOCHE</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CÓMO FUNCIONA (3 NIVELES) ==================== -->
+    <section class="section" id="proceso">
+      <div class="section-head">
+        <p class="eyebrow">ASÍ ARMAMOS TU OFICINA</p>
+        <h2>De tu idea a tu oficina 2D en 3 pasos.</h2>
+        <p class="lead">
+          Adaptamos el motor de Oficina Virtual a la identidad, los espacios y la cultura real de tu equipo.
+        </p>
+      </div>
+
+      <div class="steps-grid">
+        <article class="step-card">
+          <div class="step-tag">NIVEL 01 <span>[RELEVAMIENTO]</span></div>
+          <h3>Mapeamos tu espacio.</h3>
+          <p>Nos pasás fotos de tu oficina real (o la estética que imaginás), cantidad de puestos, salas y quiénes integran el equipo.</p>
+        </article>
+
+        <article class="step-card">
+          <div class="step-tag">NIVEL 02 <span>[PIXEL ART]</span></div>
+          <h3>Pintamos tu mundo y avatares.</h3>
+          <p>Creamos los fondos Día / Atardecer / Noche, los sprites animados de cada persona, objetos interactivos y carteles de tu marca.</p>
+        </article>
+
+        <article class="step-card">
+          <div class="step-tag">NIVEL 03 <span>[ONLINE]</span></div>
+          <h3>Entran directo por link.</h3>
+          <p>Queda lista para abrir desde el navegador en PC o celular, con acceso privado y sin costos fijos pesados de infraestructura.</p>
+        </article>
+      </div>
+
+      <div class="metrics-strip" aria-label="Características técnicas reales">
+        <div class="metric-cell">
+          <span class="metric-val">3 CLIMAS</span>
+          <span class="metric-lbl">Día · Atardecer · Noche</span>
+        </div>
+        <div class="metric-cell">
+          <span class="metric-val">0 APPS</span>
+          <span class="metric-lbl">100% en el navegador</span>
+        </div>
+        <div class="metric-cell">
+          <span class="metric-val">P2P / WS</span>
+          <span class="metric-lbl">Sin servidor o Node.js</span>
+        </div>
+        <div class="metric-cell">
+          <span class="metric-val">100% TUYA</span>
+          <span class="metric-lbl">Avatares y local a medida</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODALIDADES SIN PRECIOS (COTIZACIÓN / DEMO) ==================== -->
+    <section class="section" id="planes">
+      <div class="section-head">
+        <p class="eyebrow">ELEGÍ TU MODALIDAD</p>
+        <h2>Hecha a la medida de tu equipo.</h2>
+        <p class="lead">
+          Cotizamos según el tamaño del equipo y la personalización visual. Elegí un punto de partida y lo vemos juntos por WhatsApp.
+        </p>
+      </div>
+
+      <div class="pricing-grid">
+        <article class="plan-card">
+          <span class="plan-tier">NIVEL 01 · OFICINA BASE</span>
+          <h3>Arrancá en días.</h3>
+          <span class="plan-scope">IDEAL EQUIPOS CHICOS</span>
+          <p class="plan-desc">Tu equipo trabajando ya mismo sobre nuestra arquitectura probada con tu marca y accesos privados.</p>
+          <ul class="plan-features">
+            <li>Espacio 2D completo con puestos, chat, notas de voz y estados</li>
+            <li>Micro abierto, cámara lateral, pantalla compartida y Radio DJ</li>
+            <li>Notificaciones estilo Messenger + Zumbido + historial de presencia</li>
+            <li>Acceso privado por equipo y despliegue web listo para compartir</li>
+          </ul>
+          <button type="button" class="btn btn-secondary choose-plan" data-plan="Nivel 01 · Oficina Base">Pedir cotización →</button>
+        </article>
+
+        <article class="plan-card featured">
+          <span class="plan-ribbon">★ MÁS ELEGIDO</span>
+          <span class="plan-tier">NIVEL 02 · TU LOCAL EN PIXEL ART</span>
+          <h3>Tu oficina real en 2D.</h3>
+          <span class="plan-scope">100% PERSONALIZADA</span>
+          <p class="plan-desc">Replicamos tu oficina real, sus escritorios, ventanal y a cada persona del equipo para que el espacio se sienta verdaderamente propio.</p>
+          <ul class="plan-features">
+            <li>Ilustración pixel-art de tu oficina con iluminación real (Día / Atardecer / Noche)</li>
+            <li>Avatares pixel-art animados a medida para cada integrante</li>
+            <li>Objetos interactivos de tu cultura (mascota, pizarras, carteles y detalles propios)</li>
+            <li>Demo guiada + puesta en marcha en tu dominio o servidor</li>
+          </ul>
+          <button type="button" class="btn btn-primary choose-plan" data-plan="Nivel 02 · Tu Local en Pixel Art">Solicitar demo personalizada →</button>
+        </article>
+
+        <article class="plan-card">
+          <span class="plan-tier">NIVEL 03 · CAMPUS CUSTOM</span>
+          <h3>Campus a medida.</h3>
+          <span class="plan-scope">ESTUDIOS &amp; EMPRESAS</span>
+          <p class="plan-desc">Para organizaciones que quieren varios pisos, salas privadas por proyecto o conectar su flujo de trabajo.</p>
+          <ul class="plan-features">
+            <li>Múltiples ambientes conectados por puertas y salas por área</li>
+            <li>Webhooks con GitHub, CRM, calendario o avisos automáticos al chat</li>
+            <li>Servidor dedicado Node + WebSockets con autenticación corporativa</li>
+            <li>Acompañamiento directo de POPUPS y nuevas funciones a medida</li>
+          </ul>
+          <button type="button" class="btn btn-secondary choose-plan" data-plan="Nivel 03 · Campus Custom">Consultar alcance →</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== PREGUNTAS FRECUENTES ==================== -->
+    <section class="section" id="faq">
+      <div class="section-head">
+        <p class="eyebrow">PREGUNTAS FRECUENTES</p>
+        <h2>Todo lo que suelen preguntarnos.</h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item open">
+          <button type="button" class="faq-q" aria-expanded="true">
+            <span>¿Hace falta instalar programas o pagar servidores caros?</span>
+            <span class="faq-plus">−</span>
+          </button>
+          <div class="faq-a">
+            No. Se abre directo desde cualquier navegador en PC o celular (incluso trae joystick táctil en móvil). Además soporta modo <strong>P2P (WebRTC)</strong> sin servidor — ideal para alojar gratis en GitHub Pages — o servidor propio súper liviano en Node.js + WebSockets.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-q" aria-expanded="false">
+            <span>¿Podemos ilustrar nuestra propia oficina real y a cada integrante?</span>
+            <span class="faq-plus">+</span>
+          </button>
+          <div class="faq-a">
+            Sí, es lo que más enamora a los equipos. Tomamos fotos o referencias de tu espacio real para dibujar los muebles, carteles, ventanales, iluminación LED y cada avatar animado (caminando, sentado, saludando) y hasta la mascota del equipo.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-q" aria-expanded="false">
+            <span>¿Me entero si me hablan aunque esté trabajando en otra ventana?</span>
+            <span class="faq-plus">+</span>
+          </button>
+          <div class="faq-a">
+            Sí: trae <strong>notificaciones estilo Messenger (MSN)</strong> en Windows y Mac con el sprite de tu compañero, sonidos retro distintos por evento, pestaña titilando y el clásico botón <strong>💨 Zumbido</strong> para llamar la atención del equipo.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-q" aria-expanded="false">
+            <span>¿Cómo se controla quién puede entrar a nuestra oficina?</span>
+            <span class="faq-plus">+</span>
+          </button>
+          <div class="faq-a">
+            Cada oficina es privada: los integrantes ingresan con su identificador personal verificado (DNI con hash SHA-256 o el login que prefiera tu empresa) y queda visible el historial de presencia y horarios por persona.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CONTACTO WHATSAPP + FORMULARIO ==================== -->
+    <section class="join-card" id="contacto" aria-label="Contacto por WhatsApp y solicitud de demo">
+      <p class="eyebrow">GUARDÁ TU PUNTO DE PARTIDA</p>
+      <h2>Traé a tu equipo a su nueva oficina.</h2>
+      <p class="join-copy">
+        Escribinos directo por WhatsApp para coordinar una recorrida en vivo o completá tus datos abajo y te armamos el mensaje listo para enviar.
+      </p>
+
+      <div class="wa-direct-row">
+        <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20equipo%20POPUPS!%20Vi%20la%20landing%20de%20Oficina%20Virtual%202D%20y%20me%20gustar%C3%ADa%20coordinar%20una%20demo%20para%20mi%20equipo." class="btn btn-mint" id="waQuickBtn" target="_blank" rel="noopener">💬 Hablar directo por WhatsApp →</a>
+      </div>
+
+      <div class="form-divider">O armá tu consulta detallada</div>
+
+      <form class="join-form" id="joinForm" novalidate>
+        <div class="bonus-pill" id="bonusPill">★ BONUS INCLUIDO: TU PERSONAJE PIXEL-ART DE REGALO (3/3 ESTRELLAS)</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="fName">Tu nombre o empresa</label>
+            <input type="text" id="fName" name="name" required placeholder="Ej. Martín / Estudio Norte" autocomplete="name" />
+          </div>
+
+          <div class="field">
+            <label for="fTeam">Tamaño del equipo</label>
+            <select id="fTeam" name="team">
+              <option value="2 a 5 personas">2 a 5 personas</option>
+              <option value="6 a 15 personas" selected>6 a 15 personas</option>
+              <option value="16 a 40 personas">16 a 40 personas</option>
+              <option value="Más de 40 personas">Más de 40 personas</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="fPlan">Modalidad de interés</label>
+          <select id="fPlan" name="plan">
+            <option value="Nivel 02 · Tu Local en Pixel Art">Nivel 02 · Tu Local en Pixel Art (Más elegido)</option>
+            <option value="Nivel 01 · Oficina Base">Nivel 01 · Oficina Base</option>
+            <option value="Nivel 03 · Campus Custom">Nivel 03 · Campus Custom &amp; Integraciones</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="fMsg">Contanos sobre tu equipo o espacio (opcional)</label>
+          <textarea id="fMsg" name="message" placeholder="Ej. Trabajamos híbrido y nos encantaría replicar nuestra oficina real, escritorios y avatares del equipo..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">💬 Enviar consulta por WhatsApp →</button>
+
+        <div class="form-feedback" id="formFeedback" role="status" aria-live="polite">
+          <strong>✓ MENSAJE LISTO PARA ENVIAR</strong>
+          <span id="feedbackDetail">Preparamos tu consulta con todos los detalles para enviarla en un toque.</span>
+          <div class="feedback-actions">
+            <a href="#" id="fbWaLink" class="fb-link" target="_blank" rel="noopener">💬 Abrir en WhatsApp ↗</a>
+            <a href="#" id="fbMailLink" class="fb-link ghost">✉ Enviar por Email</a>
+            <button type="button" id="fbCopyBtn" class="fb-link ghost">📋 Copiar texto</button>
+          </div>
+        </div>
+      </form>
+
+      <p class="join-note">
+        También nos encontrás en <a href="mailto:somospopups@gmail.com">somospopups@gmail.com</a> · Hecho en Córdoba por <strong>POPUPS</strong>.
+      </p>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+      <p class="footer-copy">© 2026 OFICINA VIRTUAL · BY POPUPS / HECHO PARA EQUIPOS CURIOSOS</p>
+      <div class="footer-links">
+        <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20equipo%20POPUPS!%20Vi%20la%20landing%20de%20Oficina%20Virtual%202D%20y%20me%20gustar%C3%ADa%20coordinar%20una%20demo%20para%20mi%20equipo." id="footerWaLink" target="_blank" rel="noopener" class="back-top muted">WHATSAPP ↗</a>
+        <a href="../" class="back-top muted">← PORTFOLIO POPUPS</a>
+        <a href="#hero" class="back-top">VOLVER ARRIBA ↑</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Lightbox para ver capturas reales en pantalla completa -->
+  <div class="lightbox" id="shotLightbox" role="dialog" aria-modal="true" aria-label="Vista ampliada de la captura real">
+    <div class="lightbox-card">
+      <div class="lightbox-bar">
+        <span id="lbTitle">OFICINA VIRTUAL · CAPTURA REAL v190</span>
+        <button type="button" class="lightbox-close" id="lbClose">✕ CERRAR [ESC]</button>
+      </div>
+      <img id="lbImg" src="" alt="Captura real ampliada de Oficina Virtual" />
+    </div>
+  </div>
+
+  <!-- Botón flotante WhatsApp estilo Pixel Block HUD -->
+  <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20equipo%20POPUPS!%20Vi%20la%20landing%20de%20Oficina%20Virtual%202D%20y%20me%20gustar%C3%ADa%20coordinar%20una%20demo%20para%20mi%20equipo." class="wa-float" id="waFloatBtn" target="_blank" rel="noopener" aria-label="Consultar directo por WhatsApp">
+    <span class="wa-dot" aria-hidden="true"></span>
+    <span>💬 WHATSAPP</span>
+  </a>
+
+  <script>
+    (function () {
+      /* ============================================================
+         CONFIGURACIÓN DE CONTACTO WHATSAPP (+54 9 351 766-9967)
+         ============================================================ */
+      const WHATSAPP_NUMBER = '5493517669967';
+      const CONTACT_EMAIL = 'somospopups@gmail.com';
+
+      function buildWhatsAppUrl(text) {
+        const encoded = encodeURIComponent(text);
+        return WHATSAPP_NUMBER
+          ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`
+          : `https://api.whatsapp.com/send?text=${encoded}`;
+      }
+
+      const quickMsg = '¡Hola equipo POPUPS! Vi la landing de Oficina Virtual 2D y me gustaría coordinar una demo para mi equipo.';
+      const quickWaUrl = buildWhatsAppUrl(quickMsg);
+      ['waQuickBtn', 'waFloatBtn', 'heroDemoWa', 'footerWaLink', 'drawerWaBtn'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.href = quickWaUrl;
+      });
+
+      /* Menú móvil compacto (☰ MENÚ) */
+      const navMenuBtn = document.getElementById('navMenuBtn');
+      const mobileDrawer = document.getElementById('mobileDrawer');
+      if (navMenuBtn && mobileDrawer) {
+        const closeDrawer = () => {
+          mobileDrawer.classList.remove('open');
+          navMenuBtn.setAttribute('aria-expanded', 'false');
+          navMenuBtn.textContent = '☰ MENÚ';
+        };
+        navMenuBtn.addEventListener('click', () => {
+          const opening = !mobileDrawer.classList.contains('open');
+          mobileDrawer.classList.toggle('open', opening);
+          navMenuBtn.setAttribute('aria-expanded', String(opening));
+          navMenuBtn.textContent = opening ? '✕ CERRAR' : '☰ MENÚ';
+        });
+        mobileDrawer.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeDrawer));
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+      }
+
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* ============================================================
+         1. FONDO LED MATRIX PIXEL (Exacto a Pixel Block)
+         ============================================================ */
+      const canvas = document.getElementById('led-matrix');
+      const ctx = canvas.getContext('2d');
+      const CELL = 10, GAP = 2, STEP = CELL + GAP;
+      let pixels = [];
+
+      function buildMatrix() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        pixels = [];
+        const now = performance.now();
+        for (let y = 0; y < canvas.height; y += STEP) {
+          for (let x = 0; x < canvas.width; x += STEP) {
+            pixels.push({
+              x, y,
+              gold: Math.random() < 0.04,
+              next: now + Math.random() * 4500
+            });
+          }
+        }
+      }
+
+      let pointerX = -9999, pointerY = -9999;
+      window.addEventListener('pointermove', (e) => {
+        pointerX = e.clientX;
+        pointerY = e.clientY;
+      }, { passive: true });
+      window.addEventListener('pointerleave', () => { pointerX = -9999; pointerY = -9999; });
+
+      function drawMatrix(now) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const scrollShift = reducedMotion ? 0 : ((window.scrollY * 0.24) % STEP);
+        for (let i = 0; i < pixels.length; i++) {
+          const p = pixels[i];
+          if (!reducedMotion && now > p.next) {
+            p.gold = Math.random() < 0.04;
+            p.next = now + 900 + Math.random() * 3400;
+          }
+          const py = p.y - scrollShift;
+          if (!reducedMotion && pointerX > -500) {
+            const dx = p.x - pointerX;
+            const dy = py - pointerY;
+            const d2 = dx * dx + dy * dy;
+            if (d2 < 22500) {
+              const boost = 1 - Math.sqrt(d2) / 150;
+              ctx.fillStyle = p.gold
+                ? '#FFE494'
+                : `rgba(117, 190, 186, ${(0.08 + boost * 0.24).toFixed(2)})`;
+              ctx.fillRect(p.x, py, CELL, CELL);
+              continue;
+            }
+          }
+          ctx.fillStyle = p.gold ? '#FFD76F' : '#17132C';
+          ctx.fillRect(p.x, py, CELL, CELL);
+        }
+        if (!reducedMotion) requestAnimationFrame(drawMatrix);
+      }
+
+      buildMatrix();
+      drawMatrix(performance.now());
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          buildMatrix();
+          if (reducedMotion) drawMatrix(performance.now());
+        }, 160);
+      });
+
+      /* ============================================================
+         2. AUDIO 8-BIT OFFLINE (Web Audio API)
+         ============================================================ */
+      let soundEnabled = true;
+      let audioCtx = null;
+
+      function playTone(freqs, dur = 0.085, type = 'square', vol = 0.045) {
+        if (!soundEnabled) return;
+        try {
+          if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+          const t0 = audioCtx.currentTime;
+          freqs.forEach((f, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(f, t0 + idx * dur);
+            gain.gain.setValueAtTime(vol, t0 + idx * dur);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t0 + (idx + 1) * dur + 0.04);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(t0 + idx * dur);
+            osc.stop(t0 + (idx + 1) * dur + 0.05);
+          });
+        } catch (_) {}
+      }
+
+      /* ============================================================
+         3. ESCENARIO HERO INTERACTIVO (OFICINA REAL + ESTRELLAS + ZUMBIDO)
+         ============================================================ */
+      const worldStage = document.getElementById('worldStage');
+      const worldToast = document.getElementById('worldToast');
+      const heroOfficeImg = document.getElementById('heroOfficeImg');
+      const heroSceneStatus = document.getElementById('heroSceneStatus');
+      const heroClock = document.getElementById('heroClock');
+      const heroCaption = document.getElementById('heroCaption');
+      const heroFxLayer = document.getElementById('heroFxLayer');
+      const btnBuzz = document.getElementById('btnBuzz');
+      const btnReset = document.getElementById('btnReset');
+      const btnSound = document.getElementById('btnSound');
+      const starCounter = document.getElementById('starCounter');
+      const secretUnlock = document.getElementById('secretUnlock');
+      const loadingText = document.getElementById('loadingText');
+      const loadingBlocks = Array.from(document.querySelectorAll('#loadingBar .load-block'));
+      const hsCatBubble = document.querySelector('#hsCat .hotspot-bubble');
+
+      const heroScenes = {
+        ofi_dia: {
+          src: './assets/shot_ofi_dia.webp',
+          status: 'EN LA OFICINA · 4 EN LÍNEA',
+          clock: '☀ 10:42 · CÓRDOBA',
+          caption: 'OFICINA DE DÍA · TOCÁ CUALQUIER PUESTO, EL GATO O BUSCÁ LAS 3 ESTRELLAS ★',
+          toast: '☀ MODO DÍA · VENTANAL LUMINOSO Y 4 PUESTOS ACTIVOS',
+          catSay: '♥ Miau ♥ ¡Pasando a saludar por los escritorios!',
+          night: false
+        },
+        ofi_ata: {
+          src: './assets/shot_ofi_atardecer.webp',
+          status: '🌇 ATARDECER EN CÓRDOBA · 4 EN LÍNEA',
+          clock: '🌇 18:24 · ATARDECER',
+          caption: 'ATARDECER EN VIVO · CIELO DORADO POR EL VENTANAL Y MASCOTA FELIZ',
+          toast: '🌇 ATARDECER · CIELO DORADO Y AMBIENTE CÁLIDO',
+          catSay: '♥ Miau ♥ ¡Ronroneo +100% moral en el atardecer!',
+          night: false
+        },
+        ofi_noc: {
+          src: './assets/shot_ofi_noche.webp',
+          status: '☾ TURNO NOCHE · LEDS & MONITORES',
+          clock: '☾ 22:15 · MODO NOCHE',
+          caption: 'MODO NOCHE · CIELO ESTRELLADO, BRILLO EN MONITORES, LEDS AZULES Y SIESTA ZZZ',
+          toast: '☾ MODO NOCHE · MONITORES, LEDS AZULES Y LÁMPARAS ENCENDIDAS',
+          catSay: '☾ zZz... durmiendo la siesta nocturna en el pasillo',
+          night: true
+        }
+      };
+
+      const collected = new Set();
+      const heroHintPing = document.getElementById('heroHintPing');
+      let hasInteractedWithHero = false;
+      let toastTimer = null;
+      let activeBubbleTimer = null;
+
+      function showToast(msg) {
+        worldToast.textContent = msg;
+        worldToast.classList.add('visible');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => worldToast.classList.remove('visible'), 2700);
+      }
+
+      function spawnDomParticles(leftPct, topPct, colors) {
+        const palette = colors || ['#FFD76F', '#FFF4CF', '#A7E8AD', '#75BEBA'];
+        for (let i = 0; i < 10; i++) {
+          const p = document.createElement('span');
+          p.className = 'fx-pixel';
+          const angle = (Math.PI * 2 * i) / 10;
+          const dist = 18 + Math.random() * 26;
+          p.style.left = leftPct;
+          p.style.top = topPct;
+          p.style.background = palette[i % palette.length];
+          p.style.setProperty('--dx', `${Math.round(Math.cos(angle) * dist)}px`);
+          p.style.setProperty('--dy', `${Math.round(Math.sin(angle) * dist)}px`);
+          heroFxLayer.appendChild(p);
+          setTimeout(() => p.remove(), 550);
+        }
+      }
+
+      function spawnHearts(leftPct, topPct) {
+        for (let i = 0; i < 3; i++) {
+          const h = document.createElement('span');
+          h.className = 'fx-heart';
+          h.textContent = '♥';
+          h.style.left = `calc(${leftPct} + ${(i - 1) * 16}px)`;
+          h.style.top = `calc(${topPct} - ${i * 6}px)`;
+          heroFxLayer.appendChild(h);
+          setTimeout(() => h.remove(), 920);
+        }
+      }
+
+      function updateProgressUI() {
+        const n = collected.size;
+        if (n === 3) {
+          starCounter.textContent = '★ ¡3 / 3 ENCONTRADAS!';
+          starCounter.classList.add('won');
+          secretUnlock.classList.add('visible');
+          loadingText.textContent = '★ OFICINA VIRTUAL LISTA AL 100% · BONUS ACTIVO';
+          loadingText.style.color = 'var(--mint)';
+        } else {
+          starCounter.textContent = `ESTRELLAS ${n} / 3`;
+          starCounter.classList.remove('won');
+          secretUnlock.classList.remove('visible');
+          loadingText.textContent = 'CONECTANDO PUESTOS, VENTANAL EN VIVO Y RADIO DE LA OFICINA...';
+          loadingText.style.color = 'var(--muted)';
+        }
+        loadingBlocks.forEach((blk, idx) => {
+          blk.classList.remove('filled', 'blink');
+          if (idx < 4 + n) blk.classList.add('filled');
+          else if (idx === 4 + n && n < 3) blk.classList.add('blink');
+        });
+      }
+
+      // Cambio de momento del día en el escenario hero
+      document.querySelectorAll('[data-hero-scene]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const key = btn.dataset.heroScene;
+          const s = heroScenes[key];
+          document.querySelectorAll('[data-hero-scene]').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          heroOfficeImg.classList.add('swapping');
+          setTimeout(() => {
+            heroOfficeImg.src = s.src;
+            heroOfficeImg.classList.remove('swapping');
+          }, reducedMotion ? 0 : 110);
+          heroSceneStatus.textContent = s.status;
+          heroClock.textContent = s.clock;
+          heroCaption.textContent = s.caption;
+          if (hsCatBubble) hsCatBubble.textContent = s.catSay;
+          worldStage.classList.toggle('is-night', s.night);
+          playTone(s.night ? [392, 330] : [440, 587], 0.06, 'triangle', 0.045);
+          showToast(s.toast);
+        });
+      });
+
+      // 3 estrellas coleccionables sobre la oficina real
+      document.querySelectorAll('.hero-star').forEach((el) => {
+        const id = Number(el.dataset.star);
+        el.addEventListener('click', () => {
+          if (collected.has(id)) return;
+          hasInteractedWithHero = true;
+          if (heroHintPing) heroHintPing.classList.add('hidden');
+          collected.add(id);
+          el.style.display = 'none';
+          spawnDomParticles(el.style.left, el.style.top);
+          updateProgressUI();
+          if (collected.size === 3) {
+            playTone([523, 659, 784, 1046], 0.085, 'square', 0.05);
+            showToast('★ ¡3/3! DESBLOQUEASTE TU PERSONAJE PIXEL-ART DE REGALO');
+          } else {
+            playTone([587, 880], 0.075, 'square', 0.045);
+            showToast(`✦ ¡ESTRELLA ${collected.size} DE 3 RECOLECTADA!`);
+          }
+        });
+      });
+
+      // Zumbido estilo Messenger (tecla 4 o botón)
+      let buzzClearTimer = null;
+      function triggerBuzz() {
+        worldStage.style.transform = '';
+        worldStage.classList.remove('buzzing');
+        void worldStage.offsetWidth;
+        worldStage.classList.add('buzzing');
+        clearTimeout(buzzClearTimer);
+        buzzClearTimer = setTimeout(() => worldStage.classList.remove('buzzing'), 460);
+        playTone([150, 195, 145, 200, 140], 0.055, 'sawtooth', 0.045);
+        showToast('💨 ¡ZUMBIDO ESTILO MESSENGER ENVIADO A TODA LA OFICINA!');
+      }
+      btnBuzz.addEventListener('click', triggerBuzz);
+
+      btnReset.addEventListener('click', () => {
+        collected.clear();
+        document.querySelectorAll('.hero-star').forEach((el) => el.style.display = '');
+        updateProgressUI();
+        playTone([440, 349], 0.06, 'square', 0.04);
+        showToast('↺ ESTRELLAS REINICIADAS · ¡BUSCALAS DE NUEVO EN LA OFICINA!');
+      });
+
+      btnSound.addEventListener('click', () => {
+        soundEnabled = !soundEnabled;
+        btnSound.textContent = soundEnabled ? '♪ SONIDO: ON' : '♪ SONIDO: OFF';
+        btnSound.setAttribute('aria-pressed', String(soundEnabled));
+        if (soundEnabled) playTone([659], 0.06, 'square', 0.04);
+      });
+
+      function triggerHotspot(hs) {
+        document.querySelectorAll('.real-hotspot').forEach(h => h.classList.remove('talking'));
+        document.querySelectorAll('.roster-btn').forEach(b => b.classList.remove('active'));
+        hs.classList.add('talking');
+        const matchingBtn = document.querySelector(`.roster-btn[data-hero-target="${hs.id}"]`);
+        if (matchingBtn) matchingBtn.classList.add('active');
+        hasInteractedWithHero = true;
+        if (heroHintPing) heroHintPing.classList.add('hidden');
+        if (hs.id === 'hsCat') {
+          spawnHearts(hs.style.left, '72%');
+          playTone([659, 784, 987], 0.05, 'triangle', 0.045);
+          showToast('♥ ¡RONRONEO ACTIVADO! +100% MORAL DEL EQUIPO');
+        } else {
+          playTone([523, 659], 0.05, 'triangle', 0.035);
+        }
+        clearTimeout(activeBubbleTimer);
+        activeBubbleTimer = setTimeout(() => {
+          hs.classList.remove('talking');
+          if (matchingBtn) matchingBtn.classList.remove('active');
+        }, 2800);
+      }
+
+      document.querySelectorAll('.real-hotspot').forEach((hs) => {
+        hs.addEventListener('click', () => triggerHotspot(hs));
+      });
+
+      // Botones de sprites en #espacios desplazan arriba y disparan el globo en la oficina hero
+      document.querySelectorAll('.roster-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.dataset.heroTarget);
+          if (target) {
+            document.getElementById('mundo').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => triggerHotspot(target), 350);
+          }
+        });
+      });
+
+      /* Pista amigable inicial a los 1.8s para invitar a interactuar con la escena */
+      if (!reducedMotion) {
+        setTimeout(() => {
+          const hsP2 = document.getElementById('hsP2');
+          if (!hasInteractedWithHero && hsP2) {
+            const b = hsP2.querySelector('.hotspot-bubble');
+            const orig = b.textContent;
+            b.textContent = '✦ ¡Hola! Tocá cualquier puesto, el gato o las ★';
+            hsP2.classList.add('talking');
+            setTimeout(() => {
+              if (!hasInteractedWithHero) {
+                hsP2.classList.remove('talking');
+                setTimeout(() => { b.textContent = orig; }, 200);
+              } else {
+                b.textContent = orig;
+              }
+            }, 3600);
+          }
+        }, 1800);
+      }
+
+      /* ============================================================
+         5. MÓDULOS INTERACTIVOS (CAPTURAS REALES v190 + LIGHTBOX)
+         ============================================================ */
+      const modulesData = {
+        espacio: {
+          badge: '🏢 MÓDULO 01 · OFICINA EN VIVO + CIELO REAL',
+          title: 'Tu oficina respira al ritmo real del día.',
+          desc: 'La oficina original en perspectiva con cuatro escritorios de doble monitor, estantes con LED azul y un ventanal vivo que refleja la hora y el clima de Córdoba.',
+          bullets: [
+            'Transición real de Día, Atardecer y Noche con reflejos en monitores y lámparas.',
+            'Interacciones con [E]: sentarte en tu puesto, estados rápidos [1–3] y acariciar al gato de la oficina.',
+            'Paneles prolijos en los bordes: reloj/clima, lista de equipo en línea por rol y chat.'
+          ],
+          metricLabel: 'ENTORNO EN TIEMPO REAL',
+          metricVal: 'DÍA · ATARDECER · NOCHE',
+          img: './assets/mod_espacio.webp',
+          alt: 'Captura real de Oficina Virtual v190 mostrando el atardecer en Córdoba, reloj, lista de 4 integrantes en línea y chat',
+          lbTitle: '01 · OFICINA EN VIVO — VENTANAL REAL, RELOJ, ROSTER Y CHAT'
+        },
+        llamada: {
+          badge: '🎵 MÓDULO 02 · VOZ, CÁMARA & RADIO DJ',
+          title: 'Hablás en un clic y escuchan música juntos.',
+          desc: 'Sin armar links de Meet ni salir de la oficina. Prendés el micro o la cámara en la tira lateral derecha y cualquiera puede poner música sincronizada para toda la sala.',
+          bullets: [
+            'Micro de la oficina [M] siempre listo con indicador visual al hablar y control de volumen.',
+            'Cámaras y pantalla compartida en el margen derecho: nunca tapan el mapa ni los puestos.',
+            'Radio de la oficina [P]: pegás un link de YouTube, Vimeo o Drive y suena al segundo para todos.'
+          ],
+          metricLabel: 'SINCRONIZACIÓN EN VIVO',
+          metricVal: 'VOZ + VIDEO + RADIO DJ',
+          img: './assets/mod_llamada.webp',
+          alt: 'Captura real de Oficina Virtual v190 en modo noche con cámaras laterales, pantalla compartida y Radio de la oficina sincronizada',
+          lbTitle: '02 · VOZ, CÁMARA LATERAL, PANTALLA Y RADIO SINCRONIZADA'
+        },
+        msn: {
+          badge: '🔔 MÓDULO 03 · CHAT & AVISOS ESTILO MESSENGER',
+          title: 'La mística del MSN, pensada para trabajar.',
+          desc: 'Si estás concentrado en otra ventana, te enterás igual: globos de diálogo sobre cada compañero, avisos nativos de escritorio, notas de voz y el clásico Zumbido.',
+          bullets: [
+            'Chat con globos sobre el avatar, adjuntos de imágenes, notas de voz con onda y susurros (/w).',
+            'Barra dedicada de botones dentro del chat: jamás se superpone con los mensajes.',
+            'Notificaciones nativas Windows/Mac + sonidos 8-bit configurables + botón 💨 Zumbido [4].'
+          ],
+          metricLabel: 'RESPUESTA DEL EQUIPO',
+          metricVal: 'GLOBOS + AUDIO + ZUMBIDO',
+          img: './assets/mod_chat_msn.webp',
+          alt: 'Captura real de Oficina Virtual v190 mostrando globos de chat sobre los puestos, nota de voz, susurro y aviso de Zumbido',
+          lbTitle: '03 · CHAT CON GLOBOS, NOTAS DE VOZ, SUSURROS Y ZUMBIDO MSN'
+        },
+        deploy: {
+          badge: '🔒 MÓDULO 04 · PRIVACIDAD, HISTORIAL Y RED',
+          title: 'Liviana, privada y lista para tu equipo.',
+          desc: 'Construida en JavaScript puro y Canvas 2D sin frameworks pesados. Elegís tu avatar, validás con tu DNI hasheado en el navegador y corrés gratis vía P2P o en servidor propio.',
+          bullets: [
+            'Acceso cerrado por equipo con validación DNI SHA-256 en cliente (nunca viaja en texto plano).',
+            'Historial de presencia en vivo: ves desde qué hora ingresó cada integrante y su jornada.',
+            'Doble modo de red: WebRTC P2P sin servidor (Trystero) o Node.js + WebSockets en Render/VPS.'
+          ],
+          metricLabel: 'ARQUITECTURA',
+          metricVal: 'P2P WEBRTC O NODE + WS',
+          img: './assets/mod_privacidad.webp',
+          alt: 'Captura real del ingreso privado por DNI SHA-256 con avatares a medida, historial de presencia y modos de deploy',
+          lbTitle: '04 · ACCESO PRIVADO DNI SHA-256, HISTORIAL Y DEPLOY P2P / NODE'
+        }
+      };
+
+      const modCopy = document.getElementById('modCopy');
+      const modShotHost = document.getElementById('modShotHost');
+      const modMetricLabel = document.getElementById('modMetricLabel');
+      const modMetricVal = document.getElementById('modMetricVal');
+      const shotLightbox = document.getElementById('shotLightbox');
+      const lbImg = document.getElementById('lbImg');
+      const lbTitle = document.getElementById('lbTitle');
+      const lbClose = document.getElementById('lbClose');
+
+      function openLightbox(src, title, alt) {
+        lbImg.src = src;
+        lbImg.alt = alt;
+        lbTitle.textContent = title;
+        shotLightbox.classList.add('open');
+        playTone([587, 784], 0.045, 'triangle', 0.035);
+      }
+
+      function closeLightbox() {
+        shotLightbox.classList.remove('open');
+      }
+
+      lbClose.addEventListener('click', closeLightbox);
+      shotLightbox.addEventListener('click', (e) => { if (e.target === shotLightbox) closeLightbox(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+      function renderModule(key) {
+        const d = modulesData[key];
+        modCopy.innerHTML = `
+          <span class="mod-badge">${d.badge}</span>
+          <h3>${d.title}</h3>
+          <p>${d.desc}</p>
+          <ul class="mod-list">${d.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+        `;
+        modShotHost.innerHTML = `
+          <button type="button" class="mod-shot-btn" id="modShotZoom" aria-label="Ampliar captura: ${d.lbTitle}">
+            <img src="${d.img}" alt="${d.alt}" />
+            <span class="mod-zoom-tag">🔍 AMPLIAR CAPTURA</span>
+          </button>
+        `;
+        document.getElementById('modShotZoom').addEventListener('click', () => openLightbox(d.img, d.lbTitle, d.alt));
+        modCopy.classList.remove('mod-anim-in');
+        modShotHost.classList.remove('mod-anim-in');
+        void modCopy.offsetWidth;
+        modCopy.classList.add('mod-anim-in');
+        modShotHost.classList.add('mod-anim-in');
+        modMetricLabel.textContent = d.metricLabel;
+        modMetricVal.textContent = d.metricVal;
+      }
+
+      renderModule('espacio');
+
+      heroOfficeImg.src = heroScenes.ofi_dia.src;
+      document.querySelectorAll('[data-scene-img]').forEach((img) => {
+        const sc = heroScenes[img.dataset.sceneImg];
+        if (sc) img.src = sc.src;
+      });
+
+      document.querySelectorAll('.zoomable-shot').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const sc = heroScenes[btn.dataset.sceneKey];
+          if (sc) openLightbox(sc.src, btn.dataset.title, btn.querySelector('img').alt);
+        });
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === '4' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+          triggerBuzz();
+        }
+      });
+
+      document.querySelectorAll('.mod-tab').forEach((tab) => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.mod-tab').forEach((t) => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+          renderModule(tab.dataset.mod);
+          playTone([523], 0.045, 'square', 0.03);
+        });
+      });
+
+      /* ============================================================
+         6. MODALIDADES → PRE-SELECCIÓN EN FORMULARIO WHATSAPP
+         ============================================================ */
+      const fPlan = document.getElementById('fPlan');
+      document.querySelectorAll('.choose-plan').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          fPlan.value = btn.dataset.plan;
+          document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
+          setTimeout(() => document.getElementById('fName').focus(), 450);
+          playTone([523, 659], 0.05, 'square', 0.035);
+        });
+      });
+
+      /* ============================================================
+         7. FAQ ACORDEÓN
+         ============================================================ */
+      document.querySelectorAll('.faq-q').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const item = btn.closest('.faq-item');
+          const willOpen = !item.classList.contains('open');
+          document.querySelectorAll('.faq-item').forEach((other) => {
+            other.classList.remove('open');
+            other.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+            other.querySelector('.faq-plus').textContent = '+';
+          });
+          if (willOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+            btn.querySelector('.faq-plus').textContent = '−';
+          }
+        });
+      });
+
+      /* ============================================================
+         8. FORMULARIO WHATSAPP + COPIADO + RESPUESTA EMAIL
+         ============================================================ */
+      let bonusApplied = false;
+      let lastCompiledMessage = quickMsg;
+      const submitBtn = document.getElementById('submitBtn');
+      const formFeedback = document.getElementById('formFeedback');
+      const feedbackDetail = document.getElementById('feedbackDetail');
+      const bonusPill = document.getElementById('bonusPill');
+      const fbWaLink = document.getElementById('fbWaLink');
+      const fbMailLink = document.getElementById('fbMailLink');
+      const fbCopyBtn = document.getElementById('fbCopyBtn');
+
+      document.getElementById('btnApplyCode').addEventListener('click', () => {
+        bonusApplied = true;
+        bonusPill.classList.add('visible');
+        document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
+        playTone([587, 784, 1046], 0.06, 'square', 0.04);
+      });
+
+      document.getElementById('joinForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('fName').value.trim();
+        const team = document.getElementById('fTeam').value;
+        const plan = fPlan.value;
+        const msg = document.getElementById('fMsg').value.trim();
+
+        if (!name) {
+          submitBtn.classList.remove('success');
+          submitBtn.classList.add('error');
+          submitBtn.textContent = 'Ingresá tu nombre o empresa';
+          playTone([220, 185], 0.08, 'square', 0.04);
+          document.getElementById('fName').focus();
+          setTimeout(() => {
+            submitBtn.classList.remove('error');
+            submitBtn.textContent = '💬 Enviar consulta por WhatsApp →';
+          }, 2000);
+          return;
+        }
+
+        const lines = [
+          `¡Hola equipo POPUPS! Soy ${name}.`,
+          `Me interesa la Oficina Virtual 2D (${plan}) para un equipo de ${team}.`
+        ];
+        if (msg) lines.push(`Detalles: ${msg}`);
+        if (bonusApplied) lines.push('★ Junté las 3 estrellas en la landing (bonus personaje pixel-art de regalo).');
+
+        lastCompiledMessage = lines.join('\\n');
+        const waUrl = buildWhatsAppUrl(lastCompiledMessage);
+        const mailSubject = encodeURIComponent(`Consulta Oficina Virtual 2D — ${name}`);
+        const mailBody = encodeURIComponent(lastCompiledMessage);
+
+        fbWaLink.href = waUrl;
+        fbMailLink.href = `mailto:${CONTACT_EMAIL}?subject=${mailSubject}&body=${mailBody}`;
+        feedbackDetail.textContent = `¡Genial, ${name}! Armamos tu consulta para ${plan} (${team}). Tocá "Abrir en WhatsApp" para enviarla directo.`;
+
+        submitBtn.classList.remove('error');
+        submitBtn.classList.add('success');
+        submitBtn.textContent = '✓ Consulta lista para WhatsApp';
+        formFeedback.classList.add('visible');
+        playTone([523, 659, 784], 0.075, 'square', 0.045);
+
+        try { window.open(waUrl, '_blank', 'noopener'); } catch (_) {}
+      });
+
+      fbCopyBtn.addEventListener('click', () => {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(lastCompiledMessage).then(() => {
+            fbCopyBtn.textContent = '✓ ¡Copiado!';
+            setTimeout(() => fbCopyBtn.textContent = '📋 Copiar texto', 1800);
+          }).catch(() => {});
+        }
+      });
+
+      /* ============================================================
+         9. MOTION GRAPHICS, PARALLAX, 2.5D HERO TILT & SCROLL REVEAL
+         ============================================================ */
+      const scrollProgressBar = document.getElementById('scrollProgressBar');
+      const parallaxNodes = Array.from(document.querySelectorAll('.px-float')).map((el) => ({
+        el,
+        depth: parseFloat(el.dataset.depth || '0.2'),
+        topPct: parseFloat(el.style.top || '20') / 100
+      }));
+      parallaxNodes.forEach(({ el }) => { el.style.top = '0px'; });
+      const heroStars = Array.from(document.querySelectorAll('.hero-star'));
+
+      let targetScrollY = window.scrollY;
+      let smoothScrollY = window.scrollY;
+      let tiltTargetX = 0, tiltTargetY = 0;
+      let tiltCurX = 0, tiltCurY = 0;
+
+      if (!reducedMotion && worldStage) {
+        worldStage.addEventListener('pointermove', (e) => {
+          const r = worldStage.getBoundingClientRect();
+          tiltTargetX = ((e.clientX - r.left) / r.width) * 2 - 1;
+          tiltTargetY = ((e.clientY - r.top) / r.height) * 2 - 1;
+        }, { passive: true });
+        worldStage.addEventListener('pointerleave', () => {
+          tiltTargetX = 0;
+          tiltTargetY = 0;
+        });
+      }
+
+      window.addEventListener('scroll', () => {
+        targetScrollY = window.scrollY;
+        const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        if (scrollProgressBar) {
+          scrollProgressBar.style.transform = `scaleX(${Math.min(1, Math.max(0, targetScrollY / maxScroll))})`;
+        }
+      }, { passive: true });
+
+      function motionTick() {
+        smoothScrollY += (targetScrollY - smoothScrollY) * 0.12;
+        const span = window.innerHeight + 120;
+
+        for (let i = 0; i < parallaxNodes.length; i++) {
+          const item = parallaxNodes[i];
+          const base = item.topPct * span;
+          const y = (((base - smoothScrollY * item.depth) % span) + span) % span - 60;
+          item.el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+        }
+
+        tiltCurX += (tiltTargetX - tiltCurX) * 0.09;
+        tiltCurY += (tiltTargetY - tiltCurY) * 0.09;
+
+        if (worldStage && !worldStage.classList.contains('buzzing')) {
+          const rotY = (tiltCurX * 2.8).toFixed(2);
+          const rotX = (-tiltCurY * 2.2).toFixed(2);
+          worldStage.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+        }
+
+        if (heroOfficeImg) {
+          const scrollPan = Math.min(18, Math.max(-18, smoothScrollY * 0.035));
+          const px = (-tiltCurX * 5).toFixed(1);
+          const py = (-tiltCurY * 4 + scrollPan).toFixed(1);
+          heroOfficeImg.style.transform = `scale(1.045) translate3d(${px}px, ${py}px, 0)`;
+        }
+
+        for (let i = 0; i < heroStars.length; i++) {
+          const st = heroStars[i];
+          if (st.style.display !== 'none') {
+            const sx = (tiltCurX * (7 + i * 2)).toFixed(1);
+            const sy = (tiltCurY * (5 + i * 1.5)).toFixed(1);
+            st.style.marginLeft = `${sx}px`;
+            st.style.marginTop = `${sy}px`;
+          }
+        }
+
+        requestAnimationFrame(motionTick);
+      }
+
+      if (!reducedMotion) {
+        requestAnimationFrame(motionTick);
+      }
+
+      // Luz interactiva siguiendo el cursor dentro de las tarjetas
+      document.querySelectorAll('.adv-card, .moment-card, .step-card, .plan-card').forEach((card) => {
+        card.addEventListener('pointermove', (e) => {
+          const r = card.getBoundingClientRect();
+          card.style.setProperty('--mx', `${(e.clientX - r.left).toFixed(0)}px`);
+          card.style.setProperty('--my', `${(e.clientY - r.top).toFixed(0)}px`);
+        }, { passive: true });
+      });
+
+      // Scroll-Reveal escalonado por sección
+      const revealGroups = [
+        { sel: '.section-head', stagger: 0 },
+        { sel: '.adv-card', stagger: 90 },
+        { sel: '.moment-card', stagger: 100 },
+        { sel: '.roster-btn', stagger: 60 },
+        { sel: '.key-chip', stagger: 45 },
+        { sel: '.module-tabs', stagger: 0 },
+        { sel: '.module-panel', stagger: 60 },
+        { sel: '.step-card', stagger: 100 },
+        { sel: '.metric-cell', stagger: 70 },
+        { sel: '.plan-card', stagger: 110 },
+        { sel: '.faq-item', stagger: 70 },
+        { sel: '.join-card', stagger: 0 }
+      ];
+
+      const allReveals = [];
+      revealGroups.forEach(({ sel, stagger }) => {
+        document.querySelectorAll(sel).forEach((el, idx) => {
+          el.classList.add('reveal');
+          if (stagger) el.style.setProperty('--rev-delay', `${idx * stagger}ms`);
+          allReveals.push(el);
+        });
+      });
+
+      if (!reducedMotion && 'IntersectionObserver' in window) {
+        const revObs = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in-view');
+              revObs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -36px 0px' });
+
+        allReveals.forEach((el) => revObs.observe(el));
+      } else {
+        allReveals.forEach((el) => el.classList.add('in-view'));
+      }
+
+      // Contadores cinéticos en la tira de métricas
+      const metricsStrip = document.querySelector('.metrics-strip');
+      if (!reducedMotion && metricsStrip && 'IntersectionObserver' in window) {
+        const animateValue = (el, end, suffix, dur) => {
+          const start = performance.now();
+          const step = (now) => {
+            const t = Math.min(1, (now - start) / dur);
+            const eased = 1 - Math.pow(1 - t, 3);
+            el.textContent = `${Math.round(end * eased)}${suffix}`;
+            if (t < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        };
+
+        const mObs = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const vals = metricsStrip.querySelectorAll('.metric-val');
+              if (vals[0]) animateValue(vals[0], 3, ' CLIMAS', 650);
+              if (vals[3]) animateValue(vals[3], 100, '% TUYA', 900);
+              mObs.disconnect();
+            }
+          });
+        }, { threshold: 0.35 });
+        mObs.observe(metricsStrip);
+      }
+
+    })();
+  </script>
+</body>
+</html>
