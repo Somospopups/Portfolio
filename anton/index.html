@@ -1,0 +1,1932 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Antón · Cocina de Barrio — Caso 08 · POPUPS</title>
+  <meta name="description" content="Caso 08 de POPUPS: la web gastronómica interactiva de Antón Cocina de Barrio (Alta Córdoba) con pizza 3D giratoria, armado paso a paso y pedidos directos por WhatsApp sin comisiones." />
+  <meta name="theme-color" content="#183B25" />
+  <link rel="icon" type="image/svg+xml" href="./assets/icon.svg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:title" content="Antón · Cocina de Barrio — Caso 08 · POPUPS" />
+  <meta property="og:description" content="Pizza de barrio. Producto tope de gama. Caso real creado por POPUPS en Alta Córdoba: experiencia interactiva 3D y 4 canales de venta por WhatsApp." />
+  <meta property="og:image" content="https://somospopups.github.io/Portfolio/anton/assets/og-preview.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <style>
+    @font-face {
+      font-family: "League Spartan";
+      src: url("./assets/spartan.woff2") format("woff2");
+      font-weight: 400 900;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Caveat";
+      src: url("./assets/caveat.woff2") format("woff2");
+      font-weight: 400 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "DM Sans";
+      src: url("./assets/dmsans.woff2") format("woff2");
+      font-weight: 400 800;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Space Mono";
+      src: url("./assets/spacemono400.woff2") format("woff2");
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Space Mono";
+      src: url("./assets/spacemono700.woff2") format("woff2");
+      font-weight: 700;
+      font-display: swap;
+    }
+
+    :root {
+      --green: #2d6117;
+      --green-hi: #3b7a20;
+      --forest: #183b25;
+      --forest-2: #0f2617;
+      --ink: #101a14;
+      --mustard: #e9c36c;
+      --peach: #eaab68;
+      --cream: #f4f1e8;
+      --cream-2: #ece5d4;
+      --beige: #cbbeae;
+      --rust: #a84a1c;
+      --red: #d3202a;
+      --lime: #c8f810;
+      --display: "League Spartan", system-ui, -apple-system, sans-serif;
+      --hand: "Caveat", cursive;
+      --sans: "DM Sans", system-ui, -apple-system, sans-serif;
+      --mono: "Space Mono", ui-monospace, monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --max: 1200px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background: var(--cream);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; }
+
+    .container {
+      width: min(var(--max), calc(100% - 36px));
+      margin: 0 auto;
+    }
+
+    /* ==================== POPUPS HYBRID TOPBAR ==================== */
+    .topbar-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: rgba(15, 38, 23, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(233, 195, 108, 0.16);
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      min-height: 64px;
+      padding: 10px 0;
+      color: var(--cream);
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .back-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(244, 241, 232, 0.22);
+      background: rgba(244, 241, 232, 0.06);
+      font-size: 12px;
+      font-weight: 700;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+    .back-pill:hover {
+      background: rgba(244, 241, 232, 0.14);
+      border-color: rgba(233, 195, 108, 0.55);
+      transform: translateY(-1px);
+    }
+    .case-chip {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: rgba(233, 195, 108, 0.14);
+      border: 1px solid rgba(233, 195, 108, 0.34);
+      color: var(--mustard);
+      font-weight: 700;
+    }
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(244, 241, 232, 0.78);
+    }
+    .topbar-nav a:hover { color: var(--mustard); }
+    .topbar-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: var(--mustard);
+      color: var(--forest-2);
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      transition: transform 0.2s var(--ease), background 0.2s ease;
+      white-space: nowrap;
+    }
+    .topbar-cta:hover {
+      background: #f5d484;
+      transform: translateY(-1px);
+    }
+
+    /* ==================== SHARED BUTTONS & TYPE ==================== */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--mustard);
+    }
+    .eyebrow.dark { color: var(--green); }
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--mustard);
+      box-shadow: 0 0 0 4px rgba(233, 195, 108, 0.2);
+    }
+    .eyebrow.dark .eyebrow-dot {
+      background: var(--red);
+      box-shadow: 0 0 0 4px rgba(211, 32, 42, 0.16);
+    }
+    .hand {
+      font-family: var(--hand);
+      font-weight: 700;
+      line-height: 1.05;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 800;
+      border: 1.5px solid transparent;
+      transition: transform 0.24s var(--ease), box-shadow 0.24s var(--ease), background 0.2s ease, border-color 0.2s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--mustard);
+      color: var(--forest-2);
+      box-shadow: 0 12px 30px rgba(233, 195, 108, 0.22);
+    }
+    .btn-primary:hover { background: #f4d383; }
+    .btn-red {
+      background: var(--red);
+      color: #fff;
+      box-shadow: 0 12px 30px rgba(211, 32, 42, 0.28);
+    }
+    .btn-red:hover { background: #e32a35; }
+    .btn-ghost-light {
+      background: rgba(244, 241, 232, 0.08);
+      border-color: rgba(244, 241, 232, 0.28);
+      color: var(--cream);
+    }
+    .btn-ghost-light:hover {
+      background: rgba(244, 241, 232, 0.16);
+      border-color: var(--mustard);
+    }
+    .btn-forest {
+      background: var(--forest);
+      color: var(--cream);
+      box-shadow: 0 12px 26px rgba(24, 59, 37, 0.24);
+    }
+    .btn-forest:hover { background: var(--green); }
+    .btn-outline-dark {
+      background: transparent;
+      border-color: rgba(16, 26, 20, 0.24);
+      color: var(--ink);
+    }
+    .btn-outline-dark:hover {
+      border-color: var(--forest);
+      background: rgba(24, 59, 37, 0.06);
+    }
+
+    /* ==================== SECTION 1: HERO & 3D PIZZA STAGE ==================== */
+    .hero {
+      position: relative;
+      background:
+        radial-gradient(920px 560px at 82% 38%, rgba(59, 122, 32, 0.42), transparent 65%),
+        radial-gradient(640px 440px at 10% 90%, rgba(211, 32, 42, 0.2), transparent 65%),
+        linear-gradient(155deg, var(--forest-2) 0%, var(--forest) 54%, #14321e 100%);
+      color: var(--cream);
+      padding: 58px 0 82px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(233, 195, 108, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(233, 195, 108, 0.04) 1px, transparent 1px);
+      background-size: 46px 46px;
+      pointer-events: none;
+    }
+    .hero-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 44px;
+      align-items: center;
+    }
+    .hero-hand {
+      display: inline-block;
+      margin: 14px 0 6px;
+      font-size: 28px;
+      color: var(--peach);
+      transform: rotate(-2deg);
+    }
+    .hero h1 {
+      margin: 0;
+      font-family: var(--display);
+      font-weight: 900;
+      font-size: clamp(46px, 6.2vw, 82px);
+      line-height: 0.92;
+      letter-spacing: -0.045em;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--mustard);
+      display: block;
+    }
+    .hero-lead {
+      margin: 22px 0 0;
+      max-width: 530px;
+      font-size: 16.5px;
+      line-height: 1.6;
+      color: rgba(244, 241, 232, 0.84);
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .hero-kpis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 34px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(233, 195, 108, 0.18);
+    }
+    .kpi {
+      background: rgba(15, 38, 23, 0.55);
+      border: 1px solid rgba(233, 195, 108, 0.16);
+      border-radius: 18px;
+      padding: 14px 15px;
+    }
+    .kpi b {
+      display: block;
+      font-family: var(--display);
+      font-size: 27px;
+      font-weight: 900;
+      color: var(--mustard);
+      line-height: 1;
+    }
+    .kpi span {
+      display: block;
+      margin-top: 5px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: rgba(244, 241, 232, 0.74);
+    }
+
+    /* Interactive 3D Pizza Stage */
+    .stage-card {
+      position: relative;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(233, 195, 108, 0.18), transparent 62%),
+        rgba(12, 31, 19, 0.72);
+      border: 1px solid rgba(233, 195, 108, 0.28);
+      padding: 22px 22px 20px;
+      box-shadow: 0 32px 72px rgba(4, 12, 7, 0.45);
+      overflow: hidden;
+    }
+    .stage-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(244, 241, 232, 0.72);
+    }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(45, 97, 23, 0.45);
+      border: 1px solid rgba(200, 248, 16, 0.4);
+      color: var(--lime);
+      font-weight: 700;
+    }
+    .live-badge i {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--lime);
+      display: inline-block;
+    }
+    .pizza-arena {
+      position: relative;
+      height: 340px;
+      display: grid;
+      place-items: center;
+      cursor: grab;
+      user-select: none;
+      touch-action: pan-y;
+      margin: 6px 0;
+    }
+    .pizza-arena:active { cursor: grabbing; }
+    .pizza-ring {
+      position: absolute;
+      width: 312px;
+      height: 312px;
+      border-radius: 999px;
+      border: 1.5px dashed rgba(233, 195, 108, 0.34);
+      animation: slowSpin 38s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes slowSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .pizza-disc-wrap {
+      position: relative;
+      width: 274px;
+      height: 274px;
+      display: grid;
+      place-items: center;
+      filter: drop-shadow(0 24px 32px rgba(4, 12, 7, 0.6));
+      transition: transform 0.25s var(--ease);
+    }
+    .pizza-disc {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      will-change: transform;
+      pointer-events: none;
+      transition: opacity 0.2s ease, scale 0.24s var(--ease);
+    }
+    .pizza-disc.swapping { opacity: 0.25; scale: 0.92; }
+
+    .float-ing {
+      position: absolute;
+      pointer-events: none;
+      filter: drop-shadow(0 12px 18px rgba(4, 12, 7, 0.45));
+      transition: transform 0.35s var(--ease);
+    }
+    .float-ing.f1 { width: 74px; top: 18px; left: 16px; transform: rotate(-16deg); }
+    .float-ing.f2 { width: 66px; top: 24px; right: 18px; transform: rotate(14deg); }
+    .float-ing.f3 { width: 82px; bottom: 26px; left: 10px; transform: rotate(-8deg); }
+    .float-ing.f4 { width: 62px; bottom: 24px; right: 20px; transform: rotate(10deg); }
+
+    .drag-hint {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(15, 38, 23, 0.85);
+      border: 1px solid rgba(233, 195, 108, 0.26);
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--mustard);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .pizza-switcher {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      margin-top: 8px;
+    }
+    .pz-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 6px;
+      border-radius: 14px;
+      background: rgba(244, 241, 232, 0.06);
+      border: 1px solid rgba(244, 241, 232, 0.14);
+      color: rgba(244, 241, 232, 0.8);
+      font-size: 11px;
+      font-weight: 700;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+    .pz-tab img { width: 40px; height: 40px; object-fit: contain; }
+    .pz-tab:hover { background: rgba(244, 241, 232, 0.12); transform: translateY(-2px); }
+    .pz-tab.active {
+      background: rgba(233, 195, 108, 0.18);
+      border-color: var(--mustard);
+      color: var(--mustard);
+    }
+
+    .pizza-info-bar {
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(244, 241, 232, 0.07);
+      border: 1px solid rgba(244, 241, 232, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .pizza-info-bar h3 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--cream);
+    }
+    .pizza-info-bar .sub {
+      margin: 2px 0 0;
+      font-size: 12.5px;
+      color: rgba(244, 241, 232, 0.78);
+    }
+    .pizza-info-bar .ing-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 8px;
+    }
+    .pizza-info-bar .ing-tags span {
+      font-family: var(--mono);
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(233, 195, 108, 0.12);
+      color: var(--mustard);
+    }
+    .wa-mini {
+      flex-shrink: 0;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: #25d366;
+      color: #092213;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .wa-mini:hover { background: #36e276; transform: translateY(-1px); }
+
+    /* ==================== SECTION 2: TICKER ==================== */
+    .ticker {
+      background: var(--mustard);
+      color: var(--forest-2);
+      border-top: 2px solid var(--forest-2);
+      border-bottom: 2px solid var(--forest-2);
+      overflow: hidden;
+      padding: 13px 0;
+    }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      gap: 26px;
+      font-family: var(--display);
+      font-weight: 900;
+      font-size: 16px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      animation: marquee 28s linear infinite;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    .ticker-dot { color: var(--red); }
+
+    /* ==================== SECTION 3: STORYTELLING MASA MADRE ==================== */
+    .craft {
+      padding: 86px 0;
+      background: var(--cream);
+    }
+    .sec-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 42px;
+      flex-wrap: wrap;
+    }
+    .sec-head h2 {
+      margin: 12px 0 0;
+      font-family: var(--display);
+      font-weight: 900;
+      font-size: clamp(34px, 4.6vw, 56px);
+      line-height: 0.96;
+      letter-spacing: -0.04em;
+      max-width: 680px;
+    }
+    .sec-head h2 em {
+      font-style: normal;
+      color: var(--green);
+    }
+    .sec-head p {
+      margin: 0;
+      max-width: 390px;
+      font-size: 15px;
+      line-height: 1.58;
+      color: #4b554d;
+    }
+    .craft-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .craft-card {
+      background: #fff;
+      border: 1px solid rgba(16, 26, 20, 0.1);
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: 0 14px 36px rgba(16, 26, 20, 0.06);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .craft-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 22px 48px rgba(24, 59, 37, 0.12);
+    }
+    .craft-media {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: var(--forest-2);
+    }
+    .craft-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.55s var(--ease);
+    }
+    .craft-card:hover .craft-media img { transform: scale(1.05); }
+    .craft-num {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(15, 38, 23, 0.86);
+      color: var(--mustard);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .craft-body {
+      padding: 20px 22px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .craft-note {
+      font-size: 24px;
+      color: var(--rust);
+      margin-bottom: 4px;
+    }
+    .craft-body h3 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.025em;
+    }
+    .craft-body p {
+      margin: 10px 0 0;
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: #4f5951;
+    }
+
+    /* ==================== SECTION 4: INTERACTIVE 8-STEP MORTADELA BUILDER ==================== */
+    .builder-sec {
+      padding: 88px 0;
+      background:
+        radial-gradient(740px 460px at 20% 20%, rgba(45, 97, 23, 0.36), transparent 64%),
+        linear-gradient(180deg, var(--forest) 0%, var(--forest-2) 100%);
+      color: var(--cream);
+    }
+    .builder-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 42px;
+      align-items: center;
+    }
+    .builder-sec h2 {
+      margin: 12px 0 0;
+      font-family: var(--display);
+      font-size: clamp(34px, 4.5vw, 54px);
+      font-weight: 900;
+      line-height: 0.96;
+      letter-spacing: -0.04em;
+    }
+    .builder-sec h2 em { font-style: normal; color: var(--mustard); }
+    .builder-lead {
+      margin: 14px 0 22px;
+      font-size: 15.5px;
+      line-height: 1.6;
+      color: rgba(244, 241, 232, 0.8);
+    }
+    .steps-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 9px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .step-btn {
+      width: 100%;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 13px;
+      border-radius: 15px;
+      background: rgba(244, 241, 232, 0.06);
+      border: 1px solid rgba(244, 241, 232, 0.14);
+      color: rgba(244, 241, 232, 0.82);
+      font-size: 13px;
+      font-weight: 700;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+    .step-btn span.n {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--mustard);
+      padding: 3px 7px;
+      border-radius: 8px;
+      background: rgba(233, 195, 108, 0.12);
+      flex-shrink: 0;
+    }
+    .step-btn:hover { background: rgba(244, 241, 232, 0.12); }
+    .step-btn.done {
+      border-color: rgba(233, 195, 108, 0.38);
+      background: rgba(45, 97, 23, 0.32);
+    }
+    .step-btn.active {
+      background: var(--mustard);
+      color: var(--forest-2);
+      border-color: var(--mustard);
+      transform: translateY(-1px);
+    }
+    .step-btn.active span.n {
+      background: var(--forest-2);
+      color: var(--mustard);
+    }
+    .builder-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .board-stage {
+      position: relative;
+      border-radius: 30px;
+      background: radial-gradient(circle at 50% 48%, rgba(233, 195, 108, 0.16), rgba(10, 25, 15, 0.85));
+      border: 1px solid rgba(233, 195, 108, 0.26);
+      padding: 26px;
+      min-height: 430px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+    .board-canvas {
+      position: relative;
+      width: 100%;
+      max-width: 380px;
+      height: 310px;
+      display: grid;
+      place-items: center;
+    }
+    .board-layer {
+      position: absolute;
+      pointer-events: none;
+      transition: opacity 0.4s var(--ease), transform 0.5s var(--ease);
+    }
+    .board-tabla {
+      width: 96%;
+      bottom: 8px;
+      filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.5));
+    }
+    .board-pizza {
+      width: 72%;
+      top: 16px;
+      opacity: 0;
+      transform: translateY(-22px) scale(0.92);
+      filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.45));
+    }
+    .board-pizza.show { opacity: 1; transform: translateY(0) scale(1); }
+
+    .layer-ing {
+      opacity: 0;
+      transform: translateY(-34px) scale(0.68) rotate(-14deg);
+      filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.42));
+    }
+    .layer-ing.show { opacity: 1; transform: translateY(0) scale(1) rotate(var(--r, 0deg)); }
+    .li-mortadela { width: 112px; top: 74px; left: 74px; --r: -12deg; }
+    .li-mortadela-2 { width: 96px; top: 120px; right: 78px; --r: 18deg; }
+    .li-pesto { width: 72px; top: 96px; left: 152px; --r: 6deg; }
+    .li-tomate { width: 74px; top: 54px; right: 98px; --r: -8deg; }
+    .li-pistacho { width: 64px; bottom: 84px; left: 124px; --r: 14deg; }
+    .li-reggiano { width: 76px; bottom: 78px; right: 108px; --r: -16deg; }
+    .li-albahaca { width: 74px; top: 38px; left: 118px; --r: -22deg; }
+
+    .board-caption {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 16px;
+      background: rgba(15, 38, 23, 0.85);
+      border: 1px solid rgba(233, 195, 108, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .board-caption strong {
+      display: block;
+      font-family: var(--display);
+      font-size: 18px;
+      color: var(--mustard);
+    }
+    .board-caption small {
+      display: block;
+      font-size: 12.5px;
+      color: rgba(244, 241, 232, 0.78);
+    }
+    .step-progress {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--lime);
+      flex-shrink: 0;
+    }
+
+    /* ==================== SECTION 5: 4 REVENUE CHANNELS & ORDER SIMULATOR ==================== */
+    .channels {
+      padding: 88px 0;
+      background: var(--cream-2);
+    }
+    .channel-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .ch-tab {
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 1.5px solid rgba(16, 26, 20, 0.16);
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--ink);
+      font-size: 13.5px;
+      font-weight: 800;
+      transition: all 0.2s ease;
+    }
+    .ch-tab:hover { border-color: var(--forest); }
+    .ch-tab.active {
+      background: var(--forest);
+      color: var(--mustard);
+      border-color: var(--forest);
+      box-shadow: 0 10px 24px rgba(24, 59, 37, 0.18);
+    }
+    .channel-panel {
+      display: none;
+      background: #fff;
+      border: 1px solid rgba(16, 26, 20, 0.1);
+      border-radius: 30px;
+      padding: 32px;
+      box-shadow: 0 18px 46px rgba(16, 26, 20, 0.06);
+    }
+    .channel-panel.active { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 34px; align-items: center; }
+
+    .ch-copy h3 {
+      margin: 10px 0 0;
+      font-family: var(--display);
+      font-size: clamp(28px, 3.6vw, 40px);
+      font-weight: 900;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+    }
+    .ch-copy p {
+      margin: 14px 0 18px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #4b554d;
+    }
+    .ch-bullets {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 22px;
+      display: grid;
+      gap: 9px;
+    }
+    .ch-bullets li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: var(--cream);
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+    .ch-bullets li span.price {
+      font-family: var(--mono);
+      color: var(--green);
+      font-weight: 700;
+    }
+    .combo-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      background: var(--red);
+      color: #fff;
+      font-size: 13.5px;
+      font-weight: 800;
+    }
+
+    .emp-showcase {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    .emp-tile {
+      background: linear-gradient(155deg, var(--forest) 0%, var(--forest-2) 100%);
+      border-radius: 22px;
+      padding: 18px 14px 14px;
+      color: var(--cream);
+      text-align: center;
+      border: 1px solid rgba(233, 195, 108, 0.22);
+    }
+    .emp-tile img {
+      height: 112px;
+      width: auto;
+      margin: 0 auto 10px;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.4));
+    }
+    .emp-tile b { display: block; font-size: 13.5px; }
+    .emp-tile small { font-family: var(--mono); font-size: 11px; color: var(--mustard); }
+
+    .b2b-visual {
+      background: linear-gradient(155deg, var(--forest) 0%, var(--forest-2) 100%);
+      border-radius: 26px;
+      padding: 28px;
+      color: var(--cream);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .b2b-visual img {
+      max-height: 240px;
+      margin: 0 auto;
+      filter: drop-shadow(0 20px 26px rgba(0, 0, 0, 0.5));
+    }
+    .b2b-badge {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(233, 195, 108, 0.16);
+      border: 1px solid rgba(233, 195, 108, 0.4);
+      color: var(--mustard);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Live WhatsApp Order Simulator */
+    .wa-sim {
+      background: #0d1f14;
+      color: var(--cream);
+      border-radius: 24px;
+      padding: 22px;
+      border: 1px solid rgba(233, 195, 108, 0.22);
+    }
+    .wa-sim-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid rgba(244, 241, 232, 0.12);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--mustard);
+    }
+    .wa-choices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 14px;
+    }
+    .wa-chip {
+      padding: 7px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(244, 241, 232, 0.22);
+      background: rgba(244, 241, 232, 0.06);
+      color: var(--cream);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .wa-chip.active {
+      background: #25d366;
+      border-color: #25d366;
+      color: #082012;
+    }
+    .wa-bubble {
+      background: #1a492c;
+      border: 1px solid rgba(37, 211, 102, 0.3);
+      border-radius: 16px 16px 4px 16px;
+      padding: 14px 16px;
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: #edf9f0;
+      margin-bottom: 14px;
+    }
+    .wa-bubble small {
+      display: block;
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: rgba(237, 249, 240, 0.65);
+    }
+
+    /* ==================== SECTION 6: FICHA DEL PROYECTO (#caso) ==================== */
+    .case-sec {
+      padding: 88px 0;
+      background: var(--cream);
+      border-top: 1px solid rgba(16, 26, 20, 0.08);
+    }
+    .case-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 28px;
+      margin-top: 34px;
+    }
+    .case-card {
+      background: #fff;
+      border: 1px solid rgba(16, 26, 20, 0.1);
+      border-radius: 26px;
+      padding: 28px;
+    }
+    .case-card h3 {
+      margin: 0 0 10px;
+      font-family: var(--display);
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--forest);
+    }
+    .case-card p {
+      margin: 0 0 18px;
+      font-size: 15px;
+      line-height: 1.62;
+      color: #4a544c;
+    }
+    .case-features {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .case-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14.5px;
+      line-height: 1.48;
+      color: var(--ink);
+    }
+    .case-features li::before {
+      content: "✦";
+      color: var(--green);
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .facts-dl {
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+    .facts-dl div {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(16, 26, 20, 0.08);
+      font-size: 13.5px;
+    }
+    .facts-dl dt {
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #6b746d;
+    }
+    .facts-dl dd {
+      margin: 0;
+      font-weight: 800;
+      text-align: right;
+      color: var(--ink);
+    }
+    .stack-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 18px;
+    }
+    .stack-tags span {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: var(--cream-2);
+      color: var(--forest);
+    }
+
+    /* ==================== SECTION 7: COMMERCIAL CTA GASTRONOMÍA ==================== */
+    .cta-sec {
+      padding: 24px 0 76px;
+      background: var(--cream);
+    }
+    .cta-box {
+      border-radius: 32px;
+      padding: 46px 42px;
+      background:
+        radial-gradient(640px 380px at 88% 20%, rgba(233, 195, 108, 0.2), transparent 60%),
+        linear-gradient(140deg, var(--forest-2) 0%, var(--forest) 60%, var(--green) 100%);
+      color: var(--cream);
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 32px;
+      align-items: center;
+      box-shadow: 0 28px 66px rgba(15, 38, 23, 0.26);
+    }
+    .cta-box h2 {
+      margin: 12px 0 0;
+      font-family: var(--display);
+      font-size: clamp(32px, 4.2vw, 50px);
+      font-weight: 900;
+      line-height: 0.96;
+      letter-spacing: -0.035em;
+    }
+    .cta-box h2 em { font-style: normal; color: var(--mustard); }
+    .cta-box p {
+      margin: 16px 0 0;
+      font-size: 15.5px;
+      line-height: 1.6;
+      color: rgba(244, 241, 232, 0.84);
+      max-width: 560px;
+    }
+    .cta-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+    .cta-actions .btn { width: 100%; }
+
+    /* ==================== SECTION 8: NEXT CASE CIRCULAR BRIDGE ==================== */
+    .next-case {
+      padding: 48px 0 60px;
+      background: #0d1610;
+      color: #f4f5f0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .next-case-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .next-kicker { color: var(--lime); font-weight: 700; }
+    .next-prev { color: rgba(244, 245, 240, 0.72); }
+    .next-prev:hover { color: var(--lime); }
+    .next-inner {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .next-copy { max-width: 620px; }
+    .next-copy h2 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(30px, 4vw, 46px);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.035em;
+    }
+    .next-copy p {
+      margin: 12px 0 0;
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: rgba(244, 245, 240, 0.74);
+    }
+    .next-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn-next-lime {
+      background: var(--lime);
+      color: #0b0d09;
+      font-weight: 800;
+    }
+    .btn-next-lime:hover { background: #d6ff3c; }
+    .btn-next-ghost {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.22);
+      color: #fff;
+    }
+    .btn-next-ghost:hover { border-color: var(--lime); color: var(--lime); }
+
+    .footer {
+      background: #080e0a;
+      color: rgba(244, 245, 240, 0.64);
+      padding: 22px 0;
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .footer a:hover { color: var(--lime); }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 980px) {
+      .topbar-nav { display: none; }
+      .hero-grid,
+      .builder-grid,
+      .channel-panel.active,
+      .case-grid,
+      .cta-box {
+        grid-template-columns: 1fr;
+      }
+      .craft-grid { grid-template-columns: 1fr; }
+      .hero { padding: 42px 0 64px; }
+      .pizza-arena { height: 290px; }
+      .pizza-ring { width: 256px; height: 256px; }
+      .pizza-disc-wrap { width: 224px; height: 224px; }
+      .cta-box { padding: 32px 24px; }
+    }
+    @media (max-width: 560px) {
+      .hero-kpis { grid-template-columns: 1fr; }
+      .steps-list { grid-template-columns: 1fr; }
+      .pizza-info-bar { flex-direction: column; align-items: flex-start; }
+      .wa-mini { width: 100%; text-align: center; }
+      .channel-panel { padding: 22px 18px; }
+      .emp-showcase { grid-template-columns: 1fr; }
+      .topbar-cta { padding: 8px 12px; font-size: 11.5px; }
+      .case-chip { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .pizza-ring, .ticker-track { animation: none !important; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ==================== POPUPS HYBRID TOPBAR ==================== -->
+  <header class="topbar-wrap">
+    <div class="container topbar">
+      <div class="topbar-left">
+        <a href="../#proyectos" class="back-pill">← Volver a POPUPS</a>
+        <span class="case-chip">CASO 08 · GASTRONOMÍA</span>
+      </div>
+      <nav class="topbar-nav" aria-label="Secciones del caso Antón">
+        <a href="#la-web">La pizza 3D</a>
+        <a href="#masa">Masa madre</a>
+        <a href="#armado">Armado 8 pasos</a>
+        <a href="#canales">4 canales</a>
+        <a href="#caso">Ficha POPUPS</a>
+      </nav>
+      <a href="https://anton-cocinadebarrio.netlify.app/" target="_blank" rel="noopener" class="topbar-cta">Abrir web en vivo ↗</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== HERO + INTERACTIVE 3D PIZZA STAGE ==================== -->
+    <section class="hero" id="la-web">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow"><span class="eyebrow-dot"></span>Cliente real · Urquiza 1869 · Alta Córdoba</span>
+          <div class="hand hero-hand">Cuidado: contenido antojable ↓</div>
+          <h1>Pizza de barrio.<em>Producto tope de gama.</em></h1>
+          <p class="hero-lead">
+            Diseñamos y programamos la web interactiva de <strong>Antón · Cocina de Barrio</strong>:
+            una experiencia sensorial con pizza giratoria 3D, armado paso a paso y <strong>pedidos directos por WhatsApp</strong>
+            que venden pizzas, empanadas de 150&nbsp;gr, congelados para casa y prepizzas mayoristas sin ceder comisiones.
+          </p>
+          <div class="hero-actions">
+            <a href="https://anton-cocinadebarrio.netlify.app/" target="_blank" rel="noopener" class="btn btn-primary">Ver web en producción ↗</a>
+            <a href="#contacto-gastro" class="btn btn-ghost-light">Quiero una web así para mi local →</a>
+          </div>
+          <div class="hero-kpis">
+            <div class="kpi">
+              <b>0%</b>
+              <span>Comisión en pedidos directos por WhatsApp</span>
+            </div>
+            <div class="kpi">
+              <b>4 en 1</b>
+              <span>Pizzas, Empanadas, En Casa y B2B</span>
+            </div>
+            <div class="kpi">
+              <b>100%</b>
+              <span>Identidad real de Alta Córdoba a medida</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive 3D Pizza Stage using REAL Antón transparent cutouts -->
+        <div class="stage-card" aria-label="Selector interactivo de pizzas de Antón">
+          <div class="stage-top">
+            <span>ANTÓN · CARTA INTERACTIVA</span>
+            <span class="live-badge"><i></i>LIVE EN NETLIFY</span>
+          </div>
+
+          <div class="pizza-arena" id="pizzaArena" title="Arrastrá horizontalmente para girar la pizza">
+            <div class="pizza-ring" aria-hidden="true"></div>
+            <img src="./assets/ing-albahaca.webp" alt="" class="float-ing f1" id="fl1" aria-hidden="true" />
+            <img src="./assets/ing-tomate.webp" alt="" class="float-ing f2" id="fl2" aria-hidden="true" />
+            <img src="./assets/ing-mortadela.webp" alt="" class="float-ing f3" id="fl3" aria-hidden="true" />
+            <img src="./assets/ing-pesto.webp" alt="" class="float-ing f4" id="fl4" aria-hidden="true" />
+            <div class="pizza-disc-wrap">
+              <img src="./assets/pizza-anton.webp" alt="Pizza Antón de masa madre con mozzarella y pesto genovés" class="pizza-disc" id="pizzaDisc" />
+            </div>
+            <span class="drag-hint">↔ Arrastrá para girar · Elegí sabor abajo</span>
+          </div>
+
+          <div class="pizza-switcher" role="tablist" aria-label="Elegir pizza de Antón">
+            <button type="button" class="pz-tab active" data-pizza="anton" role="tab" aria-selected="true">
+              <img src="./assets/pizza-anton.webp" alt="Antón" />
+              <span>Antón</span>
+            </button>
+            <button type="button" class="pz-tab" data-pizza="pepperoni" role="tab" aria-selected="false">
+              <img src="./assets/pizza-pepperoni.webp" alt="Pepperoni" />
+              <span>Pepperoni</span>
+            </button>
+            <button type="button" class="pz-tab" data-pizza="napo" role="tab" aria-selected="false">
+              <img src="./assets/pizza-napo.webp" alt="Napolitana" />
+              <span>Napolitana</span>
+            </button>
+            <button type="button" class="pz-tab" data-pizza="huerta" role="tab" aria-selected="false">
+              <img src="./assets/pizza-huerta.webp" alt="De la Huerta" />
+              <span>De la Huerta</span>
+            </button>
+          </div>
+
+          <div class="pizza-info-bar">
+            <div>
+              <h3 id="pzName">Antón — “la clásica que nunca falla”</h3>
+              <p class="sub" id="pzDesc">Masa de fermentación lenta, mozzarella generosa y pesto genovés casero.</p>
+              <div class="ing-tags" id="pzTags">
+                <span>Mozzarella</span><span>Pesto genovés</span><span>Orégano</span><span>Oliva</span>
+              </div>
+            </div>
+            <a id="pzWaLink" href="https://anton-cocinadebarrio.netlify.app/#carta" target="_blank" rel="noopener" class="wa-mini">Ver en la web ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MARQUEE TICKER ==================== -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>MASA MADRE</span><span class="ticker-dot">✦</span>
+        <span>TIEMPO</span><span class="ticker-dot">✦</span>
+        <span>CALIDAD</span><span class="ticker-dot">✦</span>
+        <span>LLEVE NOMÁS</span><span class="ticker-dot">✦</span>
+        <span>ALTA CÓRDOBA · URQUIZA 1869</span><span class="ticker-dot">✦</span>
+        <span>COMÉ RICO, GASTÁ POCO</span><span class="ticker-dot">✦</span>
+        <span>MASA MADRE</span><span class="ticker-dot">✦</span>
+        <span>TIEMPO</span><span class="ticker-dot">✦</span>
+        <span>CALIDAD</span><span class="ticker-dot">✦</span>
+        <span>LLEVE NOMÁS</span><span class="ticker-dot">✦</span>
+        <span>ALTA CÓRDOBA · URQUIZA 1869</span><span class="ticker-dot">✦</span>
+        <span>COMÉ RICO, GASTÁ POCO</span><span class="ticker-dot">✦</span>
+      </div>
+    </div>
+
+    <!-- ==================== STORYTELLING: MASA MADRE · TIEMPO · HORNO ==================== -->
+    <section class="craft" id="masa">
+      <div class="container">
+        <div class="sec-head">
+          <div>
+            <span class="eyebrow dark"><span class="eyebrow-dot"></span>Narrativa que defiende el valor</span>
+            <h2>Acá la masa no acompaña. <em>La masa es la protagonista.</em></h2>
+          </div>
+          <p>
+            Antes de mostrar un solo precio, la web explica por qué Antón no compite con una pizza industrial:
+            fotografía real de oficio, fermentación lenta y borde crocante que abren el apetito en tres segundos.
+          </p>
+        </div>
+
+        <div class="craft-grid">
+          <article class="craft-card">
+            <div class="craft-media">
+              <img src="./assets/masa-madre.webp" alt="Masa madre viva en la cocina de Antón" loading="lazy" />
+              <span class="craft-num">01 · FERMENTO</span>
+            </div>
+            <div class="craft-body">
+              <div class="hand craft-note">masa madre viva</div>
+              <h3>Masa madre</h3>
+              <p>Fermento natural y harina seleccionada. El bloque instala calidad artesanal desde el primer scroll sin tecnicismos aburridos.</p>
+            </div>
+          </article>
+
+          <article class="craft-card">
+            <div class="craft-media">
+              <img src="./assets/masa-tiempo.webp" alt="Bollos de masa madre en fermentación lenta en cajón" loading="lazy" />
+              <span class="craft-num">02 · PACIENCIA</span>
+            </div>
+            <div class="craft-body">
+              <div class="hand craft-note">leva lenta… muy lenta</div>
+              <h3>Tiempo</h3>
+              <p>Fermentación prolongada sin apuro: una masa liviana, aireada y fácil de digerir que convierte a un cliente casual en vecino habitual.</p>
+            </div>
+          </article>
+
+          <article class="craft-card">
+            <div class="craft-media">
+              <img src="./assets/masa-horno.webp" alt="Borde aireado y crocante de pizza de masa madre" loading="lazy" />
+              <span class="craft-num">03 · COCCIÓN</span>
+            </div>
+            <div class="craft-body">
+              <div class="hand craft-note">borde aireado y crocante</div>
+              <h3>Horno fuerte</h3>
+              <p>Textura real en primer plano: crocante por fuera, suave por dentro. El detalle visual que empuja al botón de pedido.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE 8-STEP MORTADELA BUILDER ==================== -->
+    <section class="builder-sec" id="armado">
+      <div class="container builder-grid">
+        <div>
+          <span class="eyebrow"><span class="eyebrow-dot"></span>Experiencia estrella del sitio</span>
+          <h2>Mortadela, pistacho <em>&amp; pesto genovés</em></h2>
+          <p class="builder-lead">
+            En la web real, el cliente arma la pizza estrella paso a paso mientras hace scroll.
+            Tocá cualquier paso del 01 al 08 —o reproducí la secuencia— para ver cómo POPUPS transformó una receta en interacción memorable.
+          </p>
+
+          <ol class="steps-list" id="recipeSteps">
+            <li><button type="button" class="step-btn done active" data-step="1"><span class="n">01</span>Masa madre estirada a mano</button></li>
+            <li><button type="button" class="step-btn" data-step="2"><span class="n">02</span>Salsa de tomate</button></li>
+            <li><button type="button" class="step-btn" data-step="3"><span class="n">03</span>Mozzarella y horno fuerte</button></li>
+            <li><button type="button" class="step-btn" data-step="4"><span class="n">04</span>Mortadela con pistacho</button></li>
+            <li><button type="button" class="step-btn" data-step="5"><span class="n">05</span>Pesto genovés</button></li>
+            <li><button type="button" class="step-btn" data-step="6"><span class="n">06</span>Tomate fresco y pistacho</button></li>
+            <li><button type="button" class="step-btn" data-step="7"><span class="n">07</span>Lluvia de Reggiano</button></li>
+            <li><button type="button" class="step-btn" data-step="8"><span class="n">08</span>Albahaca y ¡a la mesa!</button></li>
+          </ol>
+
+          <div class="builder-controls">
+            <button type="button" class="btn btn-primary" id="playRecipeBtn">▶ Reproducir armado</button>
+            <a href="https://anton-cocinadebarrio.netlify.app/" target="_blank" rel="noopener" class="btn btn-ghost-light">Probar scroll real en la web ↗</a>
+          </div>
+        </div>
+
+        <div class="board-stage" aria-live="polite">
+          <div class="board-canvas">
+            <img src="./assets/tabla.webp" alt="Tabla de madera artesanal" class="board-layer board-tabla" />
+            <img src="./assets/pizza-anton.webp" alt="Base de pizza de masa madre horneada" class="board-layer board-pizza show" id="bPizza" />
+            <img src="./assets/ing-mortadela.webp" alt="" class="board-layer layer-ing li-mortadela" data-min="4" />
+            <img src="./assets/ing-mortadela.webp" alt="" class="board-layer layer-ing li-mortadela-2" data-min="4" />
+            <img src="./assets/ing-pesto.webp" alt="" class="board-layer layer-ing li-pesto" data-min="5" />
+            <img src="./assets/ing-tomate.webp" alt="" class="board-layer layer-ing li-tomate" data-min="6" />
+            <img src="./assets/ing-pistacho.webp" alt="" class="board-layer layer-ing li-pistacho" data-min="6" />
+            <img src="./assets/ing-reggiano.webp" alt="" class="board-layer layer-ing li-reggiano" data-min="7" />
+            <img src="./assets/ing-albahaca.webp" alt="" class="board-layer layer-ing li-albahaca" data-min="8" />
+          </div>
+
+          <div class="board-caption">
+            <div>
+              <strong id="stepTitle">01 · Masa madre estirada a mano</strong>
+              <small id="stepSub">Fermentación lenta en frío, borde alto y base liviana sobre tabla de madera.</small>
+            </div>
+            <span class="step-progress" id="stepProgress">1 / 8</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4 REVENUE CHANNELS IN ONE SITE ==================== -->
+    <section class="channels" id="canales">
+      <div class="container">
+        <div class="sec-head">
+          <div>
+            <span class="eyebrow dark"><span class="eyebrow-dot"></span>Arquitectura comercial</span>
+            <h2>No es solo una carta bonita: son <em>4 canales de venta</em> en una web.</h2>
+          </div>
+          <p>
+            Cada sección de Antón ataca un momento distinto de consumo —desde la cena del viernes hasta bares que compran prepizzas por mayor— cerrando siempre en WhatsApp.
+          </p>
+        </div>
+
+        <div class="channel-tabs" role="tablist" aria-label="Canales de venta de Antón">
+          <button type="button" class="ch-tab active" data-ch="empanadas" role="tab" aria-selected="true">Empanadas 150 gr &amp; Mediodía</button>
+          <button type="button" class="ch-tab" data-ch="casa" role="tab" aria-selected="false">Antón en casa (Freezer)</button>
+          <button type="button" class="ch-tab" data-ch="b2b" role="tab" aria-selected="false">B2B Gastronomía</button>
+          <button type="button" class="ch-tab" data-ch="whatsapp" role="tab" aria-selected="false">Pedidos WhatsApp 0% comisión</button>
+        </div>
+
+        <!-- Panel 1: Empanadas -->
+        <div class="channel-panel active" id="panel-empanadas">
+          <div class="ch-copy">
+            <span class="eyebrow dark">Ticket diario · Mediodía &amp; Noche</span>
+            <h3>Empanadas de 150&nbsp;gr con foto real en recorte</h3>
+            <p>
+              Mostramos cada variedad con silueta real recortada, ingredientes bien claros y el gancho imbatible del mediodía para llenar el mostrador entre semana.
+            </p>
+            <ul class="ch-bullets">
+              <li><span>Berenjenas al curry <em>(Nueva)</em></span><span class="price">$2.800</span></li>
+              <li><span>Vacío braseado</span><span class="price">$2.800</span></li>
+              <li><span>Cheeseburger estilo Big</span><span class="price">$3.500</span></li>
+              <li><span>Criolla clásica &amp; Árabe tradicional</span><span class="price">A pedido</span></li>
+            </ul>
+            <span class="combo-pill">🔥 Combo mediodía: 3 empanadas + Pepsi · $7.500</span>
+          </div>
+          <div class="emp-showcase">
+            <div class="emp-tile">
+              <img src="./assets/emp-curry.webp" alt="Empanada de berenjenas al curry" loading="lazy" />
+              <b>Berenjenas al curry</b>
+              <small>Queso azul + fundido</small>
+            </div>
+            <div class="emp-tile">
+              <img src="./assets/emp-big.webp" alt="Empanada Cheeseburger estilo Big" loading="lazy" />
+              <b>Cheeseburger Big</b>
+              <small>Sésamo + 150 gr</small>
+            </div>
+            <div class="emp-tile">
+              <img src="./assets/emp-criolla.webp" alt="Empanada de vacío braseado" loading="lazy" />
+              <b>Vacío braseado</b>
+              <small>Repulgue artesanal</small>
+            </div>
+            <div class="emp-tile">
+              <img src="./assets/emp-arabe.webp" alt="Empanada árabe tradicional" loading="lazy" />
+              <b>Árabe tradicional</b>
+              <small>Horneada al momento</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2: Antón en casa -->
+        <div class="channel-panel" id="panel-casa">
+          <div class="ch-copy">
+            <span class="eyebrow dark">Recompra semanal · Heladera &amp; Freezer</span>
+            <h3>Antón en casa: de la compra impulsiva al stock familiar</h3>
+            <p>
+              Abrimos una segunda línea de facturación que no depende del horario pico del horno: el vecino compra prepizzas, empanadas crudas, tartas y pizzas congeladas para resolver la semana.
+            </p>
+            <ul class="ch-bullets">
+              <li><span>Prepizzas de masa madre</span><span class="price">Listas p/ armar</span></li>
+              <li><span>Empanadas para hornear (vacío y criolla)</span><span class="price">Horno / Airfryer</span></li>
+              <li><span>Tarta de verduras grilladas con pesto</span><span class="price">Brócoli &amp; zucchini</span></li>
+              <li><span>Pizzas congeladas listas para el freezer</span><span class="price">100% masa madre</span></li>
+            </ul>
+          </div>
+          <div class="b2b-visual">
+            <img src="./assets/pizza-huerta.webp" alt="Pizza De la Huerta de Antón Cocina de Barrio" loading="lazy" />
+            <div class="b2b-badge">1. PEDÍS POR WA → 2. FREEZER → 3. HORNO O AIRFRYER</div>
+          </div>
+        </div>
+
+        <!-- Panel 3: B2B Gastronomía -->
+        <div class="channel-panel" id="panel-b2b">
+          <div class="ch-copy">
+            <span class="eyebrow dark">Canal mayorista · Bares, restós y cafeterías</span>
+            <h3>Prepizzas de masa madre para otros negocios</h3>
+            <p>
+              La misma web convierte a Antón en proveedor B2B: cualquier bar o cafetería de Córdoba que quiera sumar pizza de masa madre a su carta encuentra una propuesta dedicada con consulta directa.
+            </p>
+            <ul class="ch-bullets">
+              <li><span>Masa madre y fermentación lenta</span><span class="price">Calidad pareja</span></li>
+              <li><span>Sin complicar la cocina del cliente</span><span class="price">Lista en minutos</span></li>
+              <li><span>Coordinación directa por volumen</span><span class="price">WhatsApp B2B</span></li>
+            </ul>
+            <a href="https://anton-cocinadebarrio.netlify.app/" target="_blank" rel="noopener" class="btn btn-forest">Ver bloque B2B en la web ↗</a>
+          </div>
+          <div class="b2b-visual">
+            <img src="./assets/prepizza-pila.webp" alt="Pila de prepizzas de masa madre para gastronomía" loading="lazy" />
+            <div class="b2b-badge">MASA MADRE EN CANTIDAD · PROVEEDOR GASTRONÓMICO</div>
+          </div>
+        </div>
+
+        <!-- Panel 4: Live WhatsApp Order Message Generator -->
+        <div class="channel-panel" id="panel-whatsapp">
+          <div class="ch-copy">
+            <span class="eyebrow dark">Cero intermediarios · Cero fricción</span>
+            <h3>Cada botón arma el mensaje exacto en WhatsApp</h3>
+            <p>
+              En vez de obligar a crear cuenta, cargar tarjeta o pagar 25–30% a una app de delivery, cada producto pre-completa el mensaje de WhatsApp listo para tocar enviar. Probá cómo funciona acá:
+            </p>
+            <ul class="ch-bullets">
+              <li><span>Sin login ni registro para el cliente</span><span class="price">1 toque</span></li>
+              <li><span>Relación directa con el vecino del barrio</span><span class="price">Base propia</span></li>
+              <li><span>Compatible con Take Away &amp; Delivery propio</span><span class="price">0% comisión</span></li>
+            </ul>
+          </div>
+          <div class="wa-sim">
+            <div class="wa-sim-head">
+              <span>SIMULADOR · DEEP LINK WHATSAPP</span>
+              <span>351 873-8346</span>
+            </div>
+            <div class="wa-choices" id="waChoices">
+              <button type="button" class="wa-chip active" data-msg="¡Hola Antón! Elegí la pizza *Antón* en la web. ¿Me confirmás precio y demora para pedirla?">Pizza Antón</button>
+              <button type="button" class="wa-chip" data-msg="¡Hola Antón! Quiero probar la pizza de *Mortadela, pistacho y pesto genovés*.">Mortadela &amp; Pistacho</button>
+              <button type="button" class="wa-chip" data-msg="¡Hola Antón! Quiero pedir el *combo mediodía* de 3 empanadas + Pepsi ($7.500).">Combo Mediodía</button>
+              <button type="button" class="wa-chip" data-msg="¡Hola Antón! Tengo un negocio gastronómico y quiero info sobre las *prepizzas de masa madre* por mayor.">Consulta B2B</button>
+            </div>
+            <div class="wa-bubble">
+              <span id="waPreviewText">¡Hola Antón! Elegí la pizza *Antón* en la web. ¿Me confirmás precio y demora para pedirla?</span>
+              <small>✓✓ Mensaje pre-armado automáticamente · Listo para enviar</small>
+            </div>
+            <a href="https://anton-cocinadebarrio.netlify.app/" target="_blank" rel="noopener" class="btn btn-primary" style="width:100%">Explorar la web real de Antón ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FICHA DEL PROYECTO (#caso) ==================== -->
+    <section class="case-sec" id="caso">
+      <div class="container">
+        <span class="eyebrow dark"><span class="eyebrow-dot"></span>Ficha del caso · POPUPS Studio</span>
+        <div class="sec-head" style="margin-bottom:0">
+          <h2>Diseño sensorial + ingeniería ligera para un <em>cliente real de Córdoba.</em></h2>
+          <p>Todo lo que diseñamos y construimos para Antón Cocina de Barrio en Urquiza 1869, Alta Córdoba.</p>
+        </div>
+
+        <div class="case-grid">
+          <div class="case-card">
+            <h3>El desafío</h3>
+            <p>
+              Antón hacía un producto de primer nivel —masa madre de fermentación lenta, empanadas de 150&nbsp;gr y combos de barrio— pero en redes sociales un menú estático en PDF o historias sueltas no transmite textura, oficio ni ordena sus cuatro líneas de negocio.
+            </p>
+            <h3>La solución POPUPS</h3>
+            <p>
+              Construimos una web gastronómica a medida con la calidez del barrio y acabados de producto insignia: pizza 3D giratoria, historia visual de la masa madre, secuencia interactiva de 8 pasos y deep links directos a WhatsApp para cada producto y canal.
+            </p>
+            <h3>Qué construimos</h3>
+            <ul class="case-features">
+              <li>Hero con pizza interactiva giratoria y fotografía real en recorte WebP.</li>
+              <li>Narrativa visual de fermentación natural y secuencia animada de 8 pasos para su pizza estrella.</li>
+              <li>Carta clara de pizzas, empanadas de 150&nbsp;gr, combo mediodía y línea Antón en casa.</li>
+              <li>Sección mayorista B2B para captar bares, cafés y restaurantes de Córdoba.</li>
+              <li>JSON-LD de restaurante local, mapa a Urquiza 1869 y botones directos a WhatsApp sin comisiones.</li>
+            </ul>
+          </div>
+
+          <aside class="case-card">
+            <h3>Datos clave</h3>
+            <dl class="facts-dl">
+              <div><dt>Cliente</dt><dd>Antón · Cocina de Barrio</dd></div>
+              <div><dt>Ubicación</dt><dd>Urquiza 1869 · Alta Córdoba</dd></div>
+              <div><dt>Rubro</dt><dd>Gastronomía · Pizzería</dd></div>
+              <div><dt>Entrega</dt><dd>Web interactiva en producción</dd></div>
+              <div><dt>Canales</dt><dd>Take away · Delivery · Casa · B2B</dd></div>
+              <div><dt>Sitio</dt><dd><a href="https://anton-cocinadebarrio.netlify.app/" target="_blank" rel="noopener" style="color:var(--green);text-decoration:underline">anton-cocinadebarrio.netlify.app ↗</a></dd></div>
+            </dl>
+            <div class="stack-tags">
+              <span>Vite</span>
+              <span>UI Interactiva 3D</span>
+              <span>WebP Fotorealista</span>
+              <span>WhatsApp Deep Links</span>
+              <span>SEO Local Schema</span>
+              <span>Mobile First</span>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== COMMERCIAL CTA FOR GASTRONOMY ==================== -->
+    <section class="cta-sec" id="contacto-gastro">
+      <div class="container">
+        <div class="cta-box">
+          <div>
+            <span class="eyebrow"><span class="eyebrow-dot"></span>Para locales gastronómicos</span>
+            <h2>¿Querés una web así de <em>antojable</em> para tu negocio?</h2>
+            <p>
+              Si tenés pizzería, café, hamburguesería, heladería, panadería o bar, en <strong>POPUPS</strong> diseñamos tu web interactiva con pedidos directos a WhatsApp —y si querés, la conectamos con <strong>Mis Sellos</strong> para que tus clientes vuelvan todas las semanas.
+            </p>
+          </div>
+          <div class="cta-actions">
+            <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20POPUPS!%20Vi%20la%20web%20de%20Ant%C3%B3n%20Cocina%20de%20Barrio%20en%20el%20portfolio%20y%20quiero%20una%20web%20as%C3%AD%20para%20mi%20negocio." target="_blank" rel="noopener" class="btn btn-primary">Hablar por WhatsApp ↗</a>
+            <a href="mailto:somospopups@gmail.com?subject=Quiero%20una%20web%20como%20Ant%C3%B3n%20para%20mi%20negocio" class="btn btn-ghost-light">Escribir a somospopups@gmail.com</a>
+            <a href="https://anton-cocinadebarrio.netlify.app/" target="_blank" rel="noopener" class="btn btn-red">Abrir Antón en vivo ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CIRCULAR NEXT CASE BRIDGE ==================== -->
+    <section class="next-case">
+      <div class="container">
+        <div class="next-case-top">
+          <span class="next-kicker">SIGUIENTE CASO · 01 · PLATAFORMA DE GESTIÓN</span>
+          <a href="../mi-amp/" class="next-prev">← ANTERIOR · 07 MI AMP</a>
+        </div>
+        <div class="next-inner">
+          <div class="next-copy">
+            <h2>APPI pone tu vida y tu negocio en foco.</h2>
+            <p>Una plataforma PWA con +15 herramientas que reúne planificación, finanzas, equipo, contactos y seguimiento en un solo lugar, con uso offline por hasta 7 días.</p>
+          </div>
+          <div class="next-actions">
+            <a href="../appi/" class="btn btn-next-lime">Ver siguiente caso ↗</a>
+            <a href="../#proyectos" class="btn btn-next-ghost">← Todos los proyectos</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© 2026 POPUPS · CASO 08 · ANTÓN COCINA DE BARRIO · CÓRDOBA, ARGENTINA</span>
+      <span><a href="../#proyectos">Portfolio POPUPS</a> · <a href="mailto:somospopups@gmail.com">somospopups@gmail.com</a></span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // 1. Interactive 3D Draggable Pizza Stage
+      const PIZZAS = {
+        anton: {
+          img: './assets/pizza-anton.webp',
+          name: 'Antón — “la clásica que nunca falla”',
+          desc: 'Masa de fermentación lenta, mozzarella generosa y ese toque de pesto genovés que la hace distinta.',
+          tags: ['Mozzarella', 'Pesto genovés', 'Orégano', 'Oliva']
+        },
+        pepperoni: {
+          img: './assets/pizza-pepperoni.webp',
+          name: 'Pepperoni — crocante e intensa',
+          desc: 'Salsa de tomate casera, mozzarella fundida, láminas de pepperoni dorado al horno y aceitunas negras.',
+          tags: ['Pepperoni', 'Mozzarella', 'Aceitunas negras', 'Tomate']
+        },
+        napo: {
+          img: './assets/pizza-napo.webp',
+          name: 'Napolitana — fresca de barrio',
+          desc: 'Rodajas de tomate fresco de verdulería vecina, hojas de albahaca aromática y oliva extra virgen.',
+          tags: ['Tomate fresco', 'Albahaca', 'Mozzarella', 'Oliva']
+        },
+        huerta: {
+          img: './assets/pizza-huerta.webp',
+          name: 'De la Huerta — vegetales al horno',
+          desc: 'Brócoli, zucchini grillado, morrón asado y cebolla caramelizada sobre masa madre aireada.',
+          tags: ['Brócoli', 'Zucchini', 'Morrón grillado', 'Pesto']
+        }
+      };
+
+      const arena = document.getElementById('pizzaArena');
+      const disc = document.getElementById('pizzaDisc');
+      const fls = [
+        document.getElementById('fl1'),
+        document.getElementById('fl2'),
+        document.getElementById('fl3'),
+        document.getElementById('fl4')
+      ];
+      const pzName = document.getElementById('pzName');
+      const pzDesc = document.getElementById('pzDesc');
+      const pzTags = document.getElementById('pzTags');
+      const tabs = document.querySelectorAll('.pz-tab');
+
+      let rot = 0;
+      let dragging = false;
+      let startX = 0;
+      let startRot = 0;
+
+      function applyRot() {
+        disc.style.transform = 'rotate(' + rot.toFixed(1) + 'deg)';
+        if (!reduced) {
+          fls[0].style.transform = 'rotate(' + (-16 + rot * 0.14).toFixed(1) + 'deg) translateY(' + (Math.sin(rot * 0.03) * 5).toFixed(1) + 'px)';
+          fls[1].style.transform = 'rotate(' + (14 - rot * 0.12).toFixed(1) + 'deg) translateY(' + (Math.cos(rot * 0.03) * 5).toFixed(1) + 'px)';
+          fls[2].style.transform = 'rotate(' + (-8 - rot * 0.1).toFixed(1) + 'deg)';
+          fls[3].style.transform = 'rotate(' + (10 + rot * 0.15).toFixed(1) + 'deg)';
+        }
+      }
+
+      arena.addEventListener('pointerdown', function (e) {
+        dragging = true;
+        startX = e.clientX;
+        startRot = rot;
+        arena.setPointerCapture(e.pointerId);
+      });
+      arena.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        rot = startRot + (e.clientX - startX) * 0.85;
+        applyRot();
+      });
+      arena.addEventListener('pointerup', function () { dragging = false; });
+      arena.addEventListener('pointercancel', function () { dragging = false; });
+
+      tabs.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const key = btn.getAttribute('data-pizza');
+          const data = PIZZAS[key];
+          if (!data) return;
+          tabs.forEach(function (t) {
+            const on = t === btn;
+            t.classList.toggle('active', on);
+            t.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          disc.classList.add('swapping');
+          setTimeout(function () {
+            disc.src = data.img;
+            disc.alt = 'Pizza ' + data.name;
+            rot += reduced ? 0 : 28;
+            applyRot();
+            disc.classList.remove('swapping');
+          }, reduced ? 0 : 140);
+          pzName.textContent = data.name;
+          pzDesc.textContent = data.desc;
+          pzTags.innerHTML = data.tags.map(function (t) { return '<span>' + t + '</span>'; }).join('');
+        });
+      });
+
+      // 2. Interactive 8-Step Mortadela & Pistacho Recipe Builder
+      const STEPS = [
+        { t: '01 · Masa madre estirada a mano', s: 'Fermentación lenta en frío, borde alto y base liviana sobre tabla de madera.' },
+        { t: '02 · Salsa de tomate', s: 'Base justa de tomate triturado para equilibrar la untuosidad del queso.' },
+        { t: '03 · Mozzarella y horno fuerte', s: 'Golpe de calor intenso: borde leopardeado, crocante afuera y aireado adentro.' },
+        { t: '04 · Mortadela con pistacho', s: 'Fetas finas de mortadela artesanal puestas al salir del horno para que suelten aroma.' },
+        { t: '05 · Pesto genovés', s: 'Cucharadas frescas de albahaca, ajo suave, aceite de oliva y frutos secos.' },
+        { t: '06 · Tomate fresco y pistacho', s: 'Contraste fresco y crocante de pistacho picado en cada porción.' },
+        { t: '07 · Lluvia de Reggiano', s: 'Escamas de queso Reggiano estacionado que cierran el perfil umami.' },
+        { t: '08 · Albahaca y ¡a la mesa!', s: 'Lista para compartir: “no es una pizza más, es una locura”.' }
+      ];
+
+      const stepBtns = document.querySelectorAll('#recipeSteps .step-btn');
+      const layers = document.querySelectorAll('.layer-ing');
+      const stepTitle = document.getElementById('stepTitle');
+      const stepSub = document.getElementById('stepSub');
+      const stepProg = document.getElementById('stepProgress');
+      const playBtn = document.getElementById('playRecipeBtn');
+
+      let currentStep = 1;
+      let playTimer = null;
+
+      function setRecipeStep(n) {
+        currentStep = n;
+        stepBtns.forEach(function (b) {
+          const sn = parseInt(b.getAttribute('data-step'), 10);
+          b.classList.toggle('done', sn <= n);
+          b.classList.toggle('active', sn === n);
+        });
+        layers.forEach(function (el) {
+          const min = parseInt(el.getAttribute('data-min'), 10);
+          el.classList.toggle('show', n >= min);
+        });
+        const info = STEPS[n - 1];
+        stepTitle.textContent = info.t;
+        stepSub.textContent = info.s;
+        stepProg.textContent = n + ' / 8';
+      }
+
+      stepBtns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          if (playTimer) { clearInterval(playTimer); playTimer = null; playBtn.textContent = '▶ Reproducir armado'; }
+          setRecipeStep(parseInt(b.getAttribute('data-step'), 10));
+        });
+      });
+
+      playBtn.addEventListener('click', function () {
+        if (playTimer) {
+          clearInterval(playTimer);
+          playTimer = null;
+          playBtn.textContent = '▶ Reproducir armado';
+          return;
+        }
+        setRecipeStep(1);
+        playBtn.textContent = '■ Detener armado';
+        playTimer = setInterval(function () {
+          if (currentStep >= 8) {
+            clearInterval(playTimer);
+            playTimer = null;
+            playBtn.textContent = '↻ Armar de nuevo';
+            return;
+          }
+          setRecipeStep(currentStep + 1);
+        }, reduced ? 400 : 720);
+      });
+
+      // Start at step 5 visually rich on load
+      setRecipeStep(5);
+
+      // 3. 4-Channel Tabs
+      const chTabs = document.querySelectorAll('.ch-tab');
+      const chPanels = document.querySelectorAll('.channel-panel');
+      chTabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          const key = tab.getAttribute('data-ch');
+          chTabs.forEach(function (t) {
+            const on = t === tab;
+            t.classList.toggle('active', on);
+            t.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          chPanels.forEach(function (p) {
+            p.classList.toggle('active', p.id === 'panel-' + key);
+          });
+        });
+      });
+
+      // 4. WhatsApp Order Message Simulator
+      const waChips = document.querySelectorAll('#waChoices .wa-chip');
+      const waText = document.getElementById('waPreviewText');
+      waChips.forEach(function (c) {
+        c.addEventListener('click', function () {
+          waChips.forEach(function (x) { x.classList.remove('active'); });
+          c.classList.add('active');
+          waText.textContent = c.getAttribute('data-msg');
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
