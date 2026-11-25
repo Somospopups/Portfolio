@@ -14,3 +14,7 @@ Este repositorio está preparado para GitHub Pages. Las URLs previstas son:
 - Landing Oficina Virtual: https://somospopups.github.io/Portfolio/oficina-virtual/
 
 La activación de GitHub Pages se realiza desde Settings → Pages del repositorio, usando la rama `main` y la carpeta `/ (root)`.
+
+## Guía para futuros casos y agentes
+
+Para agregar nuevas landings/casos híbridos y preparar actualizaciones de publicación con `PUBLICAR.bat`, seguir [`AGENTS.md`](AGENTS.md) junto con el protocolo de [`Somospopups/Asi-subimos-los-cambios`](https://github.com/Somospopups/Asi-subimos-los-cambios).
