@@ -119,9 +119,9 @@ Cada landing que diseñemos debe cumplir este piso de calidad antes de empaqueta
 
 | # | Key (`project.html`) | Proyecto | Estado actual | Carpeta híbrida | Anterior → Siguiente |
 |---|---|---|---|---|---|
-| 01 | `appi` | APPI | **Híbrido publicado** | **`appi/`** | `07 mi-amp/` → `02 bondi` |
-| 02 | `bondi` | Bondi | Ficha `project.html?project=bondi` | *(pendiente, ej. `bondi/`)* | `01 appi/` → `03 sellos` |
-| 03 | `sellos` | Mis Sellos | Ficha `project.html?project=sellos` | *(pendiente, ej. `mis-sellos/`)* | `02 bondi` → `04 tienda` |
+| 01 | `appi` | APPI | **Híbrido publicado** | **`appi/`** | `07 mi-amp/` → `02 bondi/` |
+| 02 | `bondi` | Bondi | **Híbrido publicado** | **`bondi/`** | `01 appi/` → `03 sellos` |
+| 03 | `sellos` | Mis Sellos | Ficha `project.html?project=sellos` | *(pendiente, ej. `mis-sellos/`)* | `02 bondi/` → `04 tienda` |
 | 04 | `tienda` | Mi-Tienda | Ficha `project.html?project=tienda` | *(pendiente, ej. `mi-tienda/`)* | `03 sellos` → `05 entrenador` |
 | 05 | `entrenador` | Mi Entrenador | Ficha `project.html?project=entrenador` | *(pendiente, ej. `mi-entrenador/`)* | `04 tienda` → `06 oficina-virtual/` |
 | 06 | `office` | Oficina Virtual | **Híbrido publicado** | **`oficina-virtual/`** | `05 entrenador` → `07 mi-amp/` |

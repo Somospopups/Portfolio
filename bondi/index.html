@@ -1,0 +1,2343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POPUPS · Caso 02 — Bondi | Transporte Público de Córdoba en Tiempo Real</title>
+  <meta name="description" content="Caso 02 de POPUPS: Bondi es la PWA y app Android para viajar en colectivo por Córdoba Capital con 72 líneas, 2.886 paradas, colectivos en vivo, avisos inteligentes estilo Uber y BiciCba." />
+  <meta name="theme-color" content="#33CCFF" />
+  <link rel="icon" href="./assets/logo.svg" type="image/svg+xml" />
+  <link rel="canonical" href="https://somospopups.github.io/Portfolio/bondi/" />
+
+  <!-- Open Graph / Social Share -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:site_name" content="POPUPS · Portfolio" />
+  <meta property="og:url" content="https://somospopups.github.io/Portfolio/bondi/" />
+  <meta property="og:title" content="Bondi — Encontrá tu próximo viaje en tiempo real | POPUPS" />
+  <meta property="og:description" content="72 líneas, 2.886 paradas, colectivos en vivo sobre el mapa de Córdoba Capital, notificaciones inteligentes de salida y BiciCba." />
+  <meta property="og:image" content="https://somospopups.github.io/Portfolio/bondi/assets/og-preview.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Bondi — Mapa en vivo de Córdoba Capital con recorridos reales y notificación inteligente de salida" />
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Bondi — Encontrá tu próximo viaje en tiempo real | POPUPS" />
+  <meta name="twitter:description" content="Mapa en vivo, colectivos moviéndose en tiempo real, avisos inteligentes de salida y BiciCba en Córdoba Capital." />
+  <meta name="twitter:image" content="https://somospopups.github.io/Portfolio/bondi/assets/og-preview.jpg" />
+
+  <style>
+    @font-face { font-family:"Poppins"; src:url("./assets/poppins400.woff2") format("woff2"); font-weight:400; font-style:normal; font-display:swap; }
+    @font-face { font-family:"Poppins"; src:url("./assets/poppins500.woff2") format("woff2"); font-weight:500; font-style:normal; font-display:swap; }
+    @font-face { font-family:"Poppins"; src:url("./assets/poppins600.woff2") format("woff2"); font-weight:600; font-style:normal; font-display:swap; }
+    @font-face { font-family:"Poppins"; src:url("./assets/poppins700.woff2") format("woff2"); font-weight:700; font-style:normal; font-display:swap; }
+    @font-face { font-family:"Poppins"; src:url("./assets/poppins800.woff2") format("woff2"); font-weight:800; font-style:normal; font-display:swap; }
+    @font-face { font-family:"Space Mono"; src:url("./assets/spacemono400.woff2") format("woff2"); font-weight:400; font-style:normal; font-display:swap; }
+    @font-face { font-family:"Space Mono"; src:url("./assets/spacemono700.woff2") format("woff2"); font-weight:700; font-style:normal; font-display:swap; }
+
+    :root {
+      --sky: #33CCFF;
+      --sky-600: #16BEEE;
+      --sky-700: #0FA6D8;
+      --sky-tint: #E6F8FF;
+      --navy: #0D1D2B;
+      --navy-2: #162B3D;
+      --navy-soft: #4B6072;
+      --muted: #7C90A1;
+      --bg: #F4F9FC;
+      --card: #FFFFFF;
+      --line: rgba(13, 29, 43, 0.10);
+      --line-strong: rgba(13, 29, 43, 0.18);
+      --orange: #FF8A1E;
+      --orange-hot: #FF6B00;
+      --green: #27C171;
+      --magenta: #E435F5;
+      --crimson: #D93062;
+      --font-sans: "Poppins", system-ui, -apple-system, sans-serif;
+      --font-mono: "Space Mono", ui-monospace, monospace;
+      --max: 1220px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bg); }
+    body {
+      margin: 0;
+      color: var(--navy);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(51, 204, 255, 0.16), transparent 42%),
+        radial-gradient(circle at 90% 10%, rgba(255, 138, 30, 0.09), transparent 36%),
+        var(--bg);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+    img { display: block; max-width: 100%; }
+
+    /* Scroll progress bar */
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 4px;
+      z-index: 95;
+      background: rgba(13, 29, 43, 0.06);
+      pointer-events: none;
+    }
+    .scroll-progress-bar {
+      width: 100%; height: 100%;
+      transform-origin: left center;
+      transform: scaleX(0);
+      background: linear-gradient(90deg, var(--sky) 0%, var(--green) 48%, var(--orange) 100%);
+      will-change: transform;
+    }
+
+    /* Parallax floating transit route chips */
+    .parallax-transit {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .pt-chip {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(13, 29, 43, 0.09);
+      box-shadow: 0 8px 22px rgba(13, 29, 43, 0.07);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--navy-soft);
+      will-change: transform;
+    }
+    .pt-dot { width: 8px; height: 8px; border-radius: 50%; }
+    @media (max-width: 1320px) { .parallax-transit { display: none; } }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    /* ==================== ANIMATED BONDI MASCOT LOGO ==================== */
+    .bondi-mascot {
+      display: inline-block;
+      transition: transform 0.35s var(--ease);
+    }
+    .bondi-mascot:hover {
+      transform: translateY(-3px) rotate(-4deg) scale(1.06);
+    }
+    .bondi-mascot .b-body {
+      animation: busBounce 2.6s ease-in-out infinite;
+      transform-origin: 64px 96px;
+    }
+    .bondi-mascot .b-eye {
+      animation: eyeBlink 4.4s ease-in-out infinite;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+    @keyframes busBounce {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      45%      { transform: translateY(-2.6px) rotate(0.8deg); }
+      75%      { transform: translateY(0.8px) rotate(-0.6deg); }
+    }
+    @keyframes eyeBlink {
+      0%, 92%, 100% { transform: scaleY(1); }
+      95%, 97%      { transform: scaleY(0.12); }
+    }
+
+    /* ==================== TOPBAR ==================== */
+    .topbar-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 70;
+      background: rgba(244, 249, 252, 0.86);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+    .brand-icon-wrap {
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      background: linear-gradient(145deg, #5FDBFF, #16BEEE);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 8px 20px rgba(22, 190, 238, 0.34);
+    }
+    .brand-badge {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: var(--sky-tint);
+      color: var(--sky-700);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy-soft);
+    }
+    .nav-links a {
+      padding: 6px 0;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0; height: 2.5px;
+      border-radius: 99px;
+      background: var(--sky-600);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s var(--ease);
+    }
+    .nav-links a:hover { color: var(--navy); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 15px;
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      background: var(--card);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy);
+      transition: background 0.2s, color 0.2s, transform 0.2s var(--ease);
+    }
+    .nav-back:hover { background: var(--navy); color: #fff; border-color: var(--navy); transform: translateY(-1px); }
+
+    .nav-menu-btn {
+      display: none;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      background: var(--card);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .mobile-drawer {
+      display: none;
+      flex-direction: column;
+      background: var(--card);
+      border-bottom: 1px solid var(--line-strong);
+      padding: 10px 22px 18px;
+      box-shadow: 0 18px 40px rgba(13, 29, 43, 0.12);
+    }
+    .mobile-drawer.open { display: flex; }
+    .mobile-drawer a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 4px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+    .mobile-drawer a:last-child { border-bottom: 0; }
+    .mobile-drawer a.drawer-accent { color: var(--sky-700); font-weight: 700; }
+
+    /* Shared UI primitives */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 13px;
+      border-radius: 999px;
+      background: var(--sky-tint);
+      color: var(--sky-700);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .eyebrow i {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(39, 193, 113, 0.22);
+      animation: livePulse 2s ease-in-out infinite;
+    }
+    .eyebrow.dark {
+      background: rgba(51, 204, 255, 0.14);
+      color: var(--sky);
+    }
+    @keyframes livePulse {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(39, 193, 113, 0.26); }
+      50%      { box-shadow: 0 0 0 7px rgba(39, 193, 113, 0.06); }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 50px;
+      padding: 0 22px;
+      border-radius: 999px;
+      border: 1.5px solid transparent;
+      font-size: 13.5px;
+      font-weight: 700;
+      transition: transform 0.22s var(--ease), box-shadow 0.22s, background 0.2s, color 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #22BEF2, #0E9BD1);
+      color: #fff;
+      box-shadow: 0 12px 28px rgba(15, 166, 216, 0.32);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(15, 166, 216, 0.42); }
+    .btn-navy {
+      background: var(--navy);
+      color: #fff;
+      box-shadow: 0 12px 28px rgba(13, 29, 43, 0.22);
+    }
+    .btn-navy:hover { background: var(--navy-2); transform: translateY(-2px); }
+    .btn-ghost {
+      background: var(--card);
+      color: var(--navy);
+      border-color: var(--line-strong);
+    }
+    .btn-ghost:hover { border-color: var(--navy); transform: translateY(-2px); }
+
+    /* ==================== HERO + LIVE ANIMATED CÓRDOBA MAP ==================== */
+    .hero {
+      padding: 40px 0 64px;
+    }
+    .hero-top {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 36px;
+      align-items: center;
+      margin-bottom: 34px;
+    }
+    .hero-brand-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .hero-mascot-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px 8px 10px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #5FDBFF 0%, #1DB7EB 100%);
+      color: #062B3B;
+      box-shadow: 0 14px 30px rgba(34, 190, 242, 0.34);
+      cursor: pointer;
+    }
+    .hero-mascot-pill span {
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+    }
+    .hero-mascot-pill small {
+      display: block;
+      font-size: 10.5px;
+      font-weight: 600;
+      opacity: 0.78;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(40px, 5.8vw, 72px);
+      font-weight: 800;
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      color: var(--navy);
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(120deg, #0FA6D8 0%, #22BEF2 55%, #27C171 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-aside {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .hero-lead {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.62;
+      color: var(--navy-soft);
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* LIVE ANIMATED MAP STAGE */
+    .map-stage-card {
+      position: relative;
+      border-radius: 32px;
+      background: var(--navy);
+      border: 1.5px solid rgba(51, 204, 255, 0.35);
+      box-shadow: 0 28px 70px rgba(13, 29, 43, 0.22);
+      overflow: hidden;
+    }
+    .map-hud-top {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 16px 20px;
+      background: linear-gradient(180deg, rgba(11, 24, 36, 0.94) 0%, rgba(11, 24, 36, 0.72) 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .search-pill-demo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--navy);
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+      min-width: 280px;
+    }
+    .search-pill-demo .sp-q { color: var(--sky-700); font-weight: 800; }
+    .search-pill-demo .sp-dest {
+      color: var(--navy);
+      font-weight: 700;
+      border-right: 2px solid var(--sky-600);
+      padding-right: 4px;
+      animation: caretBlink 0.9s steps(1) infinite;
+    }
+    @keyframes caretBlink { 50% { border-color: transparent; } }
+
+    .live-pill-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #E7F7FF;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .live-pill-status i {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green);
+      animation: livePulse 1.8s infinite;
+    }
+
+    .map-canvas-wrap {
+      position: relative;
+      height: 510px;
+      background: radial-gradient(circle at 46% 52%, #132A3E 0%, #0B1926 100%);
+    }
+    #liveMapCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+    }
+
+    /* Floating Uber-Style Live Notification Bar OVER the map */
+    .hero-watchbar {
+      position: absolute;
+      top: 16px;
+      left: 18px;
+      z-index: 6;
+      width: min(415px, calc(100% - 36px));
+      padding: 13px 16px;
+      border-radius: 20px;
+      color: #fff;
+      background: var(--sky-700);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.38);
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      transition: background 0.45s var(--ease), transform 0.35s var(--ease);
+    }
+    .hero-watchbar[data-state="go"]   { background: linear-gradient(135deg, #22B568, #199E58); }
+    .hero-watchbar[data-state="soon"] { background: linear-gradient(135deg, #FF7B00, #F25800); animation: uberPulse 1.7s ease-in-out infinite; }
+    .hero-watchbar[data-state="arr"]  { background: linear-gradient(135deg, #132536, #0A1520); border: 1.5px solid rgba(51, 204, 255, 0.5); }
+    @keyframes uberPulse {
+      0%, 100% { box-shadow: 0 18px 40px rgba(255, 107, 0, 0.32), 0 0 0 0 rgba(255, 107, 0, 0.45); }
+      50%      { box-shadow: 0 18px 44px rgba(255, 107, 0, 0.42), 0 0 0 9px rgba(255, 107, 0, 0); }
+    }
+    .wb-badge-line {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.2);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 16px;
+      flex: none;
+    }
+    .wb-text { flex: 1; min-width: 0; }
+    .wb-text strong { display: block; font-size: 14px; font-weight: 800; line-height: 1.25; }
+    .wb-text span { display: block; font-size: 11.5px; opacity: 0.9; margin-top: 2px; line-height: 1.35; }
+    .wb-eta-pill {
+      padding: 6px 10px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.24);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Floating map controls bottom bar (2-tap Line Strip + BiciCba toggle) */
+    .map-dock-bottom {
+      position: relative;
+      z-index: 6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 14px 20px;
+      background: rgba(9, 20, 30, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.09);
+    }
+    .line-strip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .line-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1.5px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.06);
+      color: #DCEEF8;
+      font-size: 12px;
+      font-weight: 700;
+      transition: all 0.2s var(--ease);
+    }
+    .line-chip i { width: 9px; height: 9px; border-radius: 50%; }
+    .line-chip:hover { border-color: rgba(255, 255, 255, 0.45); transform: translateY(-1px); }
+    .line-chip.active {
+      background: #fff;
+      color: var(--navy);
+      border-color: #fff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    .bici-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 15px;
+      border-radius: 999px;
+      border: 1.5px solid rgba(39, 193, 113, 0.45);
+      background: rgba(39, 193, 113, 0.12);
+      color: #9CF2C4;
+      font-size: 12px;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    .bici-toggle-btn.active {
+      background: var(--green);
+      color: #062514;
+      border-color: var(--green);
+    }
+
+    /* Kinetic KPI Strip */
+    .kpi-grid {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .kpi-card {
+      padding: 22px 22px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 30px rgba(13, 29, 43, 0.05);
+    }
+    .kpi-num {
+      font-size: clamp(30px, 3.8vw, 44px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--navy);
+    }
+    .kpi-num span { color: var(--sky-700); }
+    .kpi-label {
+      margin-top: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--navy-soft);
+    }
+
+    /* ==================== SECTIONS ==================== */
+    .section { padding: 84px 0; }
+    .section-head {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 38px;
+    }
+    .section-head h2 {
+      margin: 14px 0 0;
+      font-size: clamp(32px, 4.4vw, 54px);
+      font-weight: 800;
+      line-height: 1.02;
+      letter-spacing: -0.035em;
+    }
+    .section-head p {
+      margin: 0;
+      font-size: 15.5px;
+      line-height: 1.62;
+      color: var(--navy-soft);
+    }
+
+    /* ==================== #ALERTAS — UBER-STYLE SMART NOTIFICATIONS SIMULATOR ==================== */
+    .alerts-band {
+      padding: 92px 0;
+      background:
+        radial-gradient(circle at 18% 15%, rgba(51, 204, 255, 0.16), transparent 44%),
+        radial-gradient(circle at 86% 80%, rgba(255, 138, 30, 0.14), transparent 44%),
+        var(--navy);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .alerts-band .section-head h2 { color: #fff; }
+    .alerts-band .section-head p { color: #A6BFCF; }
+
+    .uber-sim-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    /* Realistic Floating Phone Mockup */
+    .phone-frame {
+      width: min(370px, 100%);
+      margin: 0 auto;
+      padding: 14px;
+      border-radius: 42px;
+      background: linear-gradient(160deg, #1E3548, #0D1B28);
+      border: 2px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.55);
+    }
+    .phone-screen {
+      border-radius: 30px;
+      padding: 18px 16px 20px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(51, 204, 255, 0.25), transparent 55%),
+        linear-gradient(180deg, #102436 0%, #0A1622 100%);
+      min-height: 495px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .phone-status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.8);
+      padding: 0 6px;
+    }
+    .phone-notch {
+      width: 78px; height: 20px; border-radius: 99px;
+      background: #060C12;
+    }
+    .phone-clock {
+      text-align: center;
+      padding: 6px 0 2px;
+    }
+    .phone-clock strong {
+      display: block;
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .phone-clock small {
+      font-size: 12px;
+      color: #96B5CA;
+    }
+
+    /* Live Activity / Uber-Style Notification Card */
+    .uber-push-card {
+      padding: 15px 15px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(16px);
+      transition: transform 0.35s var(--ease), border-color 0.3s, background 0.3s;
+    }
+    .uber-push-card.pop {
+      animation: notifPop 0.45s var(--ease);
+    }
+    @keyframes notifPop {
+      0%   { opacity: 0.3; transform: translateY(-14px) scale(0.95); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .push-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .push-app {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #E3F6FF;
+    }
+    .push-app img { width: 22px; height: 22px; border-radius: 6px; }
+    .push-tag {
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--sky-700);
+      color: #fff;
+    }
+    .uber-push-card[data-state="go"] .push-tag   { background: var(--green); color: #052614; }
+    .uber-push-card[data-state="soon"] .push-tag { background: var(--orange-hot); }
+    .uber-push-card[data-state="arr"] .push-tag  { background: var(--sky); color: var(--navy); }
+
+    .push-title {
+      margin: 0 0 4px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .push-sub {
+      margin: 0 0 14px;
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: #BBD3E2;
+    }
+
+    /* Live Bus-vs-Stop Progress Track inside Live Activity */
+    .live-track-box {
+      padding: 12px 12px 10px;
+      border-radius: 16px;
+      background: rgba(7, 16, 24, 0.55);
+    }
+    .track-bar {
+      position: relative;
+      height: 8px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.14);
+      margin: 18px 6px 12px;
+    }
+    .track-fill {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 35%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--sky), var(--green));
+      transition: width 0.55s var(--ease), background 0.35s;
+    }
+    .track-bus-pin {
+      position: absolute;
+      top: 50%;
+      left: 35%;
+      transform: translate(-50%, -50%);
+      width: 30px; height: 30px;
+      border-radius: 10px;
+      background: var(--sky);
+      color: var(--navy);
+      font-size: 11px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 4px 14px rgba(51, 204, 255, 0.55);
+      transition: left 0.55s var(--ease), background 0.35s;
+    }
+    .track-stop-pin {
+      position: absolute;
+      right: -2px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--green);
+    }
+    .track-labels {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: #93B3C8;
+    }
+
+    .phone-secondary-notif {
+      padding: 11px 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 11.5px;
+      color: #B4CDDD;
+    }
+    .phone-secondary-notif strong { color: #fff; }
+
+    /* Right side: Interactive State Stepper + Real Math Formula */
+    .sim-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .sim-step-btn {
+      width: 100%;
+      text-align: left;
+      padding: 18px 20px;
+      border-radius: 22px;
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: #D2E4EF;
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.24s var(--ease);
+    }
+    .sim-step-btn:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.28); }
+    .sim-step-btn.active {
+      background: rgba(51, 204, 255, 0.14);
+      border-color: var(--sky);
+      transform: translateX(4px);
+    }
+    .step-badge {
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .sim-step-btn.active .step-badge { background: var(--sky); color: var(--navy); }
+    .sim-step-btn b { display: block; font-size: 15px; color: #fff; }
+    .sim-step-btn small { display: block; font-size: 12.5px; color: #9DB8CA; margin-top: 2px; }
+    .step-eta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--sky);
+      white-space: nowrap;
+    }
+
+    .sim-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .formula-code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #9CE7FF;
+      line-height: 1.5;
+    }
+    .auto-play-btn {
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1.5px solid var(--sky);
+      background: rgba(51, 204, 255, 0.16);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      transition: background 0.2s, color 0.2s;
+    }
+    .auto-play-btn.playing { background: var(--green); border-color: var(--green); color: #052614; }
+
+    /* ==================== #CASO — FICHA DEL CASO DE ESTUDIO ==================== */
+    .case-grid {
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap: 22px;
+    }
+    .case-card {
+      padding: 34px 32px;
+      border-radius: 30px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: 0 14px 40px rgba(13, 29, 43, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .case-card h3 {
+      margin: 0;
+      font-size: clamp(23px, 2.7vw, 31px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+    .case-card p {
+      margin: 0;
+      font-size: 14.5px;
+      line-height: 1.66;
+      color: var(--navy-soft);
+    }
+    .case-facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .case-fact {
+      padding: 14px 15px;
+      border-radius: 18px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+    }
+    .case-fact small {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .case-fact b { display: block; font-size: 15.5px; font-weight: 700; color: var(--navy); }
+
+    .case-list {
+      list-style: none;
+      margin: 4px 0 0;
+      padding: 0;
+      border-top: 1px solid var(--line);
+    }
+    .case-list li {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 10px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13.5px;
+      line-height: 1.48;
+      color: var(--navy);
+    }
+    .case-list li b {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--sky-700);
+    }
+    .tech-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: auto;
+      padding-top: 6px;
+    }
+    .tech-chips span {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--sky-tint);
+      color: var(--sky-700);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+    }
+
+    /* ==================== #EXPERIENCIA — CORREDORES, BICICBA & APP REAL ==================== */
+    .exp-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .real-app-card {
+      border-radius: 30px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 20px;
+      box-shadow: 0 18px 46px rgba(13, 29, 43, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .real-app-shot {
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      cursor: zoom-in;
+      position: relative;
+    }
+    .real-app-shot img {
+      width: 100%;
+      height: auto;
+      transition: transform 0.4s var(--ease);
+    }
+    .real-app-shot:hover img { transform: scale(1.03); }
+    .shot-badge {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(13, 29, 43, 0.84);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .real-app-cap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--navy-soft);
+    }
+    .real-app-cap strong { color: var(--navy); }
+
+    .corridors-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .corridor-box, .bici-box {
+      padding: 24px;
+      border-radius: 26px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 32px rgba(13, 29, 43, 0.05);
+    }
+    .corridor-box h3, .bici-box h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      font-weight: 800;
+    }
+    .corridor-box p, .bici-box p {
+      margin: 0 0 16px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--navy-soft);
+    }
+    .corridor-pills {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+    .corr-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+    .corr-swatch {
+      width: 14px; height: 14px; border-radius: 5px; flex: none;
+    }
+    .corr-pill small { display: block; font-size: 10.5px; font-weight: 500; color: var(--navy-soft); }
+
+    .bici-stations {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .bici-st {
+      padding: 10px 12px;
+      border-radius: 15px;
+      background: #EFFBF4;
+      border: 1px solid rgba(39, 193, 113, 0.25);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0D3520;
+    }
+    .bici-st span {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--green);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+    }
+
+    /* ==================== #CONTACTO — CTA POPUPS + ABRIR BONDI ==================== */
+    .cta-card {
+      padding: 46px 42px;
+      border-radius: 34px;
+      background: var(--card);
+      border: 1.5px solid rgba(15, 166, 216, 0.28);
+      box-shadow: 0 22px 54px rgba(13, 29, 43, 0.08);
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 32px;
+      align-items: center;
+    }
+    .cta-card h2 {
+      margin: 12px 0 10px;
+      font-size: clamp(28px, 3.8vw, 44px);
+      font-weight: 800;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+    }
+    .cta-card p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--navy-soft);
+    }
+    .cta-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .cta-note {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ==================== SIGUIENTE CASO CIRCULAR (02 BONDI -> 03 MIS SELLOS) ==================== */
+    .next-case-band {
+      margin-top: 52px;
+      padding: 46px 40px;
+      border-radius: 34px;
+      color: #fff;
+      background: linear-gradient(135deg, #16182A 0%, #2B2552 50%, #5B3372 100%);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(13, 29, 43, 0.24);
+    }
+    .next-case-band::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 86% 20%, rgba(200, 248, 16, 0.22), transparent 44%);
+    }
+    .next-top {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    }
+    .next-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #D7FF6E;
+    }
+    .next-kicker::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #C8F810; }
+    .next-prev {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.78);
+      transition: color 0.2s;
+    }
+    .next-prev:hover { color: #C8F810; }
+    .next-inner {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 26px;
+      flex-wrap: wrap;
+    }
+    .next-copy { max-width: 600px; }
+    .next-copy h2 {
+      margin: 0 0 10px;
+      font-size: clamp(30px, 4.4vw, 52px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.035em;
+      color: #fff;
+    }
+    .next-copy p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.56;
+      color: rgba(255, 255, 255, 0.82);
+    }
+    .next-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-next-lime { background: #C8F810; color: var(--navy); }
+    .btn-next-lime:hover { background: #DCFF4F; transform: translateY(-2px); }
+    .btn-next-ghost {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.32);
+      color: #fff;
+    }
+    .btn-next-ghost:hover { border-color: #fff; background: rgba(255, 255, 255, 0.18); transform: translateY(-2px); }
+
+    /* Footer */
+    .footer {
+      padding: 28px 0 42px;
+      margin-top: 26px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--navy-soft);
+    }
+    .footer-links { display: flex; gap: 18px; flex-wrap: wrap; }
+    .footer-links a:hover { color: var(--sky-700); }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background: rgba(10, 21, 31, 0.9);
+      backdrop-filter: blur(12px);
+    }
+    .lightbox.open { display: grid; }
+    .lightbox-box {
+      width: min(1020px, 95vw);
+      border-radius: 26px;
+      background: var(--navy);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      overflow: hidden;
+    }
+    .lightbox-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+    .lightbox-close {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: transparent;
+      color: #fff;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+    .lightbox-close:hover { background: var(--sky); color: var(--navy); border-color: var(--sky); }
+    .lightbox-body { padding: 20px; display: grid; place-items: center; }
+    .lightbox-body img { max-height: 75vh; width: auto; border-radius: 14px; }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.62s var(--ease), transform 0.62s var(--ease);
+      transition-delay: var(--rev-delay, 0ms);
+    }
+    .reveal.in-view { opacity: 1; transform: none; }
+
+    @media (max-width: 960px) {
+      .nav-links, .nav-back { display: none; }
+      .nav-menu-btn { display: inline-flex; }
+      .hero-top, .section-head, .uber-sim-grid, .case-grid, .exp-grid, .cta-card { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .map-canvas-wrap { height: 420px; }
+    }
+    @media (max-width: 620px) {
+      .container, .topbar { width: calc(100% - 26px); }
+      .hero { padding: 26px 0 44px; }
+      .section, .alerts-band { padding: 58px 0; }
+      .case-facts, .corridor-pills, .bici-stations { grid-template-columns: 1fr; }
+      .cta-card, .next-case-band { padding: 28px 20px; border-radius: 26px; }
+      .hero-actions .btn, .next-actions .btn { width: 100%; }
+      .search-pill-demo { min-width: 0; width: 100%; }
+      .map-canvas-wrap { height: 360px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .bondi-mascot .b-body, .bondi-mascot .b-eye, .eyebrow i, .live-pill-status i, .hero-watchbar[data-state="soon"] { animation: none !important; }
+      .parallax-transit { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" id="scrollProgress"></div></div>
+
+  <!-- Chips de parallax urbano -->
+  <div class="parallax-transit" aria-hidden="true">
+    <span class="pt-chip" data-depth="0.16" style="left:1.5%;top:22%"><span class="pt-dot" style="background:#0099CB"></span>LÍNEA 20 · 3 MIN</span>
+    <span class="pt-chip" data-depth="0.24" style="left:1.5%;top:64%"><span class="pt-dot" style="background:#FF9500"></span>LÍNEA 10 · AV. COLÓN</span>
+    <span class="pt-chip" data-depth="0.20" style="right:1.5%;top:28%"><span class="pt-dot" style="background:#27C171"></span>BICICBA · 10 ESTACIONES</span>
+    <span class="pt-chip" data-depth="0.26" style="right:1.5%;top:72%"><span class="pt-dot" style="background:#E435F5"></span>LÍNEA 80 · CERRO</span>
+  </div>
+
+  <!-- ==================== NAVEGACIÓN ==================== -->
+  <div class="topbar-wrap" id="top">
+    <header class="topbar">
+      <a href="#top" class="brand">
+        <span class="brand-icon-wrap" aria-hidden="true">
+          <svg class="bondi-mascot" viewBox="0 0 128 128" width="32" height="32">
+            <g class="b-body">
+              <rect x="14" y="16" width="100" height="84" rx="26" fill="#FFFFFF" opacity="0.22"/>
+              <rect x="14" y="16" width="100" height="84" rx="26" fill="url(#navBusG)"/>
+              <defs><linearGradient id="navBusG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7AE4FF"/><stop offset="1" stop-color="#22BEF2"/></linearGradient></defs>
+              <rect x="27" y="30" width="74" height="40" rx="18" fill="#EAFBFF"/>
+              <g class="b-eye"><circle cx="47" cy="49" r="7.5" fill="#12212E"/><circle cx="49.5" cy="46.5" r="2.4" fill="#fff"/></g>
+              <g class="b-eye"><circle cx="81" cy="49" r="7.5" fill="#12212E"/><circle cx="83.5" cy="46.5" r="2.4" fill="#fff"/></g>
+              <path d="M48 80 Q64 94 80 80" stroke="#0C2B3B" stroke-width="7" stroke-linecap="round" fill="none"/>
+              <rect x="24" y="96" width="26" height="16" rx="8" fill="#12212E"/>
+              <rect x="78" y="96" width="26" height="16" rx="8" fill="#12212E"/>
+            </g>
+          </svg>
+        </span>
+        <span>Bondi</span>
+        <span class="brand-badge">CASO 02</span>
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links">
+          <li><a href="#mapa">Mapa vivo</a></li>
+          <li><a href="#alertas">Alertas Uber</a></li>
+          <li><a href="#caso">El caso</a></li>
+          <li><a href="#experiencia">Corredores &amp; Bici</a></li>
+          <li><a href="#contacto">Probar</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-right">
+        <a href="../#proyectos" class="nav-back">← Volver a proyectos</a>
+        <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="mobileDrawer">☰ MENÚ</button>
+      </div>
+    </header>
+
+    <nav class="mobile-drawer" id="mobileDrawer" aria-label="Menú móvil">
+      <a href="#mapa"><span>01 · Mapa en vivo de Córdoba</span><span>→</span></a>
+      <a href="#alertas"><span>02 · Alertas inteligentes estilo Uber</span><span>→</span></a>
+      <a href="#caso"><span>03 · El caso de estudio</span><span>→</span></a>
+      <a href="#experiencia"><span>04 · Corredores y BiciCba</span><span>→</span></a>
+      <a href="#contacto"><span>05 · Abrir Bondi y contacto</span><span>→</span></a>
+      <a href="../#proyectos" class="drawer-accent"><span>← Volver a proyectos POPUPS</span><span>↗</span></a>
+    </nav>
+  </div>
+
+  <main>
+    <!-- ==================== HERO + MAPA VIVO ANIMADO DE CÓRDOBA ==================== -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-top">
+          <div>
+            <div class="hero-brand-row">
+              <span class="eyebrow"><i aria-hidden="true"></i>CASO 02 · MOVILIDAD URBANA · PWA + ANDROID</span>
+              <div class="hero-mascot-pill" id="heroMascotBtn" title="¡Tocá a Bondi!">
+                <svg class="bondi-mascot" viewBox="0 0 128 128" width="44" height="44" aria-label="Logo oficial animado de Bondi">
+                  <defs>
+                    <linearGradient id="heroBusG" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stop-color="#8EEBFF"/>
+                      <stop offset="1" stop-color="#22BEF2"/>
+                    </linearGradient>
+                  </defs>
+                  <g class="b-body">
+                    <rect x="14" y="16" width="100" height="84" rx="26" fill="url(#heroBusG)" stroke="#ffffff" stroke-width="4"/>
+                    <rect x="27" y="30" width="74" height="40" rx="18" fill="#EAFBFF"/>
+                    <g class="b-eye"><circle cx="47" cy="49" r="7.5" fill="#12212E"/><circle cx="49.5" cy="46.5" r="2.4" fill="#fff"/></g>
+                    <g class="b-eye"><circle cx="81" cy="49" r="7.5" fill="#12212E"/><circle cx="83.5" cy="46.5" r="2.4" fill="#fff"/></g>
+                    <path d="M48 80 Q64 94 80 80" stroke="#0C2B3B" stroke-width="7" stroke-linecap="round" fill="none"/>
+                    <rect x="24" y="96" width="26" height="16" rx="8" fill="#12212E"/>
+                    <rect x="78" y="96" width="26" height="16" rx="8" fill="#12212E"/>
+                    <rect x="16" y="44" width="8" height="20" rx="4" fill="#0C2B3B" opacity=".35"/>
+                    <rect x="104" y="44" width="8" height="20" rx="4" fill="#0C2B3B" opacity=".35"/>
+                  </g>
+                </svg>
+                <div>
+                  <span>Bondi Córdoba</span>
+                  <small>Mapa en tiempo real</small>
+                </div>
+              </div>
+            </div>
+
+            <h1>Encontrá tu<br /><em>próximo viaje</em><br />en tiempo real.</h1>
+          </div>
+
+          <div class="hero-aside">
+            <p class="hero-lead">
+              <strong>Bondi</strong> transforma el transporte público de <strong>Córdoba Capital</strong> en una experiencia clara, alegre y en vivo: 72 líneas, 2.886 paradas, colectivos moviéndose sobre el mapa, avisos inteligentes para saber exactamente cuándo salir de casa y estaciones de BiciCba.
+            </p>
+            <div class="hero-actions">
+              <a href="https://somospopups.github.io/BONDI/" class="btn btn-primary" target="_blank" rel="noopener">Abrir Bondi en vivo ↗</a>
+              <a href="#alertas" class="btn btn-ghost">Probar alertas estilo Uber ↓</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESCENARIO DE MAPA VIVO DE CÓRDOBA CON COLECTIVOS EN MOVIMIENTO -->
+        <div class="map-stage-card" id="mapa" aria-label="Mapa interactivo animado de Córdoba Capital con líneas de Bondi en movimiento">
+          <div class="map-hud-top">
+            <div class="search-pill-demo">
+              <span class="sp-q">⌕ ¿A dónde vas?</span>
+              <span class="sp-dest" id="typingDest">Patio Olmos</span>
+            </div>
+            <div class="live-pill-status">
+              <i aria-hidden="true"></i>
+              <span id="liveFleetTxt">EN VIVO · 10 UNIDADES EN MOVIMIENTO · CÓRDOBA</span>
+            </div>
+          </div>
+
+          <div class="map-canvas-wrap">
+            <!-- Banner flotante de notificación inteligente estilo Uber -->
+            <div class="hero-watchbar" id="heroWatchBar" data-state="go" aria-live="polite">
+              <div class="wb-badge-line" id="wbLine">20</div>
+              <div class="wb-text">
+                <strong id="wbTitle">¡Es hora de salir! · Línea 20</strong>
+                <span id="wbSub">Viene por Av. Colón · Caminá 3 min y esperás máx. 3 min</span>
+              </div>
+              <span class="wb-eta-pill" id="wbEta">4 min</span>
+            </div>
+
+            <canvas id="liveMapCanvas" aria-label="Animación de colectivos circulando por recorridos reales de Córdoba Capital"></canvas>
+          </div>
+
+          <div class="map-dock-bottom">
+            <div class="line-strip" role="tablist" aria-label="Elegir línea en el mapa">
+              <button type="button" class="line-chip active" data-line="ALL"><i style="background:#33CCFF"></i>Todas las líneas</button>
+              <button type="button" class="line-chip" data-line="20"><i style="background:#0099CB"></i>Línea 20</button>
+              <button type="button" class="line-chip" data-line="10"><i style="background:#FF9500"></i>Línea 10</button>
+              <button type="button" class="line-chip" data-line="80"><i style="background:#E435F5"></i>Línea 80</button>
+              <button type="button" class="line-chip" data-line="71"><i style="background:#D93062"></i>Línea 71</button>
+              <button type="button" class="line-chip" data-line="A"><i style="background:#33CCFF"></i>Trole A</button>
+            </div>
+            <button type="button" class="bici-toggle-btn" id="biciToggleBtn" aria-pressed="false">🚲 Mostrar BiciCba (10)</button>
+          </div>
+        </div>
+
+        <!-- MÉTRICAS CINÉTICAS -->
+        <div class="kpi-grid" id="kpiGrid">
+          <div class="kpi-card">
+            <div class="kpi-num"><span data-count="72" data-suffix="">72</span></div>
+            <div class="kpi-label">Líneas reales de Córdoba Capital</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-num"><span data-count="2886" data-suffix="">2.886</span></div>
+            <div class="kpi-label">Paradas geolocalizadas con traza</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-num">≤ <span data-count="3" data-suffix=" min">3 min</span></div>
+            <div class="kpi-label">Espera objetivo con Plan de Salida</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-num"><span data-count="10" data-suffix="">10</span></div>
+            <div class="kpi-label">Estaciones BiciCba integradas</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #ALERTAS — SIMULADOR DE NOTIFICACIONES INTELIGENTES ESTILO UBER ==================== -->
+    <section class="alerts-band" id="alertas">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow dark"><i aria-hidden="true"></i>PLAN DE SALIDA · ALERTAS ESTILO UBER</span>
+            <h2>Te avisa cuándo salir. Nunca para hacerte perder el bondi.</h2>
+          </div>
+          <p>
+            El motor de avisos combina tu caminata real hasta la parada con el GPS en vivo de las unidades que vienen hacia vos (filtrando el sentido contrario) para que llegues y esperes como máximo 3 minutos.
+          </p>
+        </div>
+
+        <div class="uber-sim-grid">
+          <!-- Teléfono interactivo con Live Activity y Push inteligente -->
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="phone-status-bar">
+                <span>08:42</span>
+                <span class="phone-notch" aria-hidden="true"></span>
+                <span>5G · 92%</span>
+              </div>
+
+              <div class="phone-clock">
+                <strong id="simClock">08:42</strong>
+                <small id="simDateLabel">Miércoles · Córdoba Capital · 21°</small>
+              </div>
+
+              <div class="uber-push-card" id="uberPushCard" data-state="go">
+                <div class="push-head">
+                  <span class="push-app">
+                    <img src="./assets/bondi-icon.webp" alt="Icono Bondi" />
+                    BONDI · EN VIVO
+                  </span>
+                  <span class="push-tag" id="pushTag">SALÍ AHORA</span>
+                </div>
+                <h3 class="push-title" id="pushTitle">¡Es hora de salir! · Línea 20</h3>
+                <p class="push-sub" id="pushSub">Caminata estimada: 4 min hasta Patio Olmos. Tu bondi viene por Av. Colón y llega en 7 min.</p>
+
+                <div class="live-track-box">
+                  <div class="track-bar">
+                    <div class="track-fill" id="trackFill"></div>
+                    <div class="track-bus-pin" id="trackBusPin">20</div>
+                    <div class="track-stop-pin" title="Tu parada"></div>
+                  </div>
+                  <div class="track-labels">
+                    <span id="trackLeft">Av. Colón y Zípoli</span>
+                    <span id="trackRight">Parada Patio Olmos</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="phone-secondary-notif">
+                <span><strong>Siguiente unidad:</strong> Línea 20 · Int. 2431</span>
+                <span id="nextBusEta" style="color:#33CCFF;font-weight:700">en 19 min</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Selector de los 4 estados reales del motor planOut() -->
+          <div class="sim-controls">
+            <button type="button" class="sim-step-btn" data-sim="0">
+              <span class="step-badge">⏳</span>
+              <div>
+                <b>1. Todavía en casa · Salí en 4 min</b>
+                <small>Calcula tu caminata real (×1,28 por cuadras a 4,6 km/h) y te deja listo sin apuro.</small>
+              </div>
+              <span class="step-eta">ETA 11 MIN</span>
+            </button>
+
+            <button type="button" class="sim-step-btn active" data-sim="1">
+              <span class="step-badge">🟢</span>
+              <div>
+                <b>2. ¡Es hora de salir! · Alerta verde</b>
+                <small>Dispara la notificación justa para que llegues a la parada 3 minutos antes del bondi.</small>
+              </div>
+              <span class="step-eta">ETA 7 MIN</span>
+            </button>
+
+            <button type="button" class="sim-step-btn" data-sim="2">
+              <span class="step-badge">🟠</span>
+              <div>
+                <b>3. Tu bondi está cerca · Pulso naranja</b>
+                <small>Te confirma la calle exacta por donde se aproxima (“viene por Bv. San Juan”).</small>
+              </div>
+              <span class="step-eta">ETA 2 MIN</span>
+            </button>
+
+            <button type="button" class="sim-step-btn" data-sim="3">
+              <span class="step-badge">🚌</span>
+              <div>
+                <b>4. ¡Llegando a tu parada! · Subite ahora</b>
+                <small>Unidad confirmada con número interno en tu sentido de circulación.</small>
+              </div>
+              <span class="step-eta">LLEGANDO</span>
+            </button>
+
+            <div class="sim-toolbar">
+              <div class="formula-code">
+                walk = dist × 1.28 / 4.6 km/h<br />
+                leaveIn = eta − walk − 3 min
+              </div>
+              <button type="button" class="auto-play-btn playing" id="autoPlayBtn">⏸ Pausar simulación</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #CASO — FICHA DEL CASO DE ESTUDIO ==================== -->
+    <section class="section" id="caso">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">CASO 02 · DEL PROBLEMA URBANO A LA APP</span>
+            <h2>Una sola pregunta: “¿A dónde vas?”.</h2>
+          </div>
+          <p>
+            La información del transporte público suele vivir dispersa entre mapas estáticos, tablas de horarios y apps lentas. Construimos Bondi en JavaScript puro + Leaflet, sin frameworks pesados, lista como PWA y APK Android.
+          </p>
+        </div>
+
+        <div class="case-grid">
+          <article class="case-card">
+            <span class="eyebrow">02.A · EL DESAFÍO Y LA SOLUCIÓN</span>
+            <h3>Elegir línea y activar avisos en dos toques, sin ventanas.</h3>
+            <p>
+              Para moverse todos los días por Córdoba no sobra tiempo para configurar menús. Bondi reduce el recorrido completo a dos toques directos sobre el mapa: elegís tu línea en la tira inferior y tocás tu parada para encender las alertas inteligentes de salida, proximidad y arribo.
+            </p>
+            <p>
+              Por debajo, un <strong>relay propio en Cloudflare Worker</strong> normaliza las posiciones GPS de la flota en tiempo real, filtra unidades que se alejan en sentido contrario mediante dos muestras consecutivas de rumbo y cae automáticamente a <strong>horarios offline</strong> cuando no hay señal o señal satelital.
+            </p>
+            <div class="tech-chips" aria-label="Stack técnico">
+              <span>JavaScript Vanilla</span>
+              <span>Leaflet Maps</span>
+              <span>Cloudflare Worker</span>
+              <span>PWA Offline</span>
+              <span>Capacitor 8 Android</span>
+              <span>BiciCba Live</span>
+            </div>
+          </article>
+
+          <aside class="case-card">
+            <span class="eyebrow">02.B · FICHA DEL PROYECTO</span>
+            <div class="case-facts">
+              <div class="case-fact"><small>Tipo</small><b>PWA + App Android</b></div>
+              <div class="case-fact"><small>Cobertura</small><b>72 líneas · 2.886 paradas</b></div>
+              <div class="case-fact"><small>Datos</small><b>TU BONDI + Relay CF</b></div>
+              <div class="case-fact"><small>Estado</small><b>Producto publicado</b></div>
+            </div>
+            <ul class="case-list">
+              <li><b>01</b><span>Mapa fluido de Córdoba Capital con trazas reales y filtrado de flota por línea</span></li>
+              <li><b>02</b><span>Motor de Plan de Salida estilo Uber/Didi con espera máxima de 3 minutos</span></li>
+              <li><b>03</b><span>Detección de sentido por rumbo consecutivo (“viene por Av. Medina Allende”)</span></li>
+              <li><b>04</b><span>Integración con las 10 estaciones de bicicletas públicas BiciCba</span></li>
+              <li><b>05</b><span>Instalable como PWA con caché offline y empaquetada en APK con Capacitor 8</span></li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #EXPERIENCIA — CORREDORES, BICICBA Y CAPTURA REAL ==================== -->
+    <section class="section" id="experiencia" style="padding-top:16px">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">LA CIUDAD EN TUS MANOS</span>
+            <h2>Colectivos, corredores oficiales y BiciCba en una sola pantalla.</h2>
+          </div>
+          <p>
+            Cada corredor conserva su identidad cromática real para reconocer líneas al instante, junto con las estaciones de bicicleta pública de la ciudad y la interfaz real en producción.
+          </p>
+        </div>
+
+        <div class="exp-grid">
+          <div class="real-app-card">
+            <div class="real-app-shot" id="realAppShot">
+              <img src="./assets/bondi-map-real.webp" alt="Captura real de Bondi mostrando el mapa de Córdoba Capital y el buscador ¿A dónde vas?" loading="lazy" />
+              <span class="shot-badge">Ampliar captura real ↗</span>
+            </div>
+            <div class="real-app-cap">
+              <div><strong>Interfaz real en producción</strong> · Mapa Leaflet centrado en Córdoba Capital con buscador directo y botón de líneas.</div>
+            </div>
+          </div>
+
+          <div class="corridors-stack">
+            <div class="corridor-box">
+              <h3>Los 4 corredores cromáticos de Córdoba</h3>
+              <p>72 líneas organizadas por color oficial para leer el mapa y elegir tu colectivo en menos de un segundo.</p>
+              <div class="corridor-pills">
+                <div class="corr-pill"><span class="corr-swatch" style="background:#0099CB"></span><div>Troles &amp; 20–29 / 600<small>14 líneas · Cyan oficial</small></div></div>
+                <div class="corr-pill"><span class="corr-swatch" style="background:#FF9500"></span><div>Corredores 10 · 40 · 60<small>30 líneas · Naranja</small></div></div>
+                <div class="corr-pill"><span class="corr-swatch" style="background:#E435F5"></span><div>Corredores 30 · 80 · A1/B1<small>21 líneas · Magenta</small></div></div>
+                <div class="corr-pill"><span class="corr-swatch" style="background:#D93062"></span><div>Corredor 70–76<small>7 líneas · Carmesí</small></div></div>
+              </div>
+            </div>
+
+            <div class="bici-box">
+              <h3>BiciCba integrada en el mapa</h3>
+              <p>Para llegar donde el bondi no llega: ubicación, horarios y disponibilidad de bicicletas públicas en tiempo real.</p>
+              <div class="bici-stations">
+                <div class="bici-st">Plaza España<span>12 bicis</span></div>
+                <div class="bici-st">Parque Sarmiento<span>9 bicis</span></div>
+                <div class="bici-st">Parque de las Tejas<span>8 bicis</span></div>
+                <div class="bici-st">Paseo Sobremonte<span>7 bicis</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #CONTACTO — ABRIR BONDI + CTA POPUPS ==================== -->
+    <section class="section" id="contacto" style="padding-top:24px">
+      <div class="container">
+        <div class="cta-card">
+          <div>
+            <span class="eyebrow">PROBÁ BONDI O CONSTRUÍ TU PROPIA APP</span>
+            <h2>¿Viajás por Córdoba o tenés una idea de movilidad?</h2>
+            <p>
+              Podés abrir <strong>Bondi</strong> ahora mismo gratis desde tu celular o compu, o escribirnos directo si querés diseñar y programar una PWA o app móvil con datos en tiempo real junto a POPUPS.
+            </p>
+          </div>
+          <div class="cta-actions">
+            <a href="https://somospopups.github.io/BONDI/" class="btn btn-primary" target="_blank" rel="noopener">🚌 Abrir Bondi en vivo ↗</a>
+            <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20POPUPS!%20Vi%20el%20caso%20de%20Bondi%20en%20el%20portfolio%20y%20me%20gustar%C3%ADa%20conversar%20con%20ustedes." class="btn btn-navy" target="_blank" rel="noopener">💬 Hablemos por WhatsApp ↗</a>
+            <a href="mailto:somospopups@gmail.com?subject=Consulta%20desde%20el%20caso%20Bondi%20(POPUPS)" class="btn btn-ghost">✉ somospopups@gmail.com</a>
+            <span class="cta-note">Córdoba, Argentina · PWA instalable sin tiendas ni registros.</span>
+          </div>
+        </div>
+
+        <!-- ==================== SIGUIENTE CASO CIRCULAR (02 BONDI -> 03 MIS SELLOS) ==================== -->
+        <section class="next-case-band" aria-label="Navegación a otros proyectos del portfolio POPUPS">
+          <div class="next-top">
+            <span class="next-kicker">SIGUIENTE CASO · 03 · FIDELIZACIÓN</span>
+            <a href="../appi/" class="next-prev">← ANTERIOR · 01 APPI</a>
+          </div>
+          <div class="next-inner">
+            <div class="next-copy">
+              <h2>Mis Sellos vive en el celular.</h2>
+              <p>La tarjeta digital de fidelización que reemplaza el cartón perdido: sellar en dos toques con QR, ver clientes frecuentes y detectar quién dejó de venir.</p>
+            </div>
+            <div class="next-actions">
+              <a href="../project.html?project=sellos" class="btn btn-next-lime">Ver siguiente caso ↗</a>
+              <a href="../#proyectos" class="btn btn-next-ghost">← Todos los proyectos</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== FOOTER ==================== -->
+        <footer class="footer">
+          <span>© 2026 BONDI · POPUPS · CÓRDOBA, ARGENTINA</span>
+          <div class="footer-links">
+            <a href="https://somospopups.github.io/BONDI/" target="_blank" rel="noopener">Abrir Bondi ↗</a>
+            <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20POPUPS!%20Vi%20el%20caso%20de%20Bondi%20en%20el%20portfolio." target="_blank" rel="noopener">WhatsApp ↗</a>
+            <a href="../">← Portfolio POPUPS</a>
+            <a href="#top">Volver arriba ↑</a>
+          </div>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="bondiLightbox" role="dialog" aria-modal="true" aria-label="Captura real ampliada de Bondi">
+    <div class="lightbox-box">
+      <div class="lightbox-bar">
+        <span>Bondi · Captura real de mapa en Córdoba Capital</span>
+        <button type="button" class="lightbox-close" id="lbClose">Cerrar [ESC]</button>
+      </div>
+      <div class="lightbox-body">
+        <img src="./assets/bondi-map-real.webp" alt="Captura real de Bondi en Córdoba Capital" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const MAP_DATA = {"routes":{"20":{"n":"20","c":"#0099CB","label":"Cerveceros A Santa Cecilia","km":21.49,"stopsCount":115,"pts":[[788.4,573.5],[787.8,602.4],[751.8,606.4],[744.4,591.6],[752.1,581.2],[704.9,581.0],[656.2,545.3],[613.2,516.2],[611.7,485.2],[557.7,490.9],[562.2,459.0],[550.0,462.2],[537.9,464.2],[525.3,463.7],[459.9,470.2],[478.9,443.7],[507.6,441.1],[519.6,415.3],[544.9,410.4],[548.3,389.6],[543.8,376.2],[565.2,339.9],[416.7,311.4],[440.5,265.2],[405.3,258.1],[422.1,227.7],[437.1,210.4],[425.5,196.5],[400.8,179.9],[379.9,152.7],[385.2,142.0],[373.9,127.4],[348.0,115.6],[345.1,104.4],[352.6,95.0],[348.2,83.6],[364.5,22.1],[378.4,14.9],[368.0,8.1],[302.0,1.6],[307.3,-17.3],[296.2,-31.4],[206.4,-40.7],[189.6,-44.1]]},"10":{"n":"10","c":"#ff9500","label":"Ituzaingo A Lasalle","km":28.88,"stopsCount":107,"pts":[[989.3,412.4],[975.3,407.6],[936.0,399.3],[919.4,405.9],[895.6,406.7],[876.9,409.2],[745.6,407.6],[713.8,397.4],[692.1,394.2],[673.8,388.2],[618.3,349.8],[451.3,318.6],[485.5,251.3],[463.6,246.2],[458.2,233.7],[424.4,195.5],[401.6,180.7],[380.7,154.1],[248.0,120.6],[210.7,100.4],[214.1,89.4],[119.3,7.4],[91.4,-21.9],[76.3,-41.6]]},"80":{"n":"80","c":"#fe27ff","label":"Crnel Olmedo A Cerro","km":24.18,"stopsCount":99,"pts":[[901.8,600.8],[888.8,600.7],[858.3,600.7],[858.5,588.1],[864.3,577.8],[872.2,568.4],[858.2,563.5],[853.0,462.7],[833.6,458.0],[761.6,467.4],[761.4,453.6],[747.5,453.0],[678.9,418.1],[678.8,400.7],[671.2,385.0],[659.9,379.0],[619.3,350.2],[416.7,311.4],[440.5,265.2],[303.2,236.5],[333.4,186.4],[309.6,161.2],[249.4,121.3],[227.9,109.2],[206.6,126.8],[188.7,120.1],[171.6,128.9],[156.9,123.1],[86.3,99.2],[68.4,96.8],[32.9,82.3],[61.8,56.2],[77.9,44.7],[90.5,34.6],[101.7,32.4]]},"71":{"n":"71","c":"#D93062","label":"B Mirizi A Villa Belgrano","km":22.22,"stopsCount":113,"pts":[[394.0,589.4],[427.6,594.1],[458.5,513.6],[463.2,485.6],[467.7,472.8],[478.8,443.9],[507.6,441.1],[519.6,415.3],[544.9,410.3],[548.3,390.5],[543.7,376.4],[565.2,339.9],[497.4,327.4],[509.3,303.6],[417.4,284.5],[410.1,298.3],[372.3,286.5],[185.7,244.3],[116.2,234.7],[55.9,210.5],[35.7,240.6],[-34.9,134.7],[-44.2,60.5],[-31.1,44.6],[-19.2,39.3],[-18.7,25.6],[-36.0,1.7],[-41.5,-10.3]]},"A":{"n":"A","c":"#0099CB","label":"Mariano Fragueiro A Plaza De Las Americas","km":8.93,"stopsCount":23,"pts":[[522.6,-9.5],[549.6,-8.2],[549.9,77.7],[538.3,78.4],[538.5,147.7],[510.4,198.7],[565.5,210.8],[554.5,218.6],[561.0,229.7],[554.3,250.5],[506.3,329.4],[466.6,398.7],[450.4,403.0]]}},"landmarks":[{"name":"Patio Olmos","sub":"Bv. San Juan & Vélez Sarsfield","la":-31.4198,"lo":-64.1887,"xy":[508.3,327.5]},{"name":"Plaza San Martín","sub":"Centro Histórico","la":-31.4167,"lo":-64.1836,"xy":[552.0,308.6]},{"name":"Ciudad Universitaria","sub":"Av. Medina Allende","la":-31.4383,"lo":-64.1892,"xy":[504.0,440.1]},{"name":"Nueva Córdoba","sub":"Av. H. Yrigoyen","la":-31.4282,"lo":-64.1865,"xy":[527.1,378.6]},{"name":"Cerro de las Rosas","sub":"Av. Rafael Núñez","la":-31.3768,"lo":-64.2288,"xy":[164.6,65.7]},{"name":"Terminal","sub":"Bv. Perón","la":-31.4241,"lo":-64.1726,"xy":[646.3,353.7]},{"name":"Av. Colón y Zípoli","sub":"Alberdi","la":-31.4046,"lo":-64.2124,"xy":[305.1,235.0]},{"name":"Alta Córdoba","sub":"Plaza Rivadavia","la":-31.3905,"lo":-64.1848,"xy":[541.7,149.1]}],"suquia":[[0.0,109.6],[171.4,164.3],[325.7,207.0],[445.7,243.5],[557.1,261.7],[660.0,286.1],[771.4,310.4],[960.0,334.8]],"bici":[{"name":"Cruz Roja","cod":"CRJ","dir":"Av. Belardinelli esq. Cruz Roja","bikes":9,"xy":[465.9,473.4]},{"name":"Manantiales","cod":"EMS","dir":"Raúl Carlos Brogin 3700","bikes":5,"xy":[95.1,540.6]},{"name":"Parque Sarmiento","cod":"EPS","dir":"Deodoro Roca 800","bikes":5,"xy":[604.5,392.9]},{"name":"Plaza Alberdi","cod":"PAB","dir":"Lima 950","bikes":0,"xy":[664.4,291.1]},{"name":"Parque De La Biodiversidad","cod":"PBD","dir":"Rondeau 751","bikes":2,"xy":[629.1,360.7]},{"name":"Plaza España","cod":"PES","dir":"Larrañaga y Bv. Chacabuco","bikes":7,"xy":[541.4,376.7]},{"name":"Parque las Heras","cod":"PLH","dir":"Av. Ramón Mestre y Puente Antártida","bikes":8,"xy":[521.5,243.6]},{"name":"Parque De Las Tejas","cod":"PTJ","dir":"Venezuela y Bv. Chacabuco","bikes":8,"xy":[519.6,411.4]},{"name":"Plaza Velez Sarsfield","cod":"PVS","dir":"Av. Yrigoyen y Montevideo","bikes":8,"xy":[511.0,336.6]},{"name":"Paseo Sobremonte","cod":"SBM","dir":"Caseros 570","bikes":8,"xy":[477.3,304.7]}]};
+
+      /* 1. Menú móvil */
+      const navMenuBtn = document.getElementById('navMenuBtn');
+      const mobileDrawer = document.getElementById('mobileDrawer');
+      if (navMenuBtn && mobileDrawer) {
+        navMenuBtn.addEventListener('click', () => {
+          const open = mobileDrawer.classList.toggle('open');
+          navMenuBtn.setAttribute('aria-expanded', String(open));
+          navMenuBtn.textContent = open ? '✕ CERRAR' : '☰ MENÚ';
+        });
+        mobileDrawer.querySelectorAll('a').forEach((a) => {
+          a.addEventListener('click', () => {
+            mobileDrawer.classList.remove('open');
+            navMenuBtn.setAttribute('aria-expanded', 'false');
+            navMenuBtn.textContent = '☰ MENÚ';
+          });
+        });
+      }
+
+      /* 2. Efecto divertido al tocar el logo mascot de Bondi */
+      const heroMascotBtn = document.getElementById('heroMascotBtn');
+      if (heroMascotBtn) {
+        heroMascotBtn.addEventListener('click', () => {
+          heroMascotBtn.style.transform = 'scale(1.09) rotate(-3deg)';
+          setTimeout(() => { heroMascotBtn.style.transform = ''; }, 240);
+        });
+      }
+
+      /* 3. Buscador animado "¿A dónde vas?" ciclando destinos reales de Córdoba */
+      const typingDest = document.getElementById('typingDest');
+      const dests = ['Patio Olmos', 'Ciudad Universitaria', 'Cerro de las Rosas', 'Nueva Córdoba', 'Terminal de Ómnibus', 'Plaza San Martín'];
+      let dIdx = 0, cIdx = dests[0].length, deleting = false, pauseTicks = 18;
+      if (typingDest && !reducedMotion) {
+        setInterval(() => {
+          if (pauseTicks > 0) { pauseTicks--; return; }
+          const cur = dests[dIdx];
+          if (!deleting) {
+            cIdx++;
+            typingDest.textContent = cur.slice(0, cIdx);
+            if (cIdx >= cur.length) { deleting = true; pauseTicks = 24; }
+          } else {
+            cIdx--;
+            typingDest.textContent = cur.slice(0, cIdx) || '\u00A0';
+            if (cIdx <= 0) { deleting = false; dIdx = (dIdx + 1) % dests.length; pauseTicks = 4; }
+          }
+        }, 72);
+      }
+
+      /* 4. MAPA VIVO DE CÓRDOBA CAPITAL (60 FPS) CON COLECTIVOS MOVIÉNDOSE SOBRE TRAZAS GPS REALES */
+      const canvas = document.getElementById('liveMapCanvas');
+      const ctx = canvas.getContext('2d');
+      const routeKeys = ['20', '10', '80', '71', 'A'];
+      const routeDisplayColors = { '20': '#25C4F8', '10': '#FF9500', '80': '#E435F5', '71': '#F04076', 'A': '#5FDBFF' };
+      const routeStreets = {
+        '20': ['Av. Colón', 'Bv. San Juan', 'Av. Chacabuco', 'Av. Vélez Sarsfield'],
+        '10': ['Av. Sabattini', 'Av. Emilio Olmos', 'Av. Colón', 'Av. Rafael Núñez'],
+        '80': ['Av. Fuerza Aérea', 'Av. Duarte Quirós', 'Av. Sagrada Familia', 'Av. Rafael Núñez'],
+        '71': ['Av. Patria', 'Av. General Paz', 'Av. Hipólito Yrigoyen', 'Av. Valparaíso'],
+        'A':  ['Av. Mariano Fragueiro', 'Av. General Paz', 'Av. Vélez Sarsfield', 'Plaza de las Américas']
+      };
+
+      // Precompute polyline segment lengths for constant-speed bus motion
+      const preparedRoutes = {};
+      routeKeys.forEach((k) => {
+        const r = MAP_DATA.routes[k];
+        if (!r || !r.pts || r.pts.length < 2) return;
+        const pts = r.pts;
+        const segs = [];
+        let total = 0;
+        for (let i = 0; i < pts.length - 1; i++) {
+          const dx = pts[i + 1][0] - pts[i][0];
+          const dy = pts[i + 1][1] - pts[i][1];
+          const len = Math.hypot(dx, dy);
+          segs.push({ a: pts[i], b: pts[i + 1], len, acc: total, ang: Math.atan2(dy, dx) });
+          total += len;
+        }
+        preparedRoutes[k] = { ...r, color: routeDisplayColors[k] || r.c, segs, total };
+      });
+
+      function sampleRoute(r, tNorm) {
+        const d = ((tNorm % 1) + 1) % 1 * r.total;
+        for (let i = 0; i < r.segs.length; i++) {
+          const s = r.segs[i];
+          if (d <= s.acc + s.len || i === r.segs.length - 1) {
+            const u = s.len > 0 ? Math.min(1, Math.max(0, (d - s.acc) / s.len)) : 0;
+            return {
+              x: s.a[0] + (s.b[0] - s.a[0]) * u,
+              y: s.a[1] + (s.b[1] - s.a[1]) * u,
+              ang: s.ang
+            };
+          }
+        }
+        return { x: r.pts[0][0], y: r.pts[0][1], ang: 0 };
+      }
+
+      // Spawn 2 moving buses per route (10 live buses total)
+      const fleet = [];
+      let unitSeq = 2410;
+      routeKeys.forEach((k, idx) => {
+        if (!preparedRoutes[k]) return;
+        fleet.push({ line: k, t: (idx * 0.17) % 1, speed: 0.00055 + idx * 0.00005, dir: 1, unit: unitSeq += 7 });
+        fleet.push({ line: k, t: (idx * 0.17 + 0.52) % 1, speed: 0.00048 + idx * 0.00004, dir: -1, unit: unitSeq += 11 });
+      });
+
+      let selectedLine = 'ALL';
+      let showBici = false;
+      let userPin = { x: 472, y: 318, name: 'Patio Olmos' };
+      let mapPulse = 0;
+
+      function resizeMap() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const r = canvas.getBoundingClientRect();
+        canvas.width = Math.max(320, Math.floor(r.width * dpr));
+        canvas.height = Math.max(260, Math.floor(r.height * dpr));
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      resizeMap();
+      window.addEventListener('resize', resizeMap);
+
+      // Click anywhere on the map to move your stop pin & trigger fresh Uber-style ETA alert!
+      canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mx = (e.clientX - rect.left) / rect.width * 960;
+        const my = (e.clientY - rect.top) / rect.height * 560;
+        // Snap near closest landmark if within 70 units
+        let chosen = { x: mx, y: my, name: 'Tu parada en el mapa' };
+        let bestD = 75;
+        MAP_DATA.landmarks.forEach((lm) => {
+          const d = Math.hypot(lm.xy[0] - mx, lm.xy[1] - my);
+          if (d < bestD) { bestD = d; chosen = { x: lm.xy[0], y: lm.xy[1], name: lm.name }; }
+        });
+        userPin = chosen;
+        updateHeroWatchBar(true);
+      });
+
+      const lineChips = document.querySelectorAll('.line-chip');
+      const liveFleetTxt = document.getElementById('liveFleetTxt');
+      lineChips.forEach((chip) => {
+        chip.addEventListener('click', () => {
+          lineChips.forEach((c) => c.classList.remove('active'));
+          chip.classList.add('active');
+          selectedLine = chip.dataset.line;
+          liveFleetTxt.textContent = selectedLine === 'ALL'
+            ? 'EN VIVO · 10 UNIDADES EN MOVIMIENTO · CÓRDOBA'
+            : `EN VIVO · LÍNEA ${selectedLine} · SEGUIMIENTO ACTIVO`;
+          updateHeroWatchBar(true);
+        });
+      });
+
+      const biciToggleBtn = document.getElementById('biciToggleBtn');
+      biciToggleBtn.addEventListener('click', () => {
+        showBici = !showBici;
+        biciToggleBtn.classList.toggle('active', showBici);
+        biciToggleBtn.setAttribute('aria-pressed', String(showBici));
+        biciToggleBtn.textContent = showBici ? '🚲 BiciCba visible (10)' : '🚲 Mostrar BiciCba (10)';
+      });
+
+      // Live Floating WatchBar updater synced to selected line & approaching bus
+      const heroWatchBar = document.getElementById('heroWatchBar');
+      const wbLine = document.getElementById('wbLine');
+      const wbTitle = document.getElementById('wbTitle');
+      const wbSub = document.getElementById('wbSub');
+      const wbEta = document.getElementById('wbEta');
+      let heroAlertStep = 1;
+
+      function updateHeroWatchBar(resetToGo) {
+        if (resetToGo) heroAlertStep = 1;
+        const activeLine = selectedLine === 'ALL' ? '20' : selectedLine;
+        const streets = routeStreets[activeLine] || routeStreets['20'];
+        const street = streets[heroAlertStep % streets.length];
+        const states = [
+          { st: 'wait', title: `Salí en 4 min · Línea ${activeLine}`, sub: `Viene por ${street} · Llegás a ${userPin.name} con 3 min de espera`, eta: '8 min' },
+          { st: 'go',   title: `¡Es hora de salir! · Línea ${activeLine}`, sub: `Caminá 3 min hasta ${userPin.name} · Viene por ${street}`, eta: '6 min' },
+          { st: 'soon', title: `Tu bondi está cerca · Línea ${activeLine}`, sub: `A 2 cuadras por ${street} rumbo a ${userPin.name}`, eta: '2 min' },
+          { st: 'arr',  title: `¡Llegando a ${userPin.name}! · Subite`, sub: `Línea ${activeLine} arribando ahora en tu sentido`, eta: 'AHORA' }
+        ];
+        const cur = states[heroAlertStep % states.length];
+        heroWatchBar.dataset.state = cur.st;
+        wbLine.textContent = activeLine;
+        wbTitle.textContent = cur.title;
+        wbSub.textContent = cur.sub;
+        wbEta.textContent = cur.eta;
+      }
+      updateHeroWatchBar(true);
+      if (!reducedMotion) {
+        setInterval(() => {
+          heroAlertStep = (heroAlertStep + 1) % 4;
+          updateHeroWatchBar(false);
+        }, 4600);
+      }
+
+      function drawMap() {
+        const w = canvas.getBoundingClientRect().width;
+        const h = canvas.getBoundingClientRect().height;
+        const sx = w / 960;
+        const sy = h / 560;
+        const px = (x) => x * sx;
+        const py = (y) => y * sy;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // 1. Subtle urban city block grid
+        ctx.strokeStyle = 'rgba(130, 196, 232, 0.065)';
+        ctx.lineWidth = 1;
+        for (let gx = 40; gx < 960; gx += 40) {
+          ctx.beginPath(); ctx.moveTo(px(gx), 0); ctx.lineTo(px(gx), h); ctx.stroke();
+        }
+        for (let gy = 40; gy < 560; gy += 40) {
+          ctx.beginPath(); ctx.moveTo(0, py(gy)); ctx.lineTo(w, py(gy)); ctx.stroke();
+        }
+
+        // 2. Stylized Av. Circunvalación ring
+        ctx.strokeStyle = 'rgba(255, 198, 128, 0.14)';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([8, 6]);
+        ctx.beginPath();
+        ctx.ellipse(px(475), py(275), px(395), py(235), 0.06, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // 3. Río Suquía flowing across Córdoba
+        const sq = MAP_DATA.suquia;
+        if (sq && sq.length > 1) {
+          ctx.strokeStyle = 'rgba(51, 204, 255, 0.24)';
+          ctx.lineWidth = 10;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+          ctx.beginPath();
+          sq.forEach((p, i) => { if (i === 0) ctx.moveTo(px(p[0]), py(p[1])); else ctx.lineTo(px(p[0]), py(p[1])); });
+          ctx.stroke();
+          ctx.strokeStyle = 'rgba(122, 228, 255, 0.35)';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+
+        // 4. Real GPS Bus Routes
+        routeKeys.forEach((k) => {
+          const r = preparedRoutes[k];
+          if (!r) return;
+          const isFocus = selectedLine === 'ALL' || selectedLine === k;
+          ctx.save();
+          ctx.strokeStyle = r.color;
+          ctx.globalAlpha = isFocus ? (selectedLine === k ? 0.95 : 0.65) : 0.15;
+          ctx.lineWidth = selectedLine === k ? 5 : 3;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+          if (isFocus) {
+            ctx.shadowColor = r.color;
+            ctx.shadowBlur = selectedLine === k ? 14 : 6;
+          }
+          ctx.beginPath();
+          r.pts.forEach((p, i) => { if (i === 0) ctx.moveTo(px(p[0]), py(p[1])); else ctx.lineTo(px(p[0]), py(p[1])); });
+          ctx.stroke();
+
+          // Stop dots along focused single route
+          if (selectedLine === k) {
+            ctx.shadowBlur = 0;
+            for (let i = 2; i < r.pts.length - 1; i += 4) {
+              ctx.fillStyle = '#FFFFFF';
+              ctx.beginPath();
+              ctx.arc(px(r.pts[i][0]), py(r.pts[i][1]), 3.5, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+          ctx.restore();
+        });
+
+        // 5. Real Córdoba Landmarks
+        ctx.font = '600 10.5px Poppins, sans-serif';
+        MAP_DATA.landmarks.forEach((lm) => {
+          const lx = px(lm.xy[0]), ly = py(lm.xy[1]);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+          ctx.beginPath(); ctx.arc(lx, ly, 4, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = 'rgba(218, 238, 250, 0.72)';
+          ctx.fillText(lm.name, lx + 8, ly + 3);
+        });
+
+        // 6. Optional BiciCba live green pins
+        if (showBici && MAP_DATA.bici) {
+          MAP_DATA.bici.forEach((st) => {
+            const bx = px(st.xy[0]), by = py(st.xy[1]);
+            ctx.fillStyle = 'rgba(39, 193, 113, 0.26)';
+            ctx.beginPath(); ctx.arc(bx, by, 12, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#27C171';
+            ctx.beginPath(); ctx.arc(bx, by, 6, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+          });
+        }
+
+        // 7. User Stop Radar Pin (pulsing blue GPS beacon)
+        const ux = px(userPin.x), uy = py(userPin.y);
+        const pulseR = 10 + ((mapPulse * 24) % 24);
+        const pulseA = Math.max(0, 0.55 - (pulseR - 10) / 42);
+        ctx.strokeStyle = `rgba(51, 204, 255, ${pulseA.toFixed(2)})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(ux, uy, pulseR, 0, Math.PI * 2); ctx.stroke();
+        ctx.fillStyle = '#33CCFF';
+        ctx.beginPath(); ctx.arc(ux, uy, 7, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        // 8. Live Moving Buses gliding along real routes!
+        fleet.forEach((bus) => {
+          const r = preparedRoutes[bus.line];
+          if (!r) return;
+          if (!reducedMotion) {
+            bus.t = (bus.t + bus.speed * bus.dir + 1) % 1;
+          }
+          const isVis = selectedLine === 'ALL' || selectedLine === bus.line;
+          if (!isVis) return;
+
+          const pos = sampleRoute(r, bus.t);
+          const bx = px(pos.x), by = py(pos.y);
+
+          // Soft beacon halo
+          ctx.fillStyle = r.color;
+          ctx.globalAlpha = 0.22;
+          ctx.beginPath(); ctx.arc(bx, by, 18, 0, Math.PI * 2); ctx.fill();
+          ctx.globalAlpha = 1;
+
+          // Direction chevron cone
+          const dirAng = bus.dir > 0 ? pos.ang : pos.ang + Math.PI;
+          ctx.save();
+          ctx.translate(bx, by);
+          ctx.rotate(dirAng);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.moveTo(17, 0);
+          ctx.lineTo(10, -4.5);
+          ctx.lineTo(10, 4.5);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+
+          // Rounded bus pill badge
+          ctx.fillStyle = r.color;
+          ctx.beginPath(); ctx.arc(bx, by, 12.5, 0, Math.PI * 2); ctx.fill();
+          ctx.strokeStyle = '#FFFFFF';
+          ctx.lineWidth = 2.2;
+          ctx.stroke();
+
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = '800 10px Poppins, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(bus.line, bx, by + 0.5);
+          ctx.textAlign = 'start';
+          ctx.textBaseline = 'alphabetic';
+        });
+
+        if (!reducedMotion) {
+          mapPulse += 0.016;
+          requestAnimationFrame(drawMap);
+        }
+      }
+      drawMap();
+
+      /* 5. SIMULADOR INTERACTIVO DE NOTIFICACIONES ESTILO UBER (#alertas) */
+      const SIM_STATES = [
+        {
+          state: 'wait', clock: '08:38', tag: 'SALÍ EN 4 MIN',
+          title: 'Salí en 4 min · Línea 20',
+          sub: 'Caminata estimada: 4 min hasta Patio Olmos. El bondi viene por Av. Colón y llega en 11 min.',
+          pct: 22, left: 'Av. Colón y Sagrada Familia', right: 'Patio Olmos', next: 'en 23 min'
+        },
+        {
+          state: 'go', clock: '08:42', tag: 'SALÍ AHORA',
+          title: '¡Es hora de salir! · Línea 20',
+          sub: 'Caminá tranquilo 4 min hasta Patio Olmos. Tu bondi viene por Av. Colón y esperás máx. 3 min.',
+          pct: 48, left: 'Av. Colón y Zípoli', right: 'Patio Olmos', next: 'en 19 min'
+        },
+        {
+          state: 'soon', clock: '08:47', tag: 'A 2 MIN',
+          title: 'Tu bondi está cerca · 2 min',
+          sub: 'Línea 20 (Int. 2418) viene por Bv. San Juan a 2 cuadras de tu parada.',
+          pct: 78, left: 'Bv. San Juan 450', right: 'Patio Olmos', next: 'en 14 min'
+        },
+        {
+          state: 'arr', clock: '08:49', tag: 'SUBITE AHORA',
+          title: '¡Llegando a tu parada! · Línea 20',
+          sub: 'Unidad Int. 2418 arribando a Patio Olmos en tu sentido de viaje. ¡Buen viaje!',
+          pct: 96, left: 'Arribando ahora', right: 'Patio Olmos', next: 'en 12 min'
+        }
+      ];
+
+      let simIdx = 1;
+      let autoPlay = !reducedMotion;
+      const simBtns = document.querySelectorAll('.sim-step-btn');
+      const uberPushCard = document.getElementById('uberPushCard');
+      const simClock = document.getElementById('simClock');
+      const pushTag = document.getElementById('pushTag');
+      const pushTitle = document.getElementById('pushTitle');
+      const pushSub = document.getElementById('pushSub');
+      const trackFill = document.getElementById('trackFill');
+      const trackBusPin = document.getElementById('trackBusPin');
+      const trackLeft = document.getElementById('trackLeft');
+      const trackRight = document.getElementById('trackRight');
+      const nextBusEta = document.getElementById('nextBusEta');
+      const autoPlayBtn = document.getElementById('autoPlayBtn');
+
+      function applySim(i) {
+        simIdx = i;
+        const st = SIM_STATES[i];
+        simBtns.forEach((b, idx) => b.classList.toggle('active', idx === i));
+        uberPushCard.dataset.state = st.state;
+        uberPushCard.classList.remove('pop');
+        void uberPushCard.offsetWidth;
+        uberPushCard.classList.add('pop');
+        simClock.textContent = st.clock;
+        pushTag.textContent = st.tag;
+        pushTitle.textContent = st.title;
+        pushSub.textContent = st.sub;
+        trackFill.style.width = st.pct + '%';
+        trackBusPin.style.left = st.pct + '%';
+        trackLeft.textContent = st.left;
+        trackRight.textContent = st.right;
+        nextBusEta.textContent = st.next;
+      }
+
+      simBtns.forEach((b) => {
+        b.addEventListener('click', () => {
+          autoPlay = false;
+          autoPlayBtn.classList.remove('playing');
+          autoPlayBtn.textContent = '▶ Reanudar simulación';
+          applySim(Number(b.dataset.sim));
+        });
+      });
+
+      autoPlayBtn.addEventListener('click', () => {
+        autoPlay = !autoPlay;
+        autoPlayBtn.classList.toggle('playing', autoPlay);
+        autoPlayBtn.textContent = autoPlay ? '⏸ Pausar simulación' : '▶ Reanudar simulación';
+      });
+      if (!autoPlay) {
+        autoPlayBtn.classList.remove('playing');
+        autoPlayBtn.textContent = '▶ Reanudar simulación';
+      }
+      applySim(1);
+      setInterval(() => {
+        if (autoPlay) applySim((simIdx + 1) % SIM_STATES.length);
+      }, 3800);
+
+      /* 6. Lightbox de captura real */
+      const realAppShot = document.getElementById('realAppShot');
+      const bondiLightbox = document.getElementById('bondiLightbox');
+      const lbClose = document.getElementById('lbClose');
+      const closeLb = () => { bondiLightbox.classList.remove('open'); document.body.style.overflow = ''; };
+      realAppShot.addEventListener('click', () => {
+        bondiLightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+      lbClose.addEventListener('click', closeLb);
+      bondiLightbox.addEventListener('click', (e) => { if (e.target === bondiLightbox) closeLb(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
+
+      /* 7. Scroll progress, Parallax chips, Scroll reveal & Kinetic KPIs */
+      const scrollProgress = document.getElementById('scrollProgress');
+      const ptChips = Array.from(document.querySelectorAll('.pt-chip')).map((el) => ({
+        el,
+        depth: parseFloat(el.dataset.depth || '0.2'),
+        topPct: parseFloat(el.style.top || '25') / 100
+      }));
+      ptChips.forEach(({ el }) => { el.style.top = '0px'; });
+
+      let targetY = window.scrollY, smoothY = window.scrollY;
+      window.addEventListener('scroll', () => {
+        targetY = window.scrollY;
+        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        if (scrollProgress) scrollProgress.style.transform = `scaleX(${Math.min(1, Math.max(0, targetY / max))})`;
+      }, { passive: true });
+
+      function parallaxLoop() {
+        smoothY += (targetY - smoothY) * 0.12;
+        const span = window.innerHeight + 100;
+        for (let i = 0; i < ptChips.length; i++) {
+          const it = ptChips[i];
+          const y = (((it.topPct * span - smoothY * it.depth) % span) + span) % span - 50;
+          it.el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+        }
+        requestAnimationFrame(parallaxLoop);
+      }
+      if (!reducedMotion) requestAnimationFrame(parallaxLoop);
+
+      const revSelectors = [
+        { sel: '.kpi-card', stagger: 70 },
+        { sel: '.section-head', stagger: 0 },
+        { sel: '.phone-frame', stagger: 0 },
+        { sel: '.sim-step-btn', stagger: 75 },
+        { sel: '.case-card', stagger: 90 },
+        { sel: '.real-app-card', stagger: 0 },
+        { sel: '.corridor-box, .bici-box', stagger: 90 },
+        { sel: '.cta-card', stagger: 0 },
+        { sel: '.next-case-band', stagger: 0 }
+      ];
+      const revEls = [];
+      revSelectors.forEach(({ sel, stagger }) => {
+        document.querySelectorAll(sel).forEach((el, idx) => {
+          el.classList.add('reveal');
+          if (stagger) el.style.setProperty('--rev-delay', `${idx * stagger}ms`);
+          revEls.push(el);
+        });
+      });
+      if (!reducedMotion && 'IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach((en) => {
+            if (en.isIntersecting) { en.target.classList.add('in-view'); obs.unobserve(en.target); }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -24px 0px' });
+        revEls.forEach((el) => obs.observe(el));
+      } else {
+        revEls.forEach((el) => el.classList.add('in-view'));
+      }
+
+      const kpiGrid = document.getElementById('kpiGrid');
+      if (!reducedMotion && kpiGrid && 'IntersectionObserver' in window) {
+        const kObs = new IntersectionObserver((entries) => {
+          entries.forEach((en) => {
+            if (en.isIntersecting) {
+              kpiGrid.querySelectorAll('[data-count]').forEach((el) => {
+                const target = Number(el.dataset.count);
+                const suf = el.dataset.suffix || '';
+                const start = performance.now();
+                const tick = (now) => {
+                  const t = Math.min(1, (now - start) / 850);
+                  const val = Math.round(target * (1 - Math.pow(1 - t, 3)));
+                  el.textContent = (val >= 1000 ? val.toLocaleString('es-AR') : String(val)) + suf;
+                  if (t < 1) requestAnimationFrame(tick);
+                };
+                requestAnimationFrame(tick);
+              });
+              kObs.disconnect();
+            }
+          });
+        }, { threshold: 0.35 });
+        kObs.observe(kpiGrid);
+      }
+    })();
+  </script>
+</body>
+</html>
