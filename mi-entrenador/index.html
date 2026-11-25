@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POPUPS · Caso 05 — Mi Entrenador | App de Entrenamiento, Alumnos y Cobros</title>
+  <meta name="description" content="Mi Entrenador por POPUPS: la plataforma comercial para personal trainers, estudios y gimnasios. Rutinas del día en tarjetas animadas, seguimiento de alumnos, agenda, equipo y cobros en un solo lugar." />
+  <meta name="theme-color" content="#070A08" />
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
+  <link rel="canonical" href="https://somospopups.github.io/Portfolio/mi-entrenador/" />
+
+  <!-- Open Graph / Social Share -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:site_name" content="POPUPS · Portfolio" />
+  <meta property="og:url" content="https://somospopups.github.io/Portfolio/mi-entrenador/" />
+  <meta property="og:title" content="Mi Entrenador — Entrena en serio. Gestioná sin caos. | POPUPS" />
+  <meta property="og:description" content="App para personal trainers, boxes y gimnasios: planes diarios en tarjetas, alumnos, agenda, equipo y cobros al día." />
+  <meta property="og:image" content="https://somospopups.github.io/Portfolio/mi-entrenador/assets/og-preview.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Mi Entrenador — Entrena en serio. Gestioná sin caos. Personal trainer y atleta usando la app en el gimnasio" />
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Mi Entrenador — Entrena en serio. Gestioná sin caos." />
+  <meta name="twitter:description" content="Rutinas en tarjetas interactivas, seguimiento de alumnos, equipo y cobros al día para entrenadores y gimnasios." />
+  <meta name="twitter:image" content="https://somospopups.github.io/Portfolio/mi-entrenador/assets/og-preview.jpg" />
+
+  <style>
+    @font-face { font-family:"Barlow Condensed"; src:url("./assets/barlow700.woff2") format("woff2"); font-weight:700; font-style:normal; font-display:swap; }
+    @font-face { font-family:"Barlow Condensed"; src:url("./assets/barlow800.woff2") format("woff2"); font-weight:800; font-style:normal; font-display:swap; }
+    @font-face { font-family:"Barlow Condensed"; src:url("./assets/barlow800i.woff2") format("woff2"); font-weight:800; font-style:italic; font-display:swap; }
+    @font-face { font-family:"DM Sans"; src:url("./assets/dmsans.woff2") format("woff2"); font-weight:400 700; font-style:normal; font-display:swap; }
+    @font-face { font-family:"Space Mono"; src:url("./assets/spacemono400.woff2") format("woff2"); font-weight:400; font-style:normal; font-display:swap; }
+    @font-face { font-family:"Space Mono"; src:url("./assets/spacemono700.woff2") format("woff2"); font-weight:700; font-style:normal; font-display:swap; }
+
+    :root {
+      --bg: #060907;
+      --bg-2: #0C120E;
+      --card: #111914;
+      --card-2: #17231B;
+      --ink: #F3F8F4;
+      --muted: #98AE9E;
+      --faint: #617868;
+      --line: rgba(123, 255, 59, 0.14);
+      --line-soft: rgba(243, 248, 244, 0.10);
+      --volt: #7BFF3B;
+      --green: #22E56D;
+      --green-deep: #14391E;
+      --amber: #FFB830;
+      --font-display: "Barlow Condensed", system-ui, sans-serif;
+      --font-sans: "DM Sans", system-ui, sans-serif;
+      --font-mono: "Space Mono", ui-monospace, monospace;
+      --max: 1220px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bg); }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 80% 0%, rgba(34, 229, 109, 0.10), transparent 44%),
+        linear-gradient(to right, rgba(123, 255, 59, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(123, 255, 59, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 48px 48px, 48px 48px;
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+    img { display: block; max-width: 100%; }
+
+    /* Top Volt Progress Bar */
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 3px;
+      z-index: 95;
+      background: rgba(255, 255, 255, 0.06);
+      pointer-events: none;
+    }
+    .scroll-progress-bar {
+      width: 100%; height: 100%;
+      transform-origin: left center;
+      transform: scaleX(0);
+      background: linear-gradient(90deg, var(--green) 0%, var(--volt) 100%);
+      box-shadow: 0 0 14px rgba(123, 255, 59, 0.65);
+      will-change: transform;
+    }
+
+    /* Parallax athletic grid telemetry in margins */
+    .parallax-gym {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .pg-tag {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: rgba(123, 255, 59, 0.22);
+      writing-mode: vertical-rl;
+      will-change: transform;
+    }
+    @media (max-width: 1320px) { .parallax-gym { display: none; } }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    /* ==================== TOPBAR ==================== */
+    .topbar-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 70;
+      background: rgba(6, 9, 7, 0.86);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .topbar {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .brand img {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(98, 196, 106, 0.4);
+    }
+    .brand-case {
+      padding: 4px 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(123, 255, 59, 0.08);
+      color: var(--volt);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .nav-links a {
+      padding: 6px 0;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0; height: 2px;
+      background: var(--volt);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.24s var(--ease);
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.04);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink);
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s var(--ease);
+    }
+    .nav-back:hover { background: var(--volt); color: #060907; border-color: var(--volt); transform: translateY(-1px); }
+
+    .nav-menu-btn {
+      display: none;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(123, 255, 59, 0.08);
+      color: var(--volt);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .mobile-drawer {
+      display: none;
+      flex-direction: column;
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--line);
+      padding: 10px 22px 18px;
+    }
+    .mobile-drawer.open { display: flex; }
+    .mobile-drawer a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 4px;
+      border-bottom: 1px solid var(--line-soft);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    .mobile-drawer a:last-child { border-bottom: 0; }
+    .mobile-drawer a.drawer-accent { color: var(--volt); }
+
+    /* Shared UI primitives */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(123, 255, 59, 0.32);
+      background: rgba(123, 255, 59, 0.09);
+      color: var(--volt);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+    .eyebrow i {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--volt);
+      box-shadow: 0 0 12px var(--volt);
+      animation: voltPulse 2s ease-in-out infinite;
+    }
+    @keyframes voltPulse {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(123, 255, 59, 0.25); }
+      50%      { box-shadow: 0 0 0 7px rgba(123, 255, 59, 0.05); }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 52px;
+      padding: 0 24px;
+      border-radius: 999px;
+      border: 1.5px solid transparent;
+      font-size: 14px;
+      font-weight: 700;
+      transition: transform 0.22s var(--ease), box-shadow 0.22s, background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .btn-volt {
+      background: var(--volt);
+      color: #050906;
+      box-shadow: 0 14px 34px rgba(123, 255, 59, 0.30);
+    }
+    .btn-volt:hover {
+      background: #9BFF6B;
+      transform: translateY(-2px);
+      box-shadow: 0 18px 42px rgba(123, 255, 59, 0.44);
+    }
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.22);
+      color: #fff;
+      backdrop-filter: blur(12px);
+    }
+    .btn-outline:hover {
+      border-color: var(--volt);
+      color: var(--volt);
+      transform: translateY(-2px);
+    }
+
+    /* ==================== HERO — CINEMATIC FULL-BLEED GYM STRENGTH ==================== */
+    .hero {
+      position: relative;
+      min-height: 760px;
+      padding: 68px 0 64px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero-bg-photo {
+      position: absolute;
+      inset: -4% 0;
+      z-index: 0;
+      background: url("./assets/photo-hero-gym.webp") center 28% / cover no-repeat;
+      transform: scale(1.04);
+      will-change: transform;
+    }
+    .hero-bg-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(90deg, rgba(6, 9, 7, 0.94) 0%, rgba(6, 9, 7, 0.78) 48%, rgba(6, 9, 7, 0.46) 100%),
+        linear-gradient(180deg, rgba(6, 9, 7, 0.35) 0%, rgba(6, 9, 7, 0.15) 55%, #060907 100%);
+    }
+    .hero-grid {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 44px;
+      align-items: center;
+    }
+    .hero h1 {
+      margin: 20px 0 16px;
+      font-family: var(--font-display);
+      font-size: clamp(60px, 8.2vw, 114px);
+      font-weight: 800;
+      line-height: 0.88;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--volt);
+      text-shadow: 0 0 42px rgba(123, 255, 59, 0.28);
+    }
+    .hero-lead {
+      margin: 0 0 26px;
+      max-width: 560px;
+      font-size: 16.5px;
+      line-height: 1.62;
+      color: #D2E0D5;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .hero-proof {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .hero-proof strong { color: var(--volt); }
+
+    /* Hero Floating Real Phone Stage */
+    .hero-device-stage {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      perspective: 1100px;
+    }
+    .hero-phone {
+      width: min(300px, 82vw);
+      padding: 11px;
+      border-radius: 38px;
+      background: linear-gradient(155deg, #1F3024, #0A100C);
+      border: 2px solid rgba(123, 255, 59, 0.42);
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.68), 0 0 48px rgba(34, 229, 109, 0.18);
+      transform-style: preserve-3d;
+      will-change: transform;
+      cursor: zoom-in;
+    }
+    .hero-phone img {
+      width: 100%;
+      border-radius: 28px;
+    }
+    .hero-float-badge {
+      position: absolute;
+      padding: 11px 15px;
+      border-radius: 18px;
+      background: rgba(11, 18, 13, 0.90);
+      border: 1px solid rgba(123, 255, 59, 0.34);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+      animation: floatStat 4.2s ease-in-out infinite;
+    }
+    .hero-float-badge.top-left { left: -8px; top: 14%; }
+    .hero-float-badge.bot-right { right: -8px; bottom: 12%; animation-delay: -2.1s; }
+    .hero-float-badge small {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--volt);
+    }
+    .hero-float-badge b {
+      display: block;
+      font-size: 14.5px;
+      color: #fff;
+      margin-top: 2px;
+    }
+    @keyframes floatStat {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-7px); }
+    }
+
+    /* Kinetic Athletic Ticker Strip */
+    .ticker-band {
+      overflow: hidden;
+      background: var(--volt);
+      color: #050906;
+      padding: 12px 0;
+      border-bottom: 1px solid #050906;
+    }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      gap: 32px;
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      animation: tickerMove 26s linear infinite;
+    }
+    @keyframes tickerMove {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ==================== SHARED SECTIONS ==================== */
+    .section { padding: 88px 0; }
+    .section-alt {
+      background: var(--bg-2);
+      border-top: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 42px;
+    }
+    .section-head h2 {
+      margin: 14px 0 0;
+      font-family: var(--font-display);
+      font-size: clamp(42px, 5.6vw, 72px);
+      font-weight: 800;
+      line-height: 0.92;
+      text-transform: uppercase;
+      letter-spacing: -0.005em;
+      color: #fff;
+    }
+    .section-head h2 em { font-style: italic; color: var(--volt); }
+    .section-head p {
+      margin: 0;
+      font-size: 15.5px;
+      line-height: 1.62;
+      color: var(--muted);
+    }
+
+    /* ==================== #ENTRENO-VIVO — INTERACTIVE WORKOUT DECK + REAL ATHLETE ==================== */
+    .live-workout-grid {
+      display: grid;
+      grid-template-columns: 1.02fr 0.98fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+    .athlete-photo-card {
+      position: relative;
+      border-radius: 30px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      min-height: 500px;
+      background: #0B110D;
+    }
+    .athlete-photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease);
+    }
+    .athlete-photo-card:hover img { transform: scale(1.035); }
+    .photo-hud-bottom {
+      position: absolute;
+      left: 18px; right: 18px; bottom: 18px;
+      padding: 18px 20px;
+      border-radius: 22px;
+      background: rgba(7, 12, 9, 0.88);
+      border: 1px solid rgba(123, 255, 59, 0.30);
+      backdrop-filter: blur(14px);
+    }
+    .photo-hud-bottom small {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--volt);
+      margin-bottom: 4px;
+    }
+    .photo-hud-bottom strong { display: block; font-size: 17px; color: #fff; margin-bottom: 4px; }
+    .photo-hud-bottom p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.48; }
+
+    /* Interactive Live Workout Card Deck */
+    .workout-deck {
+      border-radius: 30px;
+      background: var(--card);
+      border: 1.5px solid rgba(123, 255, 59, 0.28);
+      padding: 26px 26px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+    }
+    .deck-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .deck-title-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--volt);
+    }
+    .deck-progress-pill {
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(123, 255, 59, 0.12);
+      border: 1px solid rgba(123, 255, 59, 0.32);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--volt);
+    }
+    .deck-bar {
+      height: 7px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+    .deck-bar-fill {
+      height: 100%;
+      width: 25%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--green), var(--volt));
+      transition: width 0.4s var(--ease);
+    }
+
+    .ex-stage {
+      position: relative;
+      height: 230px;
+      border-radius: 22px;
+      background: linear-gradient(160deg, #E8F5EC 0%, #D9ECDF 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 14px;
+    }
+    .ex-stage img {
+      max-height: 202px;
+      width: auto;
+      object-fit: contain;
+      transition: opacity 0.25s ease;
+    }
+    .ex-muscle-pill {
+      position: absolute;
+      top: 12px; left: 12px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: #0A140D;
+      color: var(--volt);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .ex-pose-pill {
+      position: absolute;
+      top: 12px; right: 12px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(10, 20, 13, 0.78);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      font-weight: 700;
+    }
+
+    .ex-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .ex-info-row h3 {
+      margin: 0 0 4px;
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 0.95;
+      text-transform: uppercase;
+    }
+    .ex-info-row p { margin: 0; font-size: 13px; color: var(--muted); }
+    .ex-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+    .ex-metric {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: var(--bg-2);
+      border: 1px solid var(--line-soft);
+    }
+    .ex-metric small {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .ex-metric b { display: block; font-size: 15px; color: #fff; margin-top: 2px; }
+
+    .ex-controls {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+    .ex-nav-btn {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      border: 1px solid var(--line-soft);
+      background: var(--bg-2);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .ex-nav-btn:hover { border-color: var(--volt); color: var(--volt); }
+
+    .ex-done-btn {
+      min-height: 48px;
+      border-radius: 14px;
+      border: 0;
+      background: var(--volt);
+      color: #050906;
+      font-weight: 800;
+      font-size: 13.5px;
+      padding: 0 18px;
+      transition: transform 0.18s var(--ease), background 0.2s;
+    }
+    .ex-done-btn:hover { background: #9BFF6B; transform: translateY(-1px); }
+    .ex-done-btn.completed { background: var(--green); color: #05160B; }
+
+    .timer-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 11px 14px;
+      border-radius: 14px;
+      background: var(--bg-2);
+      border: 1px solid var(--line-soft);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+    }
+    .timer-strip strong { color: var(--volt); font-size: 15px; }
+    .timer-btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(123, 255, 59, 0.10);
+      color: var(--volt);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+    }
+    .repdb-attr {
+      font-size: 11px;
+      color: var(--faint);
+      text-align: right;
+    }
+
+    /* ==================== #ROLES — 3-LEVEL REAL PRODUCT SHOWCASE ==================== */
+    .role-tabs {
+      display: inline-flex;
+      gap: 6px;
+      padding: 6px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .role-tab {
+      border: 0;
+      border-radius: 999px;
+      padding: 11px 20px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      transition: all 0.22s var(--ease);
+    }
+    .role-tab.active {
+      background: var(--volt);
+      color: #050906;
+      box-shadow: 0 8px 22px rgba(123, 255, 59, 0.28);
+    }
+
+    .role-stage {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 26px;
+      align-items: center;
+      padding: 32px;
+      border-radius: 30px;
+      background: var(--card);
+      border: 1px solid var(--line-soft);
+    }
+    .role-copy h3 {
+      margin: 10px 0 12px;
+      font-family: var(--font-display);
+      font-size: clamp(32px, 3.8vw, 48px);
+      font-weight: 800;
+      line-height: 0.94;
+      text-transform: uppercase;
+    }
+    .role-copy p {
+      margin: 0 0 18px;
+      font-size: 15px;
+      line-height: 1.62;
+      color: var(--muted);
+    }
+    .role-bullets {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .role-bullets li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #DFECE2;
+    }
+    .role-bullets li::before {
+      content: "✓";
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(123, 255, 59, 0.14);
+      color: var(--volt);
+      font-size: 12px; font-weight: 800;
+      display: grid; place-items: center; flex: none;
+    }
+
+    .role-shots {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+    .role-shots.desktop-pair { grid-template-columns: 1fr; }
+    .shot-frame {
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(123, 255, 59, 0.25);
+      background: #080E0A;
+      cursor: zoom-in;
+      position: relative;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45);
+    }
+    .shot-frame img {
+      width: 100%;
+      height: auto;
+      max-height: 410px;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform 0.38s var(--ease);
+    }
+    .shot-frame:hover img { transform: scale(1.03); }
+    .shot-cap {
+      padding: 10px 14px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--volt);
+      background: rgba(8, 14, 10, 0.94);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* ==================== #NEGOCIO — COACH ACTION PHOTO + ROI CALCULATOR ==================== */
+    .business-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+    .roi-card {
+      padding: 34px 32px;
+      border-radius: 30px;
+      background: linear-gradient(160deg, #121D15 0%, #0A110C 100%);
+      border: 1.5px solid rgba(123, 255, 59, 0.28);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 22px;
+    }
+    .roi-card h3 {
+      margin: 8px 0 8px;
+      font-family: var(--font-display);
+      font-size: clamp(32px, 3.6vw, 44px);
+      line-height: 0.95;
+      text-transform: uppercase;
+    }
+    .roi-card p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+    .roi-slider-box {
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(6, 9, 7, 0.72);
+      border: 1px solid var(--line-soft);
+    }
+    .roi-slider-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 12px;
+    }
+    .roi-slider-top span {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .roi-slider-top strong {
+      font-family: var(--font-display);
+      font-size: 36px;
+      color: var(--volt);
+      line-height: 1;
+    }
+    input[type="range"].gym-range {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 99px;
+      background: #1D2E22;
+      outline: none;
+    }
+    input[type="range"].gym-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--volt);
+      border: 3px solid #060907;
+      box-shadow: 0 0 18px rgba(123, 255, 59, 0.75);
+      cursor: ew-resize;
+    }
+    .roi-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .roi-stat {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(123, 255, 59, 0.06);
+      border: 1px solid var(--line);
+    }
+    .roi-stat small {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .roi-stat b {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 32px;
+      color: #fff;
+      line-height: 1;
+    }
+    .roi-stat b span { color: var(--volt); }
+
+    /* ==================== #PLANES — COMMERCIAL IMPLEMENTATION TIERS ==================== */
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .plan-card {
+      padding: 32px 26px;
+      border-radius: 28px;
+      background: var(--card);
+      border: 1px solid var(--line-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: transform 0.25s var(--ease), border-color 0.25s;
+    }
+    .plan-card:hover { transform: translateY(-4px); border-color: rgba(123, 255, 59, 0.45); }
+    .plan-card.featured {
+      background: linear-gradient(165deg, #172B1C 0%, #0D1710 100%);
+      border: 2px solid var(--volt);
+      box-shadow: 0 24px 60px rgba(34, 229, 109, 0.14);
+    }
+    .plan-kicker {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--volt);
+    }
+    .plan-card h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 34px;
+      line-height: 0.96;
+      text-transform: uppercase;
+    }
+    .plan-card p { margin: 0; font-size: 14px; line-height: 1.56; color: var(--muted); }
+    .plan-list {
+      list-style: none;
+      margin: 4px 0 auto;
+      padding: 14px 0 0;
+      border-top: 1px solid var(--line-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 13.5px;
+      color: #DCE9DF;
+    }
+    .plan-list li::before { content: "▸ "; color: var(--volt); font-weight: 700; }
+
+    /* ==================== #CASO — HYBRID PORTFOLIO CASE STUDY ==================== */
+    .case-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+    }
+    .case-card {
+      padding: 34px 30px;
+      border-radius: 28px;
+      background: var(--card);
+      border: 1px solid var(--line-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .case-card h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3vw, 38px);
+      line-height: 0.96;
+      text-transform: uppercase;
+    }
+    .case-card p { margin: 0; font-size: 14.5px; line-height: 1.65; color: var(--muted); }
+    .case-facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .case-fact {
+      padding: 14px 15px;
+      border-radius: 16px;
+      background: var(--bg-2);
+      border: 1px solid var(--line-soft);
+    }
+    .case-fact small {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 4px;
+    }
+    .case-fact b { display: block; font-size: 15.5px; color: #fff; }
+    .case-list {
+      list-style: none;
+      margin: 4px 0 0;
+      padding: 0;
+      border-top: 1px solid var(--line-soft);
+    }
+    .case-list li {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 10px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--line-soft);
+      font-size: 13.5px;
+      line-height: 1.48;
+      color: #DDEAE0;
+    }
+    .case-list li b { font-family: var(--font-mono); font-size: 11px; color: var(--volt); }
+    .tech-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: auto;
+      padding-top: 6px;
+    }
+    .tech-chips span {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(123, 255, 59, 0.08);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--volt);
+    }
+
+    /* ==================== #CONTACTO & SIGUIENTE CASO CIRCULAR (05 -> 06 OFICINA VIRTUAL) ==================== */
+    .cta-box {
+      padding: 46px 42px;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 86% 15%, rgba(123, 255, 59, 0.18), transparent 46%),
+        var(--card);
+      border: 1.5px solid rgba(123, 255, 59, 0.35);
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 32px;
+      align-items: center;
+    }
+    .cta-box h2 {
+      margin: 12px 0 10px;
+      font-family: var(--font-display);
+      font-size: clamp(38px, 4.8vw, 58px);
+      line-height: 0.92;
+      text-transform: uppercase;
+    }
+    .cta-box h2 em { font-style: italic; color: var(--volt); }
+    .cta-box p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
+    .cta-actions { display: flex; flex-direction: column; gap: 10px; }
+    .cta-meta { font-family: var(--font-mono); font-size: 10.5px; color: var(--faint); }
+
+    .next-case-band {
+      margin-top: 52px;
+      padding: 46px 40px;
+      border-radius: 34px;
+      color: #fff;
+      background: linear-gradient(135deg, #1b183a 0%, #3d3572 52%, #7d4774 100%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      position: relative;
+      overflow: hidden;
+    }
+    .next-case-band::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 85% 22%, rgba(255, 215, 111, 0.24), transparent 46%);
+    }
+    .next-top {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .next-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #FFE48F;
+    }
+    .next-kicker::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #C8F810; }
+    .next-prev {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.78);
+      transition: color 0.2s;
+    }
+    .next-prev:hover { color: #C8F810; }
+    .next-inner {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 26px;
+      flex-wrap: wrap;
+    }
+    .next-copy { max-width: 600px; }
+    .next-copy h2 {
+      margin: 0 0 10px;
+      font-family: var(--font-display);
+      font-size: clamp(36px, 4.8vw, 58px);
+      line-height: 0.94;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .next-copy p { margin: 0; font-size: 15px; line-height: 1.56; color: rgba(255, 255, 255, 0.84); }
+    .next-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-next-lime { background: #C8F810; color: #080C0A; }
+    .btn-next-lime:hover { background: #DCFF4F; transform: translateY(-2px); }
+    .btn-next-ghost {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.34);
+      color: #fff;
+    }
+    .btn-next-ghost:hover { border-color: #fff; background: rgba(255, 255, 255, 0.18); transform: translateY(-2px); }
+
+    /* Footer */
+    .footer {
+      padding: 28px 0 42px;
+      margin-top: 26px;
+      border-top: 1px solid var(--line-soft);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .footer-links { display: flex; gap: 18px; flex-wrap: wrap; }
+    .footer-links a:hover { color: var(--volt); }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background: rgba(4, 7, 5, 0.92);
+      backdrop-filter: blur(14px);
+    }
+    .lightbox.open { display: grid; }
+    .lightbox-box {
+      width: min(1040px, 95vw);
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+    .lightbox-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--line-soft);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--volt);
+    }
+    .lightbox-close {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+    .lightbox-close:hover { background: var(--volt); color: #050906; }
+    .lightbox-body { padding: 20px; display: grid; place-items: center; background: #050806; }
+    .lightbox-body img { max-height: 75vh; width: auto; border-radius: 14px; }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      transition-delay: var(--rev-delay, 0ms);
+    }
+    .reveal.in-view { opacity: 1; transform: none; }
+
+    @media (max-width: 960px) {
+      .nav-links, .nav-back { display: none; }
+      .nav-menu-btn { display: inline-flex; }
+      .hero { min-height: 0; padding: 48px 0 54px; }
+      .hero-grid, .section-head, .live-workout-grid, .role-stage, .business-grid, .plans-grid, .case-grid, .cta-box {
+        grid-template-columns: 1fr;
+      }
+      .hero-float-badge { display: none; }
+      .athlete-photo-card { min-height: 360px; }
+    }
+    @media (max-width: 620px) {
+      .container, .topbar { width: calc(100% - 26px); }
+      .section { padding: 60px 0; }
+      .role-shots, .case-facts, .roi-stats { grid-template-columns: 1fr; }
+      .cta-box, .next-case-band, .role-stage { padding: 26px 20px; border-radius: 24px; }
+      .hero-actions .btn, .next-actions .btn { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .ticker-track, .hero-float-badge, .eyebrow i { animation: none !important; }
+      .parallax-gym { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" id="scrollProgress"></div></div>
+
+  <div class="parallax-gym" aria-hidden="true">
+    <span class="pg-tag" data-depth="0.18" style="left:1.3%;top:20%">STRENGTH // MI ENTRENADOR</span>
+    <span class="pg-tag" data-depth="0.25" style="right:1.3%;top:32%">CASO 05 // PERFORMANCE OS</span>
+    <span class="pg-tag" data-depth="0.20" style="left:1.3%;top:68%">3 NIVELES // RLS CLOUD</span>
+  </div>
+
+  <!-- ==================== NAVEGACIÓN ==================== -->
+  <div class="topbar-wrap" id="top">
+    <header class="topbar">
+      <a href="#top" class="brand">
+        <img src="./assets/icon.svg" alt="Icono Mi Entrenador" />
+        <span>Mi Entrenador</span>
+        <span class="brand-case">CASO 05</span>
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <ul class="nav-links">
+          <li><a href="#entreno-vivo">Entreno vivo</a></li>
+          <li><a href="#roles">3 niveles</a></li>
+          <li><a href="#negocio">Tu ahorro</a></li>
+          <li><a href="#planes">Planes</a></li>
+          <li><a href="#caso">El caso</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-right">
+        <a href="../#proyectos" class="nav-back">← Volver a proyectos</a>
+        <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="mobileDrawer">☰ MENÚ</button>
+      </div>
+    </header>
+
+    <nav class="mobile-drawer" id="mobileDrawer" aria-label="Menú móvil">
+      <a href="#entreno-vivo"><span>01 · Simulador de rutina en vivo</span><span>→</span></a>
+      <a href="#roles"><span>02 · Dueño, Profe y Alumno</span><span>→</span></a>
+      <a href="#negocio"><span>03 · Impacto en tu negocio</span><span>→</span></a>
+      <a href="#planes"><span>04 · Implementación y venta</span><span>→</span></a>
+      <a href="#caso"><span>05 · Caso de estudio POPUPS</span><span>→</span></a>
+      <a href="../#proyectos" class="drawer-accent"><span>← Volver a proyectos POPUPS</span><span>↗</span></a>
+    </nav>
+  </div>
+
+  <main>
+    <!-- ==================== HERO — FUERZA, GIMNASIO REAL Y APP EN MANO ==================== -->
+    <section class="hero" id="inicio">
+      <div class="hero-bg-photo" id="heroBgPhoto" aria-hidden="true"></div>
+      <div class="hero-bg-overlay" aria-hidden="true"></div>
+
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow"><i aria-hidden="true"></i>CASO 05 · FITNESS · PERSONAL TRAINERS &amp; GYMS</span>
+          <h1>Entrena<br /><em>en serio.</em><br />Gestioná sin caos.</h1>
+          <p class="hero-lead">
+            <strong>Mi Entrenador</strong> es la plataforma lista para implementar en tu estudio, box o equipo de entrenamiento: tus alumnos abren su <strong>plan del día en tarjetas guiadas</strong>, mientras vos controlás rutinas, asistencias, equipo y <strong>cobros mensuales al día</strong>.
+          </p>
+          <div class="hero-actions">
+            <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20POPUPS!%20Vi%20Mi%20Entrenador%20y%20quiero%20implementar%20la%20app%20para%20mis%20alumnos%20o%20gimnasio." class="btn btn-volt" target="_blank" rel="noopener">💬 Quiero Mi Entrenador para mi gym ↗</a>
+            <a href="#entreno-vivo" class="btn btn-outline">▶ Probar rutina en vivo ↓</a>
+          </div>
+          <div class="hero-proof">
+            <span><strong>01</strong> Sin planillas ni PDFs</span>
+            <span><strong>02</strong> 3 niveles: Dueño · Profe · Alumno</span>
+            <span><strong>03</strong> Personalizable con tu marca</span>
+          </div>
+        </div>
+
+        <div class="hero-device-stage" id="heroStage">
+          <div class="hero-float-badge top-left">
+            <small>ACTIVIDAD EN VIVO</small>
+            <b>⚡ 86 sesiones esta semana</b>
+          </div>
+          <div class="hero-phone" id="heroPhone" data-zoom-src="./assets/app-hoy.webp" data-zoom-title="Mi Entrenador · Vista diaria del alumno: Hoy toca Fuerza A">
+            <img src="./assets/app-hoy.webp" alt="Pantalla real de Mi Entrenador con la rutina diaria del alumno Fuerza A" />
+          </div>
+          <div class="hero-float-badge bot-right">
+            <small>COBROS CLAROS</small>
+            <b>✓ Membresías y vencimientos al día</b>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TICKER CINÉTICO -->
+    <div class="ticker-band" aria-hidden="true">
+      <div class="ticker-track">
+        <span>FUERZA</span><span>·</span><span>HIPERTROFIA</span><span>·</span><span>TARJETAS GUIADAS</span><span>·</span><span>COBROS AL DÍA</span><span>·</span><span>3 NIVELES DE ACCESO</span><span>·</span><span>SIN EXCEL NI PDFS</span><span>·</span><span>TU MARCA EN EL GYM</span><span>·</span>
+        <span>FUERZA</span><span>·</span><span>HIPERTROFIA</span><span>·</span><span>TARJETAS GUIADAS</span><span>·</span><span>COBROS AL DÍA</span><span>·</span><span>3 NIVELES DE ACCESO</span><span>·</span><span>SIN EXCEL NI PDFS</span><span>·</span><span>TU MARCA EN EL GYM</span><span>·</span>
+      </div>
+    </div>
+
+    <!-- ==================== #ENTRENO-VIVO — PERSONAS REALES + MAZO INTERACTIVO ==================== -->
+    <section class="section" id="entreno-vivo">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow"><i aria-hidden="true"></i>EN MEDIO DE LA SERIE · DEMO INTERACTIVA</span>
+            <h2>Diseñada para usarse <em>con magnesio en las manos.</em></h2>
+          </div>
+          <p>
+            Cuando el alumno está frente a la barra no quiere leer un PDF diminuto. Abre Mi Entrenador, ve qué ejercicio toca, controla su descanso y marca cada serie en un toque. Probá el mazo real acá mismo.
+          </p>
+        </div>
+
+        <div class="live-workout-grid">
+          <div class="athlete-photo-card">
+            <img src="./assets/photo-athlete-phone.webp" alt="Atleta real en gimnasio revisando su rutina de fuerza en el celular entre series" loading="lazy" />
+            <div class="photo-hud-bottom">
+              <small>EXPERIENCIA EN PISO · MÓVIL FIRST</small>
+              <strong>Cero fricción entre serie y serie</strong>
+              <p>Controles amplios, demostraciones animadas de técnica y registro inmediato de cumplimiento para sostener la constancia.</p>
+            </div>
+          </div>
+
+          <!-- MAZO INTERACTIVO REAL CON POSES START ↔ PEAK DE REPDB -->
+          <div class="workout-deck" aria-label="Simulador interactivo de rutina diaria Mi Entrenador">
+            <div>
+              <div class="deck-top">
+                <span class="deck-title-tag">HOY TOCA: FUERZA A · BLOQUE PRINCIPAL</span>
+                <span class="deck-progress-pill" id="deckProgressPill">0 / 4 COMPLETADOS</span>
+              </div>
+              <div class="deck-bar" style="margin-top:10px"><div class="deck-bar-fill" id="deckBarFill" style="width:0%"></div></div>
+            </div>
+
+            <div class="ex-stage">
+              <span class="ex-muscle-pill" id="exMuscle">PIERNAS · CUÁDRICEPS</span>
+              <span class="ex-pose-pill" id="exPosePill">POSE INICIAL</span>
+              <img id="exImg" src="./assets/goblet-squat-start.webp" alt="Demostración de ejercicio Sentadilla Goblet" />
+            </div>
+
+            <div class="ex-info-row">
+              <div>
+                <h3 id="exName">Sentadilla Goblet</h3>
+                <p id="exNote">Pecho alto, bajá controlado 3 segundos y empujá fuerte desde talones.</p>
+              </div>
+            </div>
+
+            <div class="ex-metrics">
+              <div class="ex-metric"><small>Series × Reps</small><b id="exSets">4 × 10</b></div>
+              <div class="ex-metric"><small>Descanso</small><b id="exRest">01:30</b></div>
+              <div class="ex-metric"><small>Objetivo</small><b id="exGoal">Fuerza base</b></div>
+            </div>
+
+            <div class="ex-controls">
+              <button type="button" class="ex-nav-btn" id="exPrev" aria-label="Ejercicio anterior">←</button>
+              <button type="button" class="ex-done-btn" id="exDoneBtn">✓ Marcar ejercicio hecho</button>
+              <button type="button" class="ex-nav-btn" id="exNext" aria-label="Siguiente ejercicio">→</button>
+            </div>
+
+            <div class="timer-strip">
+              <span>DESCANSO EN VIVO: <strong id="restTimerDisplay">01:30</strong></span>
+              <div style="display:flex;gap:6px">
+                <button type="button" class="timer-btn" id="restStartBtn">▶ Iniciar</button>
+                <button type="button" class="timer-btn" id="restResetBtn">↺ Reset</button>
+              </div>
+            </div>
+
+            <div class="repdb-attr">Ilustraciones de ejercicios: RepDB · Transición automática de técnica</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #ROLES — 3 NIVELES REALES (DUEÑO / PROFE / ALUMNO) ==================== -->
+    <section class="section section-alt" id="roles">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">ARQUITECTURA MULTI-ROL</span>
+            <h2>Una app. <em>Tres niveles</em> perfectamente separados.</h2>
+          </div>
+          <p>
+            Cada persona ve exactamente lo que necesita: el dueño controla facturación y equipo, cada entrenador sigue a sus alumnos y cada alumno se enfoca en entrenar y superarse.
+          </p>
+        </div>
+
+        <div class="role-tabs" role="tablist" aria-label="Elegir nivel de usuario">
+          <button type="button" class="role-tab active" data-role="dueno" role="tab" aria-selected="true">01 · Dueño / Gimnasio</button>
+          <button type="button" class="role-tab" data-role="profe" role="tab" aria-selected="false">02 · Entrenador / Coach</button>
+          <button type="button" class="role-tab" data-role="alumno" role="tab" aria-selected="false">03 · Alumno entrenando</button>
+        </div>
+
+        <div class="role-stage" id="roleStage">
+          <div class="role-copy">
+            <span class="eyebrow" id="roleEyebrow">NIVEL 01 · CONTROL TOTAL DEL ESPACIO</span>
+            <h3 id="roleTitle">Pulso del negocio, equipo y cobros sin perseguir a nadie.</h3>
+            <p id="roleDesc">
+              Mirás de un vistazo alumnos activos, sesiones completadas de la semana, cuotas cobradas, vencimientos próximos y alertas pendientes, con exportación CSV lista en un clic.
+            </p>
+            <ul class="role-bullets" id="roleBullets"></ul>
+          </div>
+
+          <div class="role-shots desktop-pair" id="roleShots"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #NEGOCIO — ENTRENO REAL + CALCULADORA DE IMPACTO ==================== -->
+    <section class="section" id="negocio">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow"><i aria-hidden="true"></i>PARA ESCALAR TU GYM O NEGOCIO FITNESS</span>
+            <h2>Menos planillas. <em>Más alumnos</em> y mejor retención.</h2>
+          </div>
+          <p>
+            Cada hora que perdés armando PDFs o revisando quién pagó la cuota es una hora que no estás entrenando ni sumando clientes nuevos. Calculá cuánto orden ganás en tu espacio.
+          </p>
+        </div>
+
+        <div class="business-grid">
+          <div class="athlete-photo-card">
+            <img src="./assets/photo-coach-action.webp" alt="Entrenador profesional guiando una sentadilla con pesa rusa mientras sigue la sesión desde su tablet" loading="lazy" />
+            <div class="photo-hud-bottom">
+              <small>COACHING PRESENCIAL Y ONLINE</small>
+              <strong>Profesionalizá la imagen de tu servicio desde el día 1</strong>
+              <p>Tus alumnos perciben el salto de calidad al instante: pasan de recibir fotos por chat a tener su propia app con tu sello.</p>
+            </div>
+          </div>
+
+          <div class="roi-card">
+            <div>
+              <span class="eyebrow">CALCULADORA DE OPERACIÓN</span>
+              <h3>Medí el tiempo que recuperás cada semana.</h3>
+              <p>Deslizá según la cantidad actual de alumnos en tu equipo, box o estudio:</p>
+            </div>
+
+            <div class="roi-slider-box">
+              <div class="roi-slider-top">
+                <span>Alumnos activos</span>
+                <strong id="roiAlumnosVal">35 alumnos</strong>
+              </div>
+              <input type="range" id="roiSlider" class="gym-range" min="10" max="150" step="5" value="35" />
+            </div>
+
+            <div class="roi-stats">
+              <div class="roi-stat">
+                <small>Tiempo administrativo ahorrado</small>
+                <b id="roiHours"><span>9 h</span> / sem</b>
+              </div>
+              <div class="roi-stat">
+                <small>Alertas de cuotas controladas</small>
+                <b id="roiCobros"><span>100%</span> al día</b>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="font-family:var(--font-mono);font-size:11px;color:var(--volt)" id="roiTierRec">MODALIDAD RECOMENDADA: ESTUDIO / EQUIPO DE PROFES</div>
+              <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20POPUPS!%20Tengo%2035%20alumnos%20y%20quiero%20una%20demo%20comercial%20de%20Mi%20Entrenador." id="roiWaBtn" class="btn btn-volt" target="_blank" rel="noopener">💬 Pedir propuesta para mis 35 alumnos ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #PLANES — MODALIDADES COMERCIALES ==================== -->
+    <section class="section section-alt" id="planes">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">LISTA PARA IMPLEMENTAR EN TU ESPACIO</span>
+            <h2>Elegí cómo llevar <em>Mi Entrenador</em> a tus alumnos.</h2>
+          </div>
+          <p>
+            Adaptamos la plataforma a tu escala actual: desde un personal trainer independiente hasta un gimnasio con equipo de entrenadores y marca propia.
+          </p>
+        </div>
+
+        <div class="plans-grid">
+          <article class="plan-card">
+            <span class="plan-kicker">01 · PERSONAL TRAINER</span>
+            <h3>Profe Independiente</h3>
+            <p>Ideal para entrenadores que quieren dejar atrás las planillas y entregar una experiencia profesional desde el celular.</p>
+            <ul class="plan-list">
+              <li>Planes diarios en mazo de tarjetas con guía visual</li>
+              <li>Ficha de alumnos, historial y rachas de progreso</li>
+              <li>Control de cuotas, vencimientos y alertas</li>
+              <li>Acceso instalable como PWA en cualquier teléfono</li>
+            </ul>
+            <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20POPUPS!%20Me%20interesa%20Mi%20Entrenador%20en%20modalidad%20Profe%20Independiente." class="btn btn-outline" target="_blank" rel="noopener">Consultar por WhatsApp ↗</a>
+          </article>
+
+          <article class="plan-card featured">
+            <span class="plan-kicker">02 · MÁS ELEGIDO · ESTUDIOS &amp; BOXES</span>
+            <h3>Estudio y Equipo</h3>
+            <p>Pensado para espacios con varios entrenadores donde el dueño necesita visibilidad total y cada profe su cartera.</p>
+            <ul class="plan-list">
+              <li>3 niveles: Dueño Admin, Entrenadores y Alumnos</li>
+              <li>Personalización con tu nombre, logo y paleta</li>
+              <li>Agenda del espacio, sesiones grupales e individuales</li>
+              <li>Panel de cobros unificado y exportación CSV</li>
+            </ul>
+            <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20POPUPS!%20Quiero%20cotizar%20Mi%20Entrenador%20para%20mi%20Estudio%20o%20Equipo%20de%20profes." class="btn btn-volt" target="_blank" rel="noopener">💬 Quiero esta modalidad ↗</a>
+          </article>
+
+          <article class="plan-card">
+            <span class="plan-kicker">03 · GIMNASIOS &amp; FRANQUICIAS</span>
+            <h3>Gimnasio a Medida</h3>
+            <p>Implementación completa con módulos dedicados, integraciones de cobro y soporte evolutivo directo con POPUPS.</p>
+            <ul class="plan-list">
+              <li>Multi-sede y base de datos aislada con RLS</li>
+              <li>Branding propio, dominio y experiencia 100% tuya</li>
+              <li>Módulos a medida según tu metodología de entreno</li>
+              <li>Onboarding del staff y acompañamiento continuo</li>
+            </ul>
+            <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20POPUPS!%20Queremos%20evaluar%20Mi%20Entrenador%20a%20medida%20para%20nuestro%20gimnasio." class="btn btn-outline" target="_blank" rel="noopener">Coordinar reunión ↗</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #CASO — FICHA HÍBRIDA DEL PORTFOLIO ==================== -->
+    <section class="section" id="caso">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">CASO 05 · PRODUCTO POPUPS</span>
+            <h2>Diseño que motiva. <em>Sistema que ordena.</em></h2>
+          </div>
+          <p>
+            Mi Entrenador combina una estética clara y enérgica para el alumno con un tablero operativo sólido para el entrenador y el dueño del gimnasio.
+          </p>
+        </div>
+
+        <div class="case-grid">
+          <article class="case-card">
+            <span class="eyebrow">05.A · EL DESAFÍO Y LA SOLUCIÓN</span>
+            <h3>Que la interfaz nunca compita con el ejercicio.</h3>
+            <p>
+              La mayoría de las apps de fitness fallan por dos extremos: o son hojas de cálculo frías que el alumno abandona a la segunda semana, o son plataformas sobrecargadas imposibles de gestionar para un profe real.
+            </p>
+            <p>
+              Construimos una PWA rápida con <strong>tres roles aislados por seguridad RLS</strong>: panel ejecutivo de cobros y métricas para el dueño, gestión de rutinas y alumnos para cada profe, y un mazo diario con demostraciones animadas, temporizador y racha de constancia para cada alumno.
+            </p>
+            <div class="tech-chips" aria-label="Stack técnico">
+              <span>PWA Instalable</span>
+              <span>JavaScript</span>
+              <span>Supabase + RLS</span>
+              <span>Arquitectura 3 Roles</span>
+              <span>Exportación CSV</span>
+              <span>Guía Visual RepDB</span>
+            </div>
+          </article>
+
+          <aside class="case-card">
+            <span class="eyebrow">05.B · FICHA DEL PROYECTO</span>
+            <div class="case-facts">
+              <div class="case-fact"><small>Tipo</small><b>App Fitness &amp; Gyms</b></div>
+              <div class="case-fact"><small>Niveles</small><b>Dueño · Profe · Alumno</b></div>
+              <div class="case-fact"><small>Módulos</small><b>Planes · Agenda · Cobros</b></div>
+              <div class="case-fact"><small>Estado</small><b>Demo viva y comercial</b></div>
+            </div>
+            <ul class="case-list">
+              <li><b>01</b><span>Mazo de entrenamiento diario con transiciones de técnica y temporizador</span></li>
+              <li><b>02</b><span>Gestión completa de alumnos, rutinas asignadas y evolución semanal</span></li>
+              <li><b>03</b><span>Control de cuotas cobradas, pendientes y vencidas con exportación CSV</span></li>
+              <li><b>04</b><span>Agenda del espacio y administración de permisos por entrenador</span></li>
+              <li><b>05</b><span>Demo interactiva lista para recorrer en 2 minutos desde móvil o escritorio</span></li>
+            </ul>
+            <a href="https://somospopups.github.io/mi-entrenador/" class="btn btn-outline" target="_blank" rel="noopener" style="margin-top:6px">Explorar demo interactiva ↗</a>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== #CONTACTO + SIGUIENTE CASO CIRCULAR (05 -> 06) ==================== -->
+    <section class="section" id="contacto" style="padding-top:12px">
+      <div class="container">
+        <div class="cta-box">
+          <div>
+            <span class="eyebrow"><i aria-hidden="true"></i>LLEVÁ TU GYM AL PRÓXIMO NIVEL</span>
+            <h2>¿Listo para profesionalizar <em>tus entrenamientos?</em></h2>
+            <p>
+              Escribinos por WhatsApp y te mostramos <strong>Mi Entrenador</strong> funcionando en vivo para tu equipo, personal trainers o gimnasio.
+            </p>
+          </div>
+          <div class="cta-actions">
+            <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20POPUPS!%20Vi%20Mi%20Entrenador%20y%20quiero%20coordinar%20una%20demo%20comercial." class="btn btn-volt" target="_blank" rel="noopener">💬 Pedir demo comercial por WhatsApp ↗</a>
+            <a href="https://somospopups.github.io/mi-entrenador/" class="btn btn-outline" target="_blank" rel="noopener">▶ Abrir demo interactiva online ↗</a>
+            <a href="mailto:somospopups@gmail.com?subject=Consulta%20comercial%20Mi%20Entrenador%20(POPUPS)" class="btn btn-outline">✉ somospopups@gmail.com</a>
+            <span class="cta-meta">Córdoba, Argentina · Respuesta directa con el equipo POPUPS.</span>
+          </div>
+        </div>
+
+        <!-- ==================== SIGUIENTE CASO CIRCULAR (05 -> 06 OFICINA VIRTUAL) ==================== -->
+        <section class="next-case-band" aria-label="Navegación a otros proyectos del portfolio POPUPS">
+          <div class="next-top">
+            <span class="next-kicker">SIGUIENTE CASO · 06 · TRABAJO COLABORATIVO</span>
+            <a href="../project.html?project=tienda" class="next-prev">← ANTERIOR · 04 MI-TIENDA</a>
+          </div>
+          <div class="next-inner">
+            <div class="next-copy">
+              <h2>Oficina Virtual hace visible al equipo.</h2>
+              <p>Un espacio 2D multiplayer en pixel art para trabajar, conversar, hacer videollamadas WebRTC, escuchar radio sincronizada y compartir la jornada desde el navegador.</p>
+            </div>
+            <div class="next-actions">
+              <a href="../oficina-virtual/" class="btn btn-next-lime">Ver siguiente caso ↗</a>
+              <a href="../#proyectos" class="btn btn-next-ghost">← Todos los proyectos</a>
+            </div>
+          </div>
+        </section>
+
+        <footer class="footer">
+          <span>© 2026 MI ENTRENADOR · POPUPS · CÓRDOBA, ARGENTINA</span>
+          <div class="footer-links">
+            <a href="https://somospopups.github.io/mi-entrenador/" target="_blank" rel="noopener">Demo online ↗</a>
+            <a href="https://wa.me/5493517669967?text=%C2%A1Hola%20POPUPS!%20Vi%20Mi%20Entrenador%20en%20el%20portfolio." target="_blank" rel="noopener">WhatsApp ↗</a>
+            <a href="../">← Portfolio POPUPS</a>
+            <a href="#top">Volver arriba ↑</a>
+          </div>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="meLightbox" role="dialog" aria-modal="true" aria-label="Captura real ampliada de Mi Entrenador">
+    <div class="lightbox-box">
+      <div class="lightbox-bar">
+        <span id="lbTitle">MI ENTRENADOR · CAPTURA REAL</span>
+        <button type="button" class="lightbox-close" id="lbClose">CERRAR [ESC]</button>
+      </div>
+      <div class="lightbox-body"><img id="lbImg" src="" alt="" /></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* 1. Menú móvil */
+      const navMenuBtn = document.getElementById('navMenuBtn');
+      const mobileDrawer = document.getElementById('mobileDrawer');
+      if (navMenuBtn && mobileDrawer) {
+        navMenuBtn.addEventListener('click', () => {
+          const open = mobileDrawer.classList.toggle('open');
+          navMenuBtn.setAttribute('aria-expanded', String(open));
+          navMenuBtn.textContent = open ? '✕ CERRAR' : '☰ MENÚ';
+        });
+        mobileDrawer.querySelectorAll('a').forEach((a) => {
+          a.addEventListener('click', () => {
+            mobileDrawer.classList.remove('open');
+            navMenuBtn.setAttribute('aria-expanded', 'false');
+            navMenuBtn.textContent = '☰ MENÚ';
+          });
+        });
+      }
+
+      /* 2. Mazo interactivo de entrenamiento en vivo (poses Start <-> Peak + Timer) */
+      const EXERCISES = [
+        {
+          name: 'Sentadilla Goblet',
+          muscle: 'PIERNAS · CUÁDRICEPS',
+          note: 'Pecho alto, bajá controlado 3 segundos y empujá fuerte desde talones.',
+          sets: '4 × 10', rest: '01:30', restSec: 90, goal: 'Fuerza base',
+          start: './assets/goblet-squat-start.webp', peak: './assets/goblet-squat-peak.webp', done: false
+        },
+        {
+          name: 'Peso Muerto Rumano',
+          muscle: 'PIERNAS · ISQUIOTIBIALES',
+          note: 'Bisagra de cadera limpia, barra pegada a las piernas y espalda neutra.',
+          sets: '3 × 10', rest: '01:45', restSec: 105, goal: 'Cadena posterior',
+          start: './assets/romanian-deadlift-start.webp', peak: './assets/romanian-deadlift-peak.webp', done: false
+        },
+        {
+          name: 'Press de Banca',
+          muscle: 'PECHO · EMPUJE',
+          note: 'Escápulas retraídas, control excéntrico y empuje explosivo hacia arriba.',
+          sets: '4 × 8', rest: '02:00', restSec: 120, goal: 'Hipertrofia',
+          start: './assets/bench-press-start.webp', peak: './assets/bench-press-peak.webp', done: false
+        },
+        {
+          name: 'Remo con Mancuerna',
+          muscle: 'ESPALDA · TRACCIÓN',
+          note: 'Llevá los codos hacia la cadera sosteniendo 1 segundo arriba.',
+          sets: '3 × 12', rest: '01:15', restSec: 75, goal: 'Estabilidad',
+          start: './assets/bent-over-db-row-start.webp', peak: './assets/bent-over-db-row-peak.webp', done: false
+        }
+      ];
+
+      let exIdx = 0;
+      let showPeak = false;
+      let restRemaining = EXERCISES[0].restSec;
+      let timerId = null;
+
+      const exImg = document.getElementById('exImg');
+      const exMuscle = document.getElementById('exMuscle');
+      const exPosePill = document.getElementById('exPosePill');
+      const exName = document.getElementById('exName');
+      const exNote = document.getElementById('exNote');
+      const exSets = document.getElementById('exSets');
+      const exRest = document.getElementById('exRest');
+      const exGoal = document.getElementById('exGoal');
+      const exDoneBtn = document.getElementById('exDoneBtn');
+      const deckProgressPill = document.getElementById('deckProgressPill');
+      const deckBarFill = document.getElementById('deckBarFill');
+      const restTimerDisplay = document.getElementById('restTimerDisplay');
+      const restStartBtn = document.getElementById('restStartBtn');
+      const restResetBtn = document.getElementById('restResetBtn');
+
+      function fmtSec(s) {
+        const m = Math.floor(s / 60);
+        const r = s % 60;
+        return `${String(m).padStart(2, '0')}:${String(r).padStart(2, '0')}`;
+      }
+
+      function stopTimer() {
+        if (timerId) { clearInterval(timerId); timerId = null; }
+        restStartBtn.textContent = '▶ Iniciar';
+      }
+
+      function renderExercise() {
+        const ex = EXERCISES[exIdx];
+        exMuscle.textContent = ex.muscle;
+        exName.textContent = ex.name;
+        exNote.textContent = ex.note;
+        exSets.textContent = ex.sets;
+        exRest.textContent = ex.rest;
+        exGoal.textContent = ex.goal;
+        exImg.src = showPeak ? ex.peak : ex.start;
+        exImg.alt = `${ex.name} — ${showPeak ? 'fase final' : 'fase inicial'}`;
+        exPosePill.textContent = showPeak ? 'FASE FINAL' : 'POSE INICIAL';
+
+        exDoneBtn.classList.toggle('completed', ex.done);
+        exDoneBtn.textContent = ex.done ? '✓ Completado (tocar para desmarcar)' : '✓ Marcar ejercicio hecho';
+
+        const doneCnt = EXERCISES.filter((x) => x.done).length;
+        deckProgressPill.textContent = doneCnt === EXERCISES.length
+          ? '🔥 4 / 4 · ¡SESIÓN COMPLETADA!'
+          : `${doneCnt} / ${EXERCISES.length} COMPLETADOS`;
+        deckBarFill.style.width = `${(doneCnt / EXERCISES.length) * 100}%`;
+      }
+
+      function switchExercise(next) {
+        stopTimer();
+        exIdx = (next + EXERCISES.length) % EXERCISES.length;
+        showPeak = false;
+        restRemaining = EXERCISES[exIdx].restSec;
+        restTimerDisplay.textContent = fmtSec(restRemaining);
+        renderExercise();
+      }
+
+      document.getElementById('exPrev').addEventListener('click', () => switchExercise(exIdx - 1));
+      document.getElementById('exNext').addEventListener('click', () => switchExercise(exIdx + 1));
+      exDoneBtn.addEventListener('click', () => {
+        EXERCISES[exIdx].done = !EXERCISES[exIdx].done;
+        renderExercise();
+      });
+
+      restStartBtn.addEventListener('click', () => {
+        if (timerId) { stopTimer(); return; }
+        if (restRemaining <= 0) restRemaining = EXERCISES[exIdx].restSec;
+        restStartBtn.textContent = '⏸ Pausar';
+        timerId = setInterval(() => {
+          restRemaining--;
+          restTimerDisplay.textContent = fmtSec(Math.max(0, restRemaining));
+          if (restRemaining <= 0) {
+            stopTimer();
+            restTimerDisplay.textContent = '¡LISTO!';
+          }
+        }, 1000);
+      });
+      restResetBtn.addEventListener('click', () => {
+        stopTimer();
+        restRemaining = EXERCISES[exIdx].restSec;
+        restTimerDisplay.textContent = fmtSec(restRemaining);
+      });
+
+      renderExercise();
+      if (!reducedMotion) {
+        setInterval(() => {
+          showPeak = !showPeak;
+          const ex = EXERCISES[exIdx];
+          exImg.src = showPeak ? ex.peak : ex.start;
+          exPosePill.textContent = showPeak ? 'FASE FINAL' : 'POSE INICIAL';
+        }, 1250);
+      }
+
+      /* 3. Selector interactivo de 3 niveles (Dueño / Profe / Alumno) + Lightbox */
+      const ROLES = {
+        dueno: {
+          eyebrow: 'NIVEL 01 · CONTROL TOTAL DEL ESPACIO',
+          title: 'Pulso del negocio, equipo y cobros sin perseguir a nadie.',
+          desc: 'Mirás de un vistazo alumnos activos, sesiones completadas de la semana, cuotas cobradas, vencimientos próximos y alertas pendientes, con exportación CSV en un clic.',
+          bullets: [
+            'Dashboard ejecutivo con actividad del equipo e ingresos del mes',
+            'Control de cobros pagados, por vencer y vencidos en un solo clic',
+            'Alta de entrenadores y permisos independientes por rol (RLS)'
+          ],
+          desktop: true,
+          shots: [
+            { src: './assets/app-dashboard.webp', cap: 'Resumen ejecutivo · Club Norte' },
+            { src: './assets/app-cobros.webp', cap: 'Cobros y membresías · Estado al día' }
+          ]
+        },
+        profe: {
+          eyebrow: 'NIVEL 02 · GESTIÓN ÁGIL DE ENTRENADORES',
+          title: 'Armá rutinas en minutos y seguí a cada alumno de cerca.',
+          desc: 'Filtrá por estado de cuota o último entrenamiento, asigná planes de fuerza o hipertrofia desde el celular y coordiná la agenda diaria con todo el equipo.',
+          bullets: [
+            'Listado inteligente de alumnos con estado al día, por vencer o vencido',
+            'Biblioteca ilustrada de ejercicios y plantillas reutilizables',
+            'Equipo de entrenadores con métricas y permisos claros'
+          ],
+          desktop: false,
+          shots: [
+            { src: './assets/app-alumnos.webp', cap: 'Gestión de alumnos · Mobile' },
+            { src: './assets/app-team.webp', cap: 'Tu equipo de entrenadores' }
+          ]
+        },
+        alumno: {
+          eyebrow: 'NIVEL 03 · FOCO 100 % EN ENTRENAR',
+          title: 'Tu rutina del día en tarjetas claras y tu progreso visible.',
+          desc: 'El alumno abre la app en el gimnasio, ve qué toca hoy con demostraciones animadas, registra su avance y sostiene su racha semana tras semana.',
+          bullets: [
+            'Plan semanal ordenado por bloque, series, repeticiones y descansos',
+            'Registro de sesiones completadas, peso de referencia y racha activa',
+            'Instalable en el celular como app (PWA) sin ocupar memoria extra'
+          ],
+          desktop: false,
+          shots: [
+            { src: './assets/app-plan.webp', cap: 'Tu rutina · Fuerza A' },
+            { src: './assets/app-progreso.webp', cap: 'Progreso y racha del alumno' }
+          ]
+        }
+      };
+
+      const roleTabs = document.querySelectorAll('.role-tab');
+      const roleEyebrow = document.getElementById('roleEyebrow');
+      const roleTitle = document.getElementById('roleTitle');
+      const roleDesc = document.getElementById('roleDesc');
+      const roleBullets = document.getElementById('roleBullets');
+      const roleShots = document.getElementById('roleShots');
+
+      const lb = document.getElementById('meLightbox');
+      const lbImg = document.getElementById('lbImg');
+      const lbTitle = document.getElementById('lbTitle');
+      const lbClose = document.getElementById('lbClose');
+      const openLb = (src, title) => {
+        lbImg.src = src; lbImg.alt = title; lbTitle.textContent = title;
+        lb.classList.add('open'); document.body.style.overflow = 'hidden';
+      };
+      const closeLb = () => { lb.classList.remove('open'); document.body.style.overflow = ''; };
+      lbClose.addEventListener('click', closeLb);
+      lb.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
+
+      const heroPhone = document.getElementById('heroPhone');
+      if (heroPhone) {
+        heroPhone.addEventListener('click', () => openLb(heroPhone.dataset.zoomSrc, heroPhone.dataset.zoomTitle));
+      }
+
+      function renderRole(key) {
+        const r = ROLES[key] || ROLES.dueno;
+        roleEyebrow.textContent = r.eyebrow;
+        roleTitle.textContent = r.title;
+        roleDesc.textContent = r.desc;
+        roleBullets.innerHTML = r.bullets.map((b) => `<li>${b}</li>`).join('');
+        roleShots.className = r.desktop ? 'role-shots desktop-pair' : 'role-shots';
+        roleShots.innerHTML = r.shots.map((s) => `
+          <div class="shot-frame" data-src="${s.src}" data-title="${s.cap}">
+            <img src="${s.src}" alt="${s.cap}" loading="lazy" />
+            <div class="shot-cap"><span>${s.cap}</span><span>Ampliar ↗</span></div>
+          </div>
+        `).join('');
+        roleShots.querySelectorAll('.shot-frame').forEach((f) => {
+          f.addEventListener('click', () => openLb(f.dataset.src, f.dataset.title));
+        });
+      }
+
+      roleTabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          roleTabs.forEach((t) => {
+            const on = t === tab;
+            t.classList.toggle('active', on);
+            t.setAttribute('aria-selected', String(on));
+          });
+          renderRole(tab.dataset.role);
+        });
+      });
+      renderRole('dueno');
+
+      /* 4. Calculadora interactiva de ahorro operativo para entrenadores y gyms */
+      const roiSlider = document.getElementById('roiSlider');
+      const roiAlumnosVal = document.getElementById('roiAlumnosVal');
+      const roiHours = document.getElementById('roiHours');
+      const roiTierRec = document.getElementById('roiTierRec');
+      const roiWaBtn = document.getElementById('roiWaBtn');
+
+      function updateRoi() {
+        const n = Number(roiSlider.value);
+        const hrs = Math.max(3, Math.round(n * 0.26));
+        const tier = n <= 25 ? 'PROFE INDEPENDIENTE' : (n <= 80 ? 'ESTUDIO / EQUIPO DE PROFES' : 'GIMNASIO A MEDIDA');
+        roiAlumnosVal.textContent = `${n} alumnos`;
+        roiHours.innerHTML = `<span>${hrs} h</span> / sem`;
+        roiTierRec.textContent = `MODALIDAD RECOMENDADA: ${tier}`;
+        const msg = encodeURIComponent(`¡Hola POPUPS! Tengo alrededor de ${n} alumnos y quiero una demo comercial de Mi Entrenador (${tier}).`);
+        roiWaBtn.href = `https://wa.me/5493517669967?text=${msg}`;
+        roiWaBtn.textContent = `💬 Pedir propuesta para mis ${n} alumnos ↗`;
+      }
+      roiSlider.addEventListener('input', updateRoi);
+      updateRoi();
+
+      /* 5. Motion Graphics: Scroll progress, Hero BG & Margin Parallax, 2.5D Phone Tilt, Scroll Reveal */
+      const scrollProgress = document.getElementById('scrollProgress');
+      const heroBgPhoto = document.getElementById('heroBgPhoto');
+      const heroStage = document.getElementById('heroStage');
+      const pgTags = Array.from(document.querySelectorAll('.pg-tag')).map((el) => ({
+        el,
+        depth: parseFloat(el.dataset.depth || '0.2'),
+        topPct: parseFloat(el.style.top || '25') / 100
+      }));
+      pgTags.forEach(({ el }) => { el.style.top = '0px'; });
+
+      let targetY = window.scrollY, smoothY = window.scrollY;
+      let tx = 0, ty = 0, cx = 0, cy = 0;
+
+      if (!reducedMotion && heroStage) {
+        heroStage.addEventListener('pointermove', (e) => {
+          const r = heroStage.getBoundingClientRect();
+          tx = ((e.clientX - r.left) / r.width) * 2 - 1;
+          ty = ((e.clientY - r.top) / r.height) * 2 - 1;
+        }, { passive: true });
+        heroStage.addEventListener('pointerleave', () => { tx = 0; ty = 0; });
+      }
+
+      window.addEventListener('scroll', () => {
+        targetY = window.scrollY;
+        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        if (scrollProgress) scrollProgress.style.transform = `scaleX(${Math.min(1, Math.max(0, targetY / max))})`;
+      }, { passive: true });
+
+      function motionLoop() {
+        smoothY += (targetY - smoothY) * 0.12;
+        if (heroBgPhoto && smoothY < 950) {
+          heroBgPhoto.style.transform = `translate3d(0, ${(smoothY * 0.14).toFixed(1)}px, 0) scale(1.04)`;
+        }
+        const span = window.innerHeight + 120;
+        for (let i = 0; i < pgTags.length; i++) {
+          const it = pgTags[i];
+          const y = (((it.topPct * span - smoothY * it.depth) % span) + span) % span - 60;
+          it.el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+        }
+        cx += (tx - cx) * 0.09;
+        cy += (ty - cy) * 0.09;
+        if (heroPhone) {
+          heroPhone.style.transform = `rotateX(${(-cy * 4).toFixed(2)}deg) rotateY(${(cx * 5).toFixed(2)}deg)`;
+        }
+        requestAnimationFrame(motionLoop);
+      }
+      if (!reducedMotion) requestAnimationFrame(motionLoop);
+
+      const revSelectors = [
+        { sel: '.section-head', stagger: 0 },
+        { sel: '.athlete-photo-card, .workout-deck', stagger: 90 },
+        { sel: '.role-stage', stagger: 0 },
+        { sel: '.roi-card', stagger: 0 },
+        { sel: '.plan-card', stagger: 85 },
+        { sel: '.case-card', stagger: 90 },
+        { sel: '.cta-box, .next-case-band', stagger: 0 }
+      ];
+      const revEls = [];
+      revSelectors.forEach(({ sel, stagger }) => {
+        document.querySelectorAll(sel).forEach((el, idx) => {
+          el.classList.add('reveal');
+          if (stagger) el.style.setProperty('--rev-delay', `${idx * stagger}ms`);
+          revEls.push(el);
+        });
+      });
+      if (!reducedMotion && 'IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach((en) => {
+            if (en.isIntersecting) { en.target.classList.add('in-view'); obs.unobserve(en.target); }
+          });
+        }, { threshold: 0.11, rootMargin: '0px 0px -24px 0px' });
+        revEls.forEach((el) => obs.observe(el));
+      } else {
+        revEls.forEach((el) => el.classList.add('in-view'));
+      }
+    })();
+  </script>
+</body>
+</html>
