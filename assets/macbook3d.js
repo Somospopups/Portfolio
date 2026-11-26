@@ -29,7 +29,7 @@
     var swBtns = mbpSwitcher ? Array.from(mbpSwitcher.querySelectorAll('.mbp-sw-btn')) : [];
 
     // -------------------------------------------------------------------------
-    // 3 Flagship Products in Exact Requested Sequence
+    // 3 Flagship Products in Exact Sequence
     // -------------------------------------------------------------------------
     var SHOWCASE = [
       {
@@ -37,7 +37,7 @@
         theme: 'theme-miamp',
         accent: '#54e3b4',
         glowColor: 0x62e5be,
-        dwell: 6800,
+        dwell: 7000,
         href: 'mi-amp/',
         external: false,
         tag: '01 · MI AMP · Plugin DSP',
@@ -57,7 +57,7 @@
         theme: 'theme-appi',
         accent: '#c8f810',
         glowColor: 0x9b7eff,
-        dwell: 6000,
+        dwell: 6200,
         href: 'appi/',
         external: false,
         tag: '02 · APPI · PWA Offline',
@@ -77,7 +77,7 @@
         theme: 'theme-webs',
         accent: '#f2c61f',
         glowColor: 0xf0b26c,
-        dwell: 7600,
+        dwell: 7800,
         href: 'webs-a-medida/',
         external: false,
         tag: '03 · Webs a medida · Desde cero',
@@ -95,7 +95,7 @@
     ];
 
     // -------------------------------------------------------------------------
-    // WebGL Renderer Setup (Transparent background so Behind-MacBook Pills Shine Through!)
+    // High-Performance WebGL Renderer Setup
     // -------------------------------------------------------------------------
     var renderer;
     try {
@@ -117,14 +117,21 @@
     renderer.domElement.setAttribute('aria-label', 'MacBook Pro 3D interactiva: arrastrá para girar 360 grados');
     canvasHost.appendChild(renderer.domElement);
 
+    var FOV_DEG = 16.5;
+    var TAN_HALF_FOV = Math.tan((FOV_DEG * Math.PI) / 360);
     var scene = new THREE.Scene();
-    // Heroic close studio framing so the 16" display is HUGE, sharp & legible!
-    var camera = new THREE.PerspectiveCamera(35, 16 / 10.6, 0.1, 60);
-    camera.position.set(0, 1.38, 6.05);
-    camera.lookAt(0, 0.70, 0);
+    var camera = new THREE.PerspectiveCamera(FOV_DEG, 16 / 10, 0.1, 80);
+    var baseCamZ = 10.6;
+    var curCamZ = 10.6;
+    var spinDollyAmt = 2.0;
+    var OPEN_CAM_Y = 0.80;
+    var OPEN_LOOK_Y = 0.36;
+    var curLookY = OPEN_LOOK_Y;
+    camera.position.set(0, OPEN_CAM_Y, baseCamZ);
+    camera.lookAt(0, curLookY, 0);
 
     // -------------------------------------------------------------------------
-    // Procedural Studio HDRI Environment Map (Apple Product-Shoot Metallic Reflections!)
+    // Procedural Studio HDRI Environment Map (Apple-Grade Metallic Reflections)
     // -------------------------------------------------------------------------
     var pmrem = new THREE.PMREMGenerator(renderer);
     pmrem.compileEquirectangularShader();
@@ -142,26 +149,18 @@
       envScene.add(m);
     }
 
-    // Overhead main diffused softbox
     addStudioPanel(0xf4f7ff, [0, 8, 1], [Math.PI / 2, 0, 0], 14, 9, 2.2);
-    // Front key strip
     addStudioPanel(0xdce6ff, [0, 3.2, 9], [0, Math.PI, 0], 10, 4.5, 1.35);
-    // Left violet/blue studio rim light
     addStudioPanel(0x8874ff, [-9, 2.8, 0.5], [0, Math.PI / 2, 0], 9, 5, 1.65);
-    // Right subtle mint/lime accent rim light
     addStudioPanel(0xbdf642, [9, 2.5, 0.5], [0, -Math.PI / 2, 0], 8, 4.2, 1.15);
-    // Rear bright rim so 180° back aluminum & POPUPS sticker gleam crisply!
     addStudioPanel(0xe4ecff, [0, 4.5, -9], [0.22, 0, 0], 12, 5.5, 1.9);
-    // Subtle underside studio table bounce
     addStudioPanel(0x283044, [0, -6, 0], [-Math.PI / 2, 0, 0], 16, 16, 0.85);
 
     var envRT = pmrem.fromScene(envScene, 0.035);
     scene.environment = envRT.texture;
     pmrem.dispose();
 
-    // Direct studio lights for crisp specular micro-bevels
-    var ambient = new THREE.HemisphereLight(0xd8e2ff, 0x161924, 0.9);
-    scene.add(ambient);
+    scene.add(new THREE.HemisphereLight(0xd8e2ff, 0x161924, 0.92));
 
     var keyLight = new THREE.DirectionalLight(0xffffff, 1.25);
     keyLight.position.set(4.5, 7.5, 6.2);
@@ -175,12 +174,11 @@
     rimRight.position.set(6.5, 2.2, -4.0);
     scene.add(rimRight);
 
-    // Soft diffuse ambient glow cast from the open display onto the upper keyboard (no bright trackpad dot!)
-    var screenBounceLight = new THREE.PointLight(0x62e5be, 0.46, 3.6, 2);
-    screenBounceLight.position.set(0, 1.35, -0.55);
+    var screenBounceLight = new THREE.PointLight(0x62e5be, 0.42, 3.8, 2);
+    screenBounceLight.position.set(0, 1.35, -0.35);
 
     // -------------------------------------------------------------------------
-    // Helper: Rounded Rectangle ExtrudeGeometry (Real CNC Chamfered Aluminum!)
+    // Geometry Helpers (CNC Chamfered Rounded Aluminum Slabs)
     // -------------------------------------------------------------------------
     function makeRoundedRectShape(w, h, r) {
       var shape = new THREE.Shape();
@@ -214,10 +212,10 @@
     }
 
     // -------------------------------------------------------------------------
-    // Procedural High-Res Space Black Keyboard + Trackpad + Speaker Grilles Texture
+    // Procedural Space Black Keyboard + Trackpad + Speaker Grilles Texture
     // -------------------------------------------------------------------------
     function createKeyboardDeckTexture() {
-      var cw = 1536, ch = 1070;
+      var cw = 1536, ch = 972;
       var c = document.createElement('canvas');
       c.width = cw; c.height = ch;
       var ctx = c.getContext('2d');
@@ -229,11 +227,9 @@
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, cw, ch);
 
-      for (var i = 0; i < 6000; i++) {
-        var gx = Math.random() * cw;
-        var gy = Math.random() * ch;
+      for (var i = 0; i < 4500; i++) {
         ctx.fillStyle = (i & 1) ? 'rgba(255,255,255,0.014)' : 'rgba(0,0,0,0.02)';
-        ctx.fillRect(gx, gy, 2, 1);
+        ctx.fillRect(Math.random() * cw, Math.random() * ch, 2, 1);
       }
 
       function rrect(x, y, w, h, r) {
@@ -250,7 +246,7 @@
         ctx.closePath();
       }
 
-      var kx = 188, ky = 84, kw = 1160, kh = 516;
+      var kx = 188, ky = 72, kw = 1160, kh = 474;
       rrect(kx - 4, ky - 4, kw + 8, kh + 8, 22);
       ctx.fillStyle = '#090a0d';
       ctx.fill();
@@ -266,9 +262,9 @@
       for (var side = 0; side < 2; side++) {
         var sx0 = side === 0 ? 52 : 1384;
         for (var col = 0; col < 10; col++) {
-          for (var row = 0; row < 48; row++) {
+          for (var row = 0; row < 44; row++) {
             var dx = sx0 + col * 10.5 + (row % 2 ? 4.5 : 0);
-            var dy = 104 + row * 10.0;
+            var dy = 90 + row * 10.0;
             ctx.beginPath();
             ctx.arc(dx, dy, 1.8, 0, Math.PI * 2);
             ctx.fill();
@@ -277,28 +273,28 @@
       }
 
       var rows = [
-        { h: 60, keys: [
+        { h: 55, keys: [
           ['esc', 1.45], ['F1', 1], ['F2', 1], ['F3', 1], ['F4', 1], ['F5', 1], ['F6', 1],
           ['F7', 1], ['F8', 1], ['F9', 1], ['F10', 1], ['F11', 1], ['F12', 1], ['TOUCH', 1.15]
         ]},
-        { h: 72, keys: [
+        { h: 66, keys: [
           ['º', 1], ['1', 1], ['2', 1], ['3', 1], ['4', 1], ['5', 1], ['6', 1], ['7', 1], ['8', 1], ['9', 1], ['0', 1], ['-', 1], ['=', 1], ['delete', 1.65]
         ]},
-        { h: 72, keys: [
+        { h: 66, keys: [
           ['tab', 1.55], ['Q', 1], ['W', 1], ['E', 1], ['R', 1], ['T', 1], ['Y', 1], ['U', 1], ['I', 1], ['O', 1], ['P', 1], ['[', 1], [']', 1], ['\\', 1.1]
         ]},
-        { h: 72, keys: [
+        { h: 66, keys: [
           ['caps', 1.8], ['A', 1], ['S', 1], ['D', 1], ['F', 1], ['G', 1], ['H', 1], ['J', 1], ['K', 1], ['L', 1], [';', 1], ["'", 1], ['return', 1.85]
         ]},
-        { h: 72, keys: [
+        { h: 66, keys: [
           ['shift', 2.32], ['Z', 1], ['X', 1], ['C', 1], ['V', 1], ['B', 1], ['N', 1], ['M', 1], [',', 1], ['.', 1], ['/', 1], ['shift', 2.33]
         ]},
-        { h: 78, keys: [
+        { h: 71, keys: [
           ['fn', 1], ['ctrl', 1], ['opt', 1], ['cmd', 1.32], ['', 5.35], ['cmd', 1.32], ['opt', 1], ['◀', 0.9], ['▲▼', 0.92], ['▶', 0.9]
         ]}
       ];
 
-      var padX = 16, padY = 16, gap = 10;
+      var padX = 16, padY = 15, gap = 9;
       var curY = ky + padY;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -328,7 +324,7 @@
 
           if (label === 'TOUCH') {
             ctx.beginPath();
-            ctx.arc(curX + kwKey / 2, curY + khKey / 2, 16, 0, Math.PI * 2);
+            ctx.arc(curX + kwKey / 2, curY + khKey / 2, 15, 0, Math.PI * 2);
             ctx.strokeStyle = 'rgba(180, 192, 210, 0.34)';
             ctx.lineWidth = 2;
             ctx.stroke();
@@ -336,22 +332,20 @@
             ctx.fillStyle = '#0a0b0e';
             ctx.fillRect(curX, curY + khKey / 2 - 2, kwKey, 4);
             ctx.fillStyle = 'rgba(232, 238, 248, 0.65)';
-            ctx.font = '600 13px sans-serif';
+            ctx.font = '600 12px sans-serif';
             ctx.fillText('▲', curX + kwKey / 2, curY + khKey * 0.27);
             ctx.fillText('▼', curX + kwKey / 2, curY + khKey * 0.75);
           } else if (label) {
             ctx.fillStyle = 'rgba(232, 238, 248, 0.72)';
-            ctx.font = label.length > 2 ? '600 13px system-ui, sans-serif' : '600 18px system-ui, sans-serif';
+            ctx.font = label.length > 2 ? '600 12px system-ui, sans-serif' : '600 17px system-ui, sans-serif';
             ctx.fillText(label, curX + kwKey / 2, curY + khKey / 2 + 1);
           }
-
           curX += kwKey + gap;
         }
         curY += rowDef.h + gap;
       }
 
-      // Giant Glass Force Touch Trackpad
-      var tx = 442, ty = 638, tw = 652, th = 378;
+      var tx = 442, ty = 580, tw = 652, th = 342;
       rrect(tx, ty, tw, th, 18);
       var tg = ctx.createLinearGradient(tx, ty, tx + tw, ty + th);
       tg.addColorStop(0, '#1e2128');
@@ -374,8 +368,7 @@
     }
 
     // -------------------------------------------------------------------------
-    // TRANSPARENT POPUPS "P●" STICKER DECAL (Sits Directly on Same Seamless Space Black Lid!)
-    // Zero mismatched background box — identical both closed AND spun 180°!
+    // TRANSPARENT POPUPS "P●" STICKER DECAL ON SEAMLESS SPACE BLACK LID
     // -------------------------------------------------------------------------
     var stickerCanvas = document.createElement('canvas');
     stickerCanvas.width = 512;
@@ -397,16 +390,14 @@
         var dx = (w - drawW) / 2;
         var dy = (h - drawH) / 2;
 
-        // Crisp glossy POPUPS "P" sticker directly on Space Black aluminum (zero background rect!)
         stickerCtx.drawImage(markImg, 0, 0, srcW, srcH, dx, dy, drawW, drawH);
 
-        // Signature neon lime dot at exact relative coordinate
         var dotX = dx + drawW * 0.7908;
         var dotY = dy + drawH * 0.2090;
         var dotR = drawW * 0.1157;
 
         var glow = stickerCtx.createRadialGradient(dotX, dotY, dotR * 0.25, dotX, dotY, dotR * 1.9);
-        glow.addColorStop(0, 'rgba(198,248,17,0.42)');
+        glow.addColorStop(0, 'rgba(198,248,17,0.44)');
         glow.addColorStop(1, 'rgba(198,248,17,0)');
         stickerCtx.fillStyle = glow;
         stickerCtx.beginPath();
@@ -432,38 +423,45 @@
     drawPopupsSticker(null);
 
     // -------------------------------------------------------------------------
-    // Live Dynamic Screen Canvas Texture (1280 x 878 = Exact 100% Full-Bleed Display Ratio!)
+    // High-Speed GPU Screen Canvas Texture (1280 x 802 = Exact 16:10 Full-Bleed!)
+    // Zero mipmap regen + smart dirty flag -> locked 60/120fps fluidity!
     // -------------------------------------------------------------------------
     var screenCanvas = document.createElement('canvas');
     screenCanvas.width = 1280;
-    screenCanvas.height = 878;
-    var sctx = screenCanvas.getContext('2d');
-    sctx.fillStyle = '#090b10';
-    sctx.fillRect(0, 0, 1280, 878);
+    screenCanvas.height = 802;
+    var sctx = screenCanvas.getContext('2d', { alpha: false });
+    sctx.fillStyle = '#07090e';
+    sctx.fillRect(0, 0, 1280, 802);
 
     var screenTex = new THREE.CanvasTexture(screenCanvas);
     screenTex.encoding = THREE.sRGBEncoding;
+    screenTex.generateMipmaps = false;
     screenTex.minFilter = THREE.LinearFilter;
     screenTex.magFilter = THREE.LinearFilter;
-    screenTex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+    screenTex.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
 
-    // Preload all real 100%-screen product images + POPUPS sticker mark
+    var screenDirty = true;
     var imgs = {
       miamp: new Image(),
       appi: new Image(),
       webs: new Image(),
       mark: new Image()
     };
+    imgs.miamp.onload = function () { screenDirty = true; };
+    imgs.appi.onload = function () { screenDirty = true; };
+    imgs.webs.onload = function () { screenDirty = true; };
+    imgs.mark.onload = function () { drawPopupsSticker(imgs.mark); };
     imgs.miamp.src = 'assets/miamp-real-intro.webp';
     imgs.appi.src = 'assets/appi-screen-full.webp';
     imgs.webs.src = 'assets/webs-medida-scroll.webp';
-    imgs.mark.onload = function () { drawPopupsSticker(imgs.mark); };
     imgs.mark.src = 'assets/logo-mark.webp';
 
     // -------------------------------------------------------------------------
-    // Build Real Solid 3D MacBook Pro 16" Space Black Assembly
+    // Build True Cinema 16:10 Solid 3D Space Black MacBook Pro 16"
+    // Balanced center-of-mass pivot (base offset +0.52) for ultra-smooth 360° spin!
     // -------------------------------------------------------------------------
-    var W = 3.56, D = 2.48, BH = 0.125, LH = 0.044, R = 0.145;
+    var W = 3.76, D = 2.38, BH = 0.122, LH = 0.044, R = 0.145;
+    var Z_OFF = 0.52;
 
     var matAluminum = new THREE.MeshStandardMaterial({
       color: 0x353b47,
@@ -499,18 +497,17 @@
       envMapIntensity: 1.2
     });
 
-    // Root turntable group (rotates 360° around Y and tilts subtly on X!)
     var laptopRoot = new THREE.Group();
     scene.add(laptopRoot);
 
     // 1) UNIBODY CHASSIS BASE
     var baseGroup = new THREE.Group();
+    baseGroup.position.z = Z_OFF;
     laptopRoot.add(baseGroup);
 
     var baseChassis = new THREE.Mesh(makeChamferedSlab(W, D, BH, R, 0.018), matAluminum);
     baseGroup.add(baseChassis);
 
-    // Top keyboard + trackpad + speaker grilles deck (satin matte roughness -> no bright spotlight dot on trackpad!)
     var deckGeo = new THREE.PlaneGeometry(W - 0.10, D - 0.10);
     deckGeo.rotateX(-Math.PI / 2);
     var deckMat = new THREE.MeshStandardMaterial({
@@ -523,13 +520,12 @@
     deckMesh.position.set(0, BH + 0.0012, 0);
     baseGroup.add(deckMesh);
 
-    // 4 Authentic Rubber Feet on Bottom Underside
     var footGeo = new THREE.CylinderGeometry(0.115, 0.122, 0.022, 24);
     var footPositions = [
-      [-W / 2 + 0.34, -0.011, -D / 2 + 0.32],
-      [ W / 2 - 0.34, -0.011, -D / 2 + 0.32],
-      [-W / 2 + 0.34, -0.011,  D / 2 - 0.32],
-      [ W / 2 - 0.34, -0.011,  D / 2 - 0.32]
+      [-W / 2 + 0.34, -0.011, -D / 2 + 0.30],
+      [ W / 2 - 0.34, -0.011, -D / 2 + 0.30],
+      [-W / 2 + 0.34, -0.011,  D / 2 - 0.30],
+      [ W / 2 - 0.34, -0.011,  D / 2 - 0.30]
     ];
     for (var fi = 0; fi < footPositions.length; fi++) {
       var foot = new THREE.Mesh(footGeo, matRubber);
@@ -537,12 +533,10 @@
       baseGroup.add(foot);
     }
 
-    // Front Center Thumb Notch Indentation
-    var thumbNotch = new THREE.Mesh(new THREE.BoxGeometry(0.54, 0.036, 0.024), matAluminumDark);
+    var thumbNotch = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.036, 0.024), matAluminumDark);
     thumbNotch.position.set(0, BH - 0.024, D / 2 - 0.006);
     baseGroup.add(thumbNotch);
 
-    // Rear Black Clutch Hinge Barrel + Thermal Exhaust Recess
     var hingeBarrel = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.038, W * 0.66, 20), matAluminumDark);
     hingeBarrel.rotation.z = Math.PI / 2;
     hingeBarrel.position.set(0, BH - 0.014, -D / 2 + 0.038);
@@ -552,7 +546,6 @@
     rearVent.position.set(0, BH * 0.52, -D / 2 + 0.004);
     baseGroup.add(rearVent);
 
-    // Real Sculpted Side Ports (Left: MagSafe 3 + 2x USB-C + 3.5mm Audio | Right: HDMI + USB-C + SDXC)
     function addPort(x, y, z, pw, ph, sideSign) {
       var rim = new THREE.Mesh(new THREE.BoxGeometry(0.010, ph + 0.012, pw + 0.014), matPortRim);
       rim.position.set(x, y, z);
@@ -562,22 +555,22 @@
       baseGroup.add(hole);
     }
     var pY = BH * 0.54;
-    addPort(-W / 2 + 0.002, pY, -0.78, 0.145, 0.036, -1); // MagSafe 3
-    addPort(-W / 2 + 0.002, pY, -0.52, 0.095, 0.028, -1); // Thunderbolt 1
-    addPort(-W / 2 + 0.002, pY, -0.34, 0.095, 0.028, -1); // Thunderbolt 2
+    addPort(-W / 2 + 0.002, pY, -0.74, 0.145, 0.036, -1);
+    addPort(-W / 2 + 0.002, pY, -0.48, 0.095, 0.028, -1);
+    addPort(-W / 2 + 0.002, pY, -0.30, 0.095, 0.028, -1);
     var audioJack = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.014, 16), matPortMetal);
     audioJack.rotation.z = Math.PI / 2;
-    audioJack.position.set(-W / 2 + 0.002, pY, -0.14);
+    audioJack.position.set(-W / 2 + 0.002, pY, -0.10);
     baseGroup.add(audioJack);
-    addPort(W / 2 - 0.002, pY, -0.76, 0.165, 0.036, 1);  // HDMI
-    addPort(W / 2 - 0.002, pY, -0.50, 0.095, 0.028, 1);  // Thunderbolt 3
-    addPort(W / 2 - 0.002, pY, -0.22, 0.245, 0.024, 1);  // SDXC card slot
+    addPort(W / 2 - 0.002, pY, -0.72, 0.165, 0.036, 1);
+    addPort(W / 2 - 0.002, pY, -0.46, 0.095, 0.028, 1);
+    addPort(W / 2 - 0.002, pY, -0.18, 0.245, 0.024, 1);
 
     baseGroup.add(screenBounceLight);
 
-    // 2) HINGED 16" FULL-BLEED DISPLAY LID ASSEMBLY (Same Seamless Space Black Aluminum + POPUPS Sticker!)
+    // 2) HINGED 16:10 FULL-BLEED CINEMA DISPLAY LID (Seamless Space Black Aluminum + POPUPS Sticker!)
     var lidPivot = new THREE.Group();
-    lidPivot.position.set(0, BH + 0.004, -D / 2 + 0.055);
+    lidPivot.position.set(0, BH + 0.004, -D / 2 + 0.055 + Z_OFF);
     laptopRoot.add(lidPivot);
 
     var lidShape = makeRoundedRectShape(W - 0.024, D - 0.024, R - 0.012);
@@ -591,12 +584,10 @@
     });
     lidGeo.translate(0, D / 2, -(LH - 0.016) / 2);
     lidGeo.computeVertexNormals();
-    // Entire back of the lid is 100% pure seamless Space Black matAluminum (exact same color & finish as the chassis!)
     var lidBody = new THREE.Mesh(lidGeo, matAluminum);
     lidPivot.add(lidBody);
 
-    // Transparent POPUPS "P●" Sticker Decal centered on the seamless Space Black outer lid!
-    // Automatically flips upright both when CLOSED (facing up toward viewer) AND when OPEN & SPUN 180°!
+    // Transparent POPUPS "P●" Sticker Decal on the seamless Space Black aluminum lid (identical closed & 180°!)
     var stickerGeo = new THREE.PlaneGeometry(1.12, 1.12);
     stickerGeo.rotateY(Math.PI);
     var stickerMat = new THREE.MeshStandardMaterial({
@@ -612,41 +603,39 @@
     popupsStickerMesh.position.set(0, D / 2, -(LH / 2) - 0.0034);
     lidPivot.add(popupsStickerMesh);
 
-    // Front Slim Black Glass Bezel (uniform ultra-thin bezel on all 4 sides — ZERO gray bottom chin!)
-    var bezelShape = makeRoundedRectShape(W - 0.05, D - 0.05, R - 0.022);
-    var bezelGeo = new THREE.ShapeGeometry(bezelShape, 18);
-    var bezelMesh = new THREE.Mesh(bezelGeo, matGlassBezel);
+    var bezelShape = makeRoundedRectShape(W - 0.048, D - 0.048, R - 0.020);
+    var bezelMesh = new THREE.Mesh(new THREE.ShapeGeometry(bezelShape, 18), matGlassBezel);
     bezelMesh.position.set(0, D / 2, LH / 2 + 0.0015);
     lidPivot.add(bezelMesh);
 
-    // Front 100% Full-Bleed Borderless Cinema Display (fills 100% of screen area, ZERO bottom bar, ZERO notch!)
-    var scrW = W - 0.11; // 3.45
-    var scrH = D - 0.11; // 2.37  (exact 1.4557 ratio matching 1280x878 / 1600x1098!)
-    var scrY = D / 2;    // dead-center inside lid -> uniform 0.055 slim bezel all around!
+    // 100% Edge-to-Edge Borderless Display (ZERO bottom bar, ZERO notch!)
+    var scrW = W - 0.10; // 3.66
+    var scrH = D - 0.10; // 2.28  (exact 1.605 ratio matching 1280x802 / 1600x1002!)
+    var scrY = D / 2;
 
-    var screenMat = new THREE.MeshBasicMaterial({
-      map: screenTex,
-      toneMapped: false
-    });
-    var screenMesh = new THREE.Mesh(new THREE.PlaneGeometry(scrW, scrH), screenMat);
+    var screenMesh = new THREE.Mesh(
+      new THREE.PlaneGeometry(scrW, scrH),
+      new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false })
+    );
     screenMesh.position.set(0, scrY, LH / 2 + 0.0034);
     lidPivot.add(screenMesh);
 
-    // Subtle Studio Glass Reflection Overlay over Display
-    var glassSheenMat = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.055,
-      metalness: 0.9,
-      roughness: 0.06,
-      envMapIntensity: 1.45,
-      depthWrite: false
-    });
-    var glassSheen = new THREE.Mesh(new THREE.PlaneGeometry(scrW, scrH), glassSheenMat);
+    var glassSheen = new THREE.Mesh(
+      new THREE.PlaneGeometry(scrW, scrH),
+      new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.052,
+        metalness: 0.9,
+        roughness: 0.06,
+        envMapIntensity: 1.45,
+        depthWrite: false
+      })
+    );
     glassSheen.position.set(0, scrY, LH / 2 + 0.0048);
     lidPivot.add(glassSheen);
 
-    // Soft Studio Floor Contact Shadow Directly Under the 3D MacBook
+    // Soft Floor Contact Shadow
     var shCanvas = document.createElement('canvas');
     shCanvas.width = 512; shCanvas.height = 512;
     var shCtx = shCanvas.getContext('2d');
@@ -657,7 +646,7 @@
     shCtx.fillStyle = shGrad;
     shCtx.fillRect(0, 0, 512, 512);
     var shadowPlane = new THREE.Mesh(
-      new THREE.PlaneGeometry(5.1, 3.85),
+      new THREE.PlaneGeometry(5.4, 3.85),
       new THREE.MeshBasicMaterial({
         map: new THREE.CanvasTexture(shCanvas),
         transparent: true,
@@ -666,55 +655,75 @@
       })
     );
     shadowPlane.rotation.x = -Math.PI / 2;
-    shadowPlane.position.set(0, -0.04, 0.06);
+    shadowPlane.position.set(0, -0.04, Z_OFF + 0.05);
     laptopRoot.add(shadowPlane);
 
-    laptopRoot.position.set(0, -0.72, 0);
+    laptopRoot.position.set(0, -0.78, 0);
 
     // -------------------------------------------------------------------------
-    // Dynamic 60fps 100%-Full-Screen Painter (MI AMP Sky-to-Plugin Pan | APPI | Webs Fast Scroll)
+    // Silky Native-Refresh (60/120fps) Screen Painter with Smart GPU Upload Caching
     // -------------------------------------------------------------------------
     var activeIdx = 0;
     var slideStartTs = performance.now();
-    var lastScreenPaint = 0;
-    var easeOutQuart = function (t) { return 1 - Math.pow(1 - t, 4); };
-    var easeInOutCubic = function (t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+    var lastStaticWake = -1;
+    var lastLampPaint = 0;
+
     var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+    var damp = function (cur, tgt, lambda, dtSec) { return cur + (tgt - cur) * (1 - Math.exp(-lambda * dtSec)); };
+    var easeOutQuart = function (t) { return 1 - Math.pow(1 - t, 4); };
+    var easeInOutQuint = function (t) { return t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2; };
+    var easeInOutSine = function (t) { return -(Math.cos(Math.PI * t) - 1) / 2; };
 
     function paintScreen(now, openAmt) {
-      if (now - lastScreenPaint < 22) return;
-      lastScreenPaint = now;
-
-      var cw = screenCanvas.width, ch = screenCanvas.height;
       var item = SHOWCASE[activeIdx];
       var elapsed = (now - slideStartTs) / 1000;
+      var awake = clamp((openAmt - 0.16) / 0.50, 0, 1);
+      var wakeChanged = Math.abs(awake - lastStaticWake) > 0.004;
 
+      // Determine whether this frame genuinely needs a canvas repaint + WebGL upload
+      var isAnimating = false;
+      if (item.key === 'webs' && !reduced) {
+        isAnimating = true; // continuous silky live scroll at full native Hz!
+      } else if (item.key === 'miamp' && !reduced) {
+        if (elapsed < 3.15) {
+          isAnimating = true; // silky sky-to-plugin crane-down at full native Hz!
+        } else if (now - lastLampPaint >= 33) {
+          isAnimating = true; // gentle 30Hz warm amber pilot lamp breathe
+          lastLampPaint = now;
+        }
+      }
+
+      if (!screenDirty && !wakeChanged && !isAnimating) return;
+      screenDirty = false;
+      lastStaticWake = awake;
+
+      var cw = screenCanvas.width, ch = screenCanvas.height;
       sctx.fillStyle = '#07090e';
       sctx.fillRect(0, 0, cw, ch);
 
       if (item.key === 'miamp' && imgs.miamp.complete && imgs.miamp.naturalWidth > 0) {
-        // Real MI AMP Sky-to-Stage Intro Pan (1600x2196 = 2x 1600x1098 -> fills 100% of screen!)
         var natW = imgs.miamp.naturalWidth;
         var natH = imgs.miamp.naturalHeight;
         var halfH = natH / 2;
         var panT = 0;
         if (reduced) {
           panT = 1;
-        } else if (elapsed < 1.15) {
-          panT = 0.015 * Math.sin(elapsed * 2.1);
-        } else if (elapsed < 2.85) {
-          panT = easeInOutCubic((elapsed - 1.15) / 1.70);
+        } else if (elapsed < 0.95) {
+          // Ultra-gentle sky float
+          panT = 0.012 * Math.sin(elapsed * 2.2);
+        } else if (elapsed < 3.00) {
+          // Apple-smooth quintic crane-down from coastal sky + MI AMP logo onto real plugin!
+          panT = easeInOutQuint((elapsed - 0.95) / 2.05);
         } else {
           panT = 1;
         }
         var sy = clamp(panT, 0, 1) * halfH;
         sctx.drawImage(imgs.miamp, 0, sy, natW, halfH, 0, 0, cw, ch);
 
-        // Warm living pulse on the real amp's orange jewel pilot lamp (exact 0.6375, 0.7031 in 1600x1098)
         if (panT > 0.92) {
-          var lampPulse = 0.28 + 0.22 * Math.sin(elapsed * 4.5);
+          var lampPulse = 0.26 + 0.22 * Math.sin(elapsed * 4.2);
           var lx = cw * 0.6375;
-          var ly = ch * 0.7031;
+          var ly = ch * 0.6747;
           var lg = sctx.createRadialGradient(lx, ly, 2, lx, ly, 42);
           lg.addColorStop(0, 'rgba(255, 138, 42, ' + (lampPulse * 0.72).toFixed(3) + ')');
           lg.addColorStop(1, 'rgba(255, 90, 20, 0)');
@@ -724,37 +733,35 @@
           sctx.fill();
         }
       } else if (item.key === 'appi' && imgs.appi.complete && imgs.appi.naturalWidth > 0) {
-        // Full 1600x1098 zero-seam APPI filling 100% of the monitor!
         sctx.drawImage(imgs.appi, 0, 0, cw, ch);
       } else if (item.key === 'webs' && imgs.webs.complete && imgs.webs.naturalWidth > 0) {
-        // Full-bleed edge-to-edge fast live scroll (100% of screen, zero browser chrome!)
+        // Silky continuous sinusoidal fast scroll across the entire custom web showcase!
         var wNatW = imgs.webs.naturalWidth;
         var wNatH = imgs.webs.naturalHeight;
-        var viewSrcH = wNatW * (ch / cw); // ~1098px of 2680px
+        var viewSrcH = wNatW * (ch / cw);
         var maxSrcY = Math.max(0, wNatH - viewSrcH);
 
-        var cycle = 6.8;
+        var cycle = 7.0;
         var p = reduced ? 0 : ((elapsed % cycle) / cycle);
         var frac = 0;
-        if (p < 0.08) {
+        if (p < 0.07) {
           frac = 0;
-        } else if (p < 0.68) {
-          frac = easeInOutCubic((p - 0.08) / 0.60);
-        } else if (p < 0.82) {
+        } else if (p < 0.67) {
+          frac = easeInOutSine((p - 0.07) / 0.60);
+        } else if (p < 0.80) {
           frac = 1;
         } else {
-          frac = 1 - easeInOutCubic((p - 0.82) / 0.18);
+          frac = 1 - easeInOutSine((p - 0.80) / 0.20);
         }
         var srcY = frac * maxSrcY;
         sctx.drawImage(imgs.webs, 0, srcY, wNatW, viewSrcH, 0, 0, cw, ch);
 
         var barH = ch * 0.28;
         var barY = 16 + frac * (ch - barH - 32);
-        sctx.fillStyle = 'rgba(12, 14, 18, 0.30)';
-        sctx.fillRect(cw - 12, barY, 5, barH);
+        sctx.fillStyle = 'rgba(12, 14, 18, 0.28)';
+        sctx.fillRect(cw - 11, barY, 5, barH);
       }
 
-      var awake = clamp((openAmt - 0.18) / 0.52, 0, 1);
       if (awake < 0.995) {
         sctx.fillStyle = 'rgba(5, 7, 11, ' + ((1 - awake) * 0.94).toFixed(3) + ')';
         sctx.fillRect(0, 0, cw, ch);
@@ -764,11 +771,12 @@
     }
 
     // -------------------------------------------------------------------------
-    // UI Sync (Behind-MacBook Pills, Aurora, Caption Bar, Switcher Tabs)
+    // Silky UI Sync (Pills, Aurora, Caption Bar, Switcher Tabs)
     // -------------------------------------------------------------------------
     function applyProductData(idx, dimPillsBrief) {
       activeIdx = ((idx % SHOWCASE.length) + SHOWCASE.length) % SHOWCASE.length;
       slideStartTs = performance.now();
+      screenDirty = true;
       var item = SHOWCASE[activeIdx];
 
       portalStage.classList.remove('theme-miamp', 'theme-appi', 'theme-webs');
@@ -816,7 +824,7 @@
     }
 
     // -------------------------------------------------------------------------
-    // Interactive 360° Drag (Touch Finger + Mouse Drag) + Real Inertia + Auto-Spin
+    // Frame-Rate-Independent 360° Drag + Weighted Inertia + Studio Dolly Zoom
     // -------------------------------------------------------------------------
     var targetOpen = reduced ? 1 : 0;
     var currentOpen = reduced ? 1 : 0;
@@ -824,12 +832,12 @@
     var isHoverSwitcher = false;
 
     var rotY = 0;
-    var rotX = 0.06;
-    var velY = 0;
+    var rotX = 0.05;
+    var velY = 0; // radians / second!
     var velX = 0;
     var hoverX = 0, hoverY = 0, curHX = 0, curHY = 0;
 
-    var SPIN_MS = 1480;
+    var SPIN_MS = 1620;
     var spinActive = false;
     var spinStartTs = 0;
     var spinStartY = 0;
@@ -845,6 +853,7 @@
     var isDragging = false;
     var dragStartX = 0, dragStartY = 0;
     var lastDragX = 0, lastDragY = 0;
+    var lastDragTs = 0;
     var dragTotalDist = 0;
     var touchAxis = null;
 
@@ -889,6 +898,7 @@
       if (portalPills) portalPills.classList.remove('is-swapping');
       dragStartX = lastDragX = e.clientX;
       dragStartY = lastDragY = e.clientY;
+      lastDragTs = performance.now();
       dragTotalDist = 0;
       velY = 0; velX = 0;
       dwellElapsed = 0;
@@ -899,19 +909,22 @@
 
     window.addEventListener('mousemove', function (e) {
       if (!isDragging) return;
+      var now = performance.now();
+      var dtDrag = Math.max(0.008, (now - lastDragTs) / 1000);
+      lastDragTs = now;
       var dx = e.clientX - lastDragX;
       var dy = e.clientY - lastDragY;
       lastDragX = e.clientX;
       lastDragY = e.clientY;
       dragTotalDist += Math.hypot(dx, dy);
 
-      var dRotY = dx * 0.0086;
-      var dRotX = dy * 0.0046;
+      var dRotY = dx * 0.0082;
+      var dRotX = dy * 0.0044;
       if (Math.abs(dx) > 0.5) manualDragDir = dx > 0 ? 1 : -1;
       rotY += dRotY;
-      rotX = clamp(rotX + dRotX, -0.24, 0.42);
-      velY = dRotY * 0.85;
-      velX = dRotX * 0.5;
+      rotX = clamp(rotX + dRotX, -0.22, 0.40);
+      velY = clamp(velY * 0.55 + (dRotY / dtDrag) * 0.45, -14, 14);
+      velX = clamp(velX * 0.55 + (dRotX / dtDrag) * 0.35, -4, 4);
       dwellElapsed = 0;
     });
 
@@ -939,6 +952,7 @@
       if (portalPills) portalPills.classList.remove('is-swapping');
       dragStartX = lastDragX = t.clientX;
       dragStartY = lastDragY = t.clientY;
+      lastDragTs = performance.now();
       dragTotalDist = 0;
       velY = 0; velX = 0;
       dwellElapsed = 0;
@@ -961,16 +975,19 @@
       if (touchAxis === 'v') return;
       if (touchAxis === 'h') {
         e.preventDefault();
+        var now = performance.now();
+        var dtDrag = Math.max(0.008, (now - lastDragTs) / 1000);
+        lastDragTs = now;
         lastDragX = t.clientX;
         lastDragY = t.clientY;
         dragTotalDist += Math.hypot(dx, dy);
-        var dRotY = dx * 0.0115;
-        var dRotX = dy * 0.0036;
+        var dRotY = dx * 0.0112;
+        var dRotX = dy * 0.0034;
         if (Math.abs(dx) > 0.5) manualDragDir = dx > 0 ? 1 : -1;
         rotY += dRotY;
-        rotX = clamp(rotX + dRotX, -0.22, 0.36);
-        velY = dRotY * 0.92;
-        velX = dRotX * 0.4;
+        rotX = clamp(rotX + dRotX, -0.20, 0.34);
+        velY = clamp(velY * 0.50 + (dRotY / dtDrag) * 0.50, -16, 16);
+        velX = clamp(velX * 0.55 + (dRotX / dtDrag) * 0.30, -3.5, 3.5);
         dwellElapsed = 0;
       }
     }, { passive: false });
@@ -1012,7 +1029,7 @@
 
     if (mbpCue) {
       mbpCue.addEventListener('click', function () {
-        var top = portalStage.getBoundingClientRect().top + window.scrollY - 82;
+        var top = portalStage.getBoundingClientRect().top + window.scrollY - 76;
         window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
       });
     }
@@ -1022,19 +1039,104 @@
       var rect = portalStage.getBoundingClientRect();
       var vh = window.innerHeight || 800;
       var startY = vh * 0.90;
-      var endY = vh * 0.16;
+      var endY = vh * 0.14;
       var raw = (startY - rect.top) / Math.max(210, startY - endY);
       targetOpen = clamp(raw, 0, 1);
     }
 
+    // Exact Screen-Plane Projection Math so the MacBook Reaches Near Left & Right Edges on BOTH PC & Phone!
     function resizeRenderer() {
       var rect = canvasHost.getBoundingClientRect();
       var w = Math.max(260, Math.round(rect.width));
-      var h = Math.max(220, Math.round(rect.height));
+      var h = Math.max(240, Math.round(rect.height));
       renderer.setSize(w, h, false);
-      camera.aspect = w / h;
-      // Heroic close zoom on desktop so the screen dominates cleanly; safe non-clipping distance on portrait mobile!
-      camera.position.z = w < 520 ? 7.55 : 6.05;
+      var asp = w / h;
+      camera.aspect = asp;
+
+      // Exact Apple-Keynote 16.5° telephoto bounding-box solver!
+      // Projects the true 3D corners of the open MacBook (top bezel + front keyboard lip)
+      // so the lateral edges reach as close as possible to both viewport edges on PC AND mobile
+      // while NEVER clipping the top bezel or during full 360° spins!
+      var openYOff = -0.76;
+      var openRx = 0.05;
+      var openLidA = -0.18;
+      var hingeY = BH - 0.004;
+      var hingeZ = -D / 2 + Z_OFF;
+
+      function xformCorner(lx, ly, lz, ry) {
+        var y1 = ly * Math.cos(openRx) - lz * Math.sin(openRx);
+        var z1 = ly * Math.sin(openRx) + lz * Math.cos(openRx);
+        var x2 = lx * Math.cos(ry) + z1 * Math.sin(ry);
+        var z2 = -lx * Math.sin(ry) + z1 * Math.cos(ry);
+        return [x2, y1 + openYOff, z2];
+      }
+      function lidCorner(lx, ly, ry) {
+        var yh = hingeY + ly * Math.cos(openLidA);
+        var zh = hingeZ + ly * Math.sin(openLidA);
+        return xformCorner(lx, yh, zh, ry);
+      }
+      function kbdCorner(lx, lz, ry) {
+        return xformCorner(lx, BH, lz + Z_OFF, ry);
+      }
+      function projNDC(pt, camZ) {
+        var fy = OPEN_LOOK_Y - OPEN_CAM_Y;
+        var fz = -camZ;
+        var fl = Math.hypot(fy, fz);
+        fy /= fl; fz /= fl;
+        var uy = -fz, uz = fy;
+        var dy = pt[1] - OPEN_CAM_Y;
+        var dz = pt[2] - camZ;
+        var depth = dy * fy + dz * fz;
+        var py = dy * uy + dz * uz;
+        return [
+          pt[0] / (depth * TAN_HALF_FOV * asp),
+          py / (depth * TAN_HALF_FOV)
+        ];
+      }
+
+      var targetMaxW = w <= 640 ? 0.965 : (w <= 1080 ? 0.955 : 0.95);
+      var tlOpen = lidCorner(-W / 2, D, 0);
+      var kfOpen = kbdCorner(W / 2, D / 2, 0);
+
+      var lo = 5.0, hi = 28.0;
+      for (var it = 0; it < 26; it++) {
+        var mid = (lo + hi) * 0.5;
+        var pTL = projNDC(tlOpen, mid);
+        var pKF = projNDC(kfOpen, mid);
+        if (Math.abs(pKF[0]) <= targetMaxW && pTL[1] <= 0.94 && pKF[1] >= -0.96) {
+          hi = mid;
+        } else {
+          lo = mid;
+        }
+      }
+      baseCamZ = hi;
+
+      // Exact 360° spin dolly pull-back so no rotating corner ever clips on any aspect ratio!
+      var slo = 0.0, shi = 14.0;
+      for (var sit = 0; sit < 18; sit++) {
+        var sm = (slo + shi) * 0.5;
+        var ok = true;
+        for (var deg = 0; deg < 360; deg += 20) {
+          var rRad = (deg * Math.PI) / 180;
+          var corners = [
+            lidCorner(-W / 2, D, rRad), lidCorner(W / 2, D, rRad),
+            kbdCorner(-W / 2, D / 2, rRad), kbdCorner(W / 2, D / 2, rRad),
+            kbdCorner(-W / 2, -D / 2, rRad), kbdCorner(W / 2, -D / 2, rRad)
+          ];
+          for (var c = 0; c < corners.length; c++) {
+            var sp = projNDC(corners[c], baseCamZ + sm);
+            if (Math.abs(sp[0]) > 0.96 || Math.abs(sp[1]) > 0.96) {
+              ok = false;
+              break;
+            }
+          }
+          if (!ok) break;
+        }
+        if (ok) shi = sm; else slo = sm;
+      }
+      spinDollyAmt = shi;
+      if (curCamZ < 1 || Math.abs(curCamZ - baseCamZ) > 6) curCamZ = baseCamZ;
+
       camera.updateProjectionMatrix();
     }
 
@@ -1055,11 +1157,11 @@
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) {
         inView = entries[0] ? entries[0].isIntersecting : true;
-      }, { threshold: 0.08 }).observe(portalStage);
+      }, { threshold: 0.06 }).observe(portalStage);
     }
 
     // -------------------------------------------------------------------------
-    // Main 60fps 3D Animation Loop
+    // Main Silky 60/120fps Delta-Time-Damped 3D Loop
     // -------------------------------------------------------------------------
     var lastTs = 0;
     function animate(now) {
@@ -1069,40 +1171,41 @@
         return;
       }
 
-      var dt = lastTs ? Math.min(64, now - lastTs) : 16;
+      var dtMs = lastTs ? Math.min(50, now - lastTs) : 16.67;
+      var dtSec = dtMs / 1000;
       lastTs = now;
 
-      currentOpen += (targetOpen - currentOpen) * 0.11;
-      curHX += (hoverX - curHX) * 0.08;
-      curHY += (hoverY - curHY) * 0.08;
+      // Frame-rate-independent exponential spring damping (identically silky at 60Hz, 90Hz, 120Hz, 144Hz!)
+      currentOpen = damp(currentOpen, targetOpen, 7.2, dtSec);
+      curHX = damp(curHX, hoverX, 5.2, dtSec);
+      curHY = damp(curHY, hoverY, 5.2, dtSec);
 
       var e = easeOutQuart(currentOpen);
 
-      // Physical lid angle: closed = +PI/2 (folded flat on top of base), open = -0.22 rad (~103° studio open!)
+      // Physical lid hinge: closed flat on base -> sleek open 100° cinema angle
       var closedLidRotX = Math.PI / 2 - 0.032;
-      var openLidRotX = -0.22;
+      var openLidRotX = -0.18;
       lidPivot.rotation.x = closedLidRotX + (openLidRotX - closedLidRotX) * e;
 
-      // Keep POPUPS sticker 100% upright & non-mirrored BOTH when CLOSED (tilted toward viewer) AND when OPEN & SPUN 180°!
-      // Flip happens invisibly at e=0.62 when the back of the lid is already angled away from the front camera.
+      // POPUPS sticker stays 100% upright & non-mirrored BOTH closed AND spun 180° open!
       popupsStickerMesh.rotation.z = e < 0.62 ? Math.PI : 0;
 
-      // Soft diffuse screen illumination onto keyboard (zero circular trackpad reflection!)
-      screenBounceLight.intensity = clamp((e - 0.25) / 0.65, 0, 0.52);
+      screenBounceLight.intensity = clamp((e - 0.25) / 0.65, 0, 0.45);
 
-      // When CLOSED (e -> 0), angle the whole closed Space Black MacBook forward (+0.54 rad) so the top aluminum lid
-      // & POPUPS sticker shine clearly right toward the visitor! Smoothly levels to studio pitch (+0.05 rad) as lid opens!
-      var closedPitchOffset = 0.48 * (1 - e);
-
+      var closedPitchOffset = 0.46 * (1 - e);
       var floatLift = 0;
+      var wantDolly = 0;
+
       if (spinActive) {
         var rawT = clamp((now - spinStartTs) / SPIN_MS, 0, 1);
-        var easedT = easeInOutCubic(rawT);
+        var easedT = easeInOutQuint(rawT);
         rotY = spinStartY + (spinEndY - spinStartY) * easedT;
-        floatLift = 0.09 * Math.sin(rawT * Math.PI);
-        rotX += (0.06 - rotX) * 0.08;
+        var arc = Math.sin(rawT * Math.PI);
+        floatLift = 0.08 * arc;
+        wantDolly = spinDollyAmt * arc; // silky camera pull-back during spin so giant corners NEVER clip!
+        rotX = damp(rotX, 0.05, 5.0, dtSec);
 
-        if (rawT >= 0.24 && !spinPillsDimmed) {
+        if (rawT >= 0.26 && !spinPillsDimmed) {
           spinPillsDimmed = true;
           if (portalPills) portalPills.classList.add('is-swapping');
         }
@@ -1121,6 +1224,7 @@
           if (mbpSpinBtn) mbpSpinBtn.classList.remove('is-spinning');
         }
       } else if (isDragging) {
+        wantDolly = spinDollyAmt * 0.92;
         var facingBack = Math.cos(rotY) < -0.68;
         if (facingBack && !manualBackCrossed && currentOpen > 0.65) {
           manualBackCrossed = true;
@@ -1130,11 +1234,13 @@
           manualBackCrossed = false;
         }
       } else {
-        if (Math.abs(velY) > 0.0004 || Math.abs(velX) > 0.0004) {
-          rotY += velY;
-          rotX = clamp(rotX + velX, -0.24, 0.42);
-          velY *= 0.945;
-          velX *= 0.90;
+        // Silky frame-rate-independent rotational inertia after finger/mouse flick!
+        if (Math.abs(velY) > 0.025 || Math.abs(velX) > 0.02) {
+          rotY += velY * dtSec;
+          rotX = clamp(rotX + velX * dtSec, -0.22, 0.40);
+          velY *= Math.pow(0.052, dtSec);
+          velX *= Math.pow(0.018, dtSec);
+          wantDolly = spinDollyAmt * clamp(Math.abs(Math.sin(rotY)) + (Math.cos(rotY) < 0 ? 1 : 0), 0, 1);
 
           var inertiaBack = Math.cos(rotY) < -0.68;
           if (inertiaBack && !manualBackCrossed && currentOpen > 0.65) {
@@ -1145,11 +1251,15 @@
             manualBackCrossed = false;
           }
         } else {
-          rotX += (0.06 - rotX) * 0.05;
+          velY = 0; velX = 0;
+          rotX = damp(rotX, 0.05, 4.2, dtSec);
+          // Also keep safe dolly zoom if user left the laptop parked sideways/backwards!
+          var turnedFactor = clamp(1 - Math.cos(rotY), 0, 1);
+          wantDolly = spinDollyAmt * turnedFactor * 0.85;
 
           if (!reduced && inView && currentOpen > 0.84 && !isHoverSwitcher) {
             var dwellMs = SHOWCASE[activeIdx].dwell;
-            dwellElapsed += dt;
+            dwellElapsed += dtMs;
             var pct = clamp(dwellElapsed / dwellMs, 0, 1);
             var activeProg = swBtns[activeIdx] && swBtns[activeIdx].querySelector('.sw-prog');
             if (activeProg) activeProg.style.transform = 'scaleX(' + pct.toFixed(4) + ')';
@@ -1160,15 +1270,21 @@
         }
       }
 
-      var orbitAmt = clamp((e - 0.65) / 0.35, 0, 1);
-      var idleBob = reduced ? 0 : Math.sin(now * 0.0017) * 0.028 * orbitAmt;
-      laptopRoot.rotation.y = rotY + (isDragging ? 0 : curHX * 0.085 * orbitAmt);
-      laptopRoot.rotation.x = rotX + closedPitchOffset + (isDragging ? 0 : -curHY * 0.045 * orbitAmt);
-      // Lift closed Mac slightly upward so the angled closed Space Black lid + POPUPS sticker sits centered in hero!
-      laptopRoot.position.y = -0.72 + (1 - e) * 0.62 + floatLift + idleBob;
+      // Smoothly damp camera studio dolly & viewing height (Apple-Keynote 16.5° telephoto framing!)
+      curCamZ = damp(curCamZ, baseCamZ + wantDolly, 5.8, dtSec);
+      var targetLookY = OPEN_LOOK_Y + 0.08 * (1 - e);
+      curLookY = damp(curLookY, targetLookY, 5.5, dtSec);
+      camera.position.set(0, OPEN_CAM_Y + 0.14 * (1 - e), curCamZ);
+      camera.lookAt(0, curLookY, 0);
 
-      shadowPlane.material.opacity = clamp((0.54 + 0.24 * e) - floatLift * 1.4, 0.32, 0.82);
-      var shScale = 1 - floatLift * 0.5;
+      var orbitAmt = clamp((e - 0.65) / 0.35, 0, 1);
+      var idleBob = reduced ? 0 : Math.sin(now * 0.0016) * 0.022 * orbitAmt;
+      laptopRoot.rotation.y = rotY + (isDragging ? 0 : curHX * 0.075 * orbitAmt);
+      laptopRoot.rotation.x = rotX + closedPitchOffset + (isDragging ? 0 : -curHY * 0.04 * orbitAmt);
+      laptopRoot.position.y = -0.76 + (1 - e) * 1.18 + floatLift + idleBob;
+
+      shadowPlane.material.opacity = clamp((0.52 + 0.24 * e) - floatLift * 1.4, 0.30, 0.80);
+      var shScale = 1 - floatLift * 0.45;
       shadowPlane.scale.set(shScale, shScale, 1);
 
       paintScreen(now, e);
@@ -1205,6 +1321,7 @@
     computeTarget();
     currentOpen = targetOpen;
     resizeRenderer();
+    curCamZ = baseCamZ;
     requestAnimationFrame(animate);
   }
 

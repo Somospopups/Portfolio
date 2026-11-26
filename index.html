@@ -315,11 +315,10 @@
       --pill-accent:#54e3b4;
       --pill-accent-border:rgba(84,227,180,.42);
       --pill-accent-glow:rgba(84,227,180,.85);
-      transition:opacity .26s ease, filter .26s ease;
+      transition:opacity .32s cubic-bezier(.22,1,.36,1);
     }
     .portal-pills-layer.is-swapping {
       opacity:0;
-      filter:blur(5px);
     }
     .portal-stage.theme-miamp .portal-pills-layer {
       --pill-accent:#54e3b4;
@@ -362,13 +361,12 @@
       border:1px solid rgba(255,255,255,.22);
       border-radius:999px;
       color:rgba(255,255,255,.94);
-      background:rgba(10,12,20,.66);
-      backdrop-filter:blur(12px);
+      background:rgba(10,12,20,.80);
       font-size:10.5px;
       font-weight:800;
       letter-spacing:.01em;
       white-space:nowrap;
-      box-shadow:0 14px 32px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.16);
+      box-shadow:0 12px 28px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.16);
       will-change:transform;
       animation:pillBob var(--bob, 5.4s) ease-in-out var(--bdel, 0s) infinite alternate;
       transition:color .35s ease, border-color .35s ease;
@@ -383,31 +381,30 @@
     .pill-body.accent {
       color:var(--pill-accent);
       border-color:var(--pill-accent-border);
-      background:rgba(10,13,16,.76);
+      background:rgba(10,13,18,.86);
     }
     .pill-body.accent::before {
       background:var(--pill-accent);
       box-shadow:0 0 10px var(--pill-accent-glow);
     }
     .pill-body.deep {
-      opacity:.64;
+      opacity:.58;
       transform-origin:center;
       font-size:9.5px;
       padding:7px 13px;
-      filter:blur(.35px);
-      background:rgba(10,12,20,.50);
+      background:rgba(10,12,20,.64);
     }
     @keyframes pillBob {
-      0% { transform:translate3d(0, -10px, 0) rotate(-1.6deg); }
-      100% { transform:translate3d(0, 10px, 0) rotate(1.6deg); }
+      0% { transform:translate3d(0, -10px, 0) rotate(-1.4deg); }
+      100% { transform:translate3d(0, 10px, 0) rotate(1.4deg); }
     }
 
     /* Depth Layer 3 (BEHIND MACBOOK): Breathing Studio Backlight Aurora Halo (per-product theme!) */
     .mbp-aurora {
       position:absolute;
-      left:50%; top:40%;
-      width:min(840px, 92vw);
-      height:min(460px, 56vw);
+      left:50%; top:42%;
+      width:min(1180px, 96vw);
+      height:min(580px, 64vw);
       transform:translate(-50%, -50%);
       z-index:3;
       pointer-events:none;
@@ -416,9 +413,9 @@
         radial-gradient(ellipse 62% 54% at 44% 48%, rgba(84,227,180,.36) 0%, transparent 72%),
         radial-gradient(ellipse 52% 46% at 62% 54%, rgba(36,162,148,.22) 0%, transparent 70%),
         radial-gradient(ellipse 38% 34% at 50% 62%, rgba(200,248,16,.14) 0%, transparent 68%);
-      filter:blur(34px);
-      animation:mbpAuroraBreathe 6.5s ease-in-out infinite alternate;
-      transition:background .65s ease;
+      filter:blur(36px);
+      animation:mbpAuroraBreathe 7.2s ease-in-out infinite alternate;
+      transition:background .7s ease;
       will-change:transform, opacity;
     }
     .portal-stage.theme-appi .mbp-aurora {
@@ -434,15 +431,15 @@
         radial-gradient(ellipse 38% 34% at 50% 62%, rgba(200,248,16,.16) 0%, transparent 68%);
     }
     @keyframes mbpAuroraBreathe {
-      0% { transform:translate(-50%, -50%) scale(.93); }
-      100% { transform:translate(-50%, -50%) scale(1.08); }
+      0% { transform:translate(-50%, -50%) scale(.94); }
+      100% { transform:translate(-50%, -50%) scale(1.07); }
     }
 
-    /* Depth Layer 5 (IN FRONT OF PILLS & ORBITS): True Solid 3D WebGL MacBook Pro Stage */
+    /* Depth Layer 5 (IN FRONT OF PILLS & ORBITS): True Full-Viewport-Width 3D WebGL MacBook Pro Stage */
     .mbp-front-layer {
       position:relative;
       z-index:5;
-      width:100%;
+      width:100vw;
       display:flex;
       flex-direction:column;
       align-items:center;
@@ -451,8 +448,8 @@
 
     .mbp-webgl-stage {
       position:relative;
-      width:clamp(320px, min(1160px, 95vw), 98vw);
-      height:clamp(360px, min(690px, 76vh), 78vh);
+      width:100vw;
+      height:clamp(540px, min(62vw, calc(100vh - 24px)), 1140px);
       margin:0 auto;
       user-select:none;
       -webkit-user-select:none;
@@ -477,16 +474,16 @@
     .mbp-drag-hint {
       position:relative;
       z-index:7;
-      margin:-68px auto 0;
+      margin:-78px auto 0;
       display:inline-flex;
       align-items:center;
       gap:7px;
       padding:5px 13px;
       border-radius:999px;
-      background:rgba(10,12,18,.72);
+      background:rgba(10,12,18,.78);
       backdrop-filter:blur(12px);
-      border:1px solid rgba(255,255,255,.14);
-      color:rgba(244,245,240,.78);
+      border:1px solid rgba(255,255,255,.15);
+      color:rgba(244,245,240,.80);
       font-family:var(--mono);
       font-size:9.5px;
       letter-spacing:.07em;
@@ -690,8 +687,8 @@
     .laptop-cue:hover { border-color:var(--lime); }
 
     @media (max-width: 640px) {
-      .mbp-webgl-stage { width:100vw; height:clamp(300px, 52vh, 430px); }
-      .mbp-drag-hint { margin-top:-26px; font-size:8.5px; padding:4px 10px; }
+      .mbp-webgl-stage { width:100vw; height:clamp(320px, 54vh, 460px); }
+      .mbp-drag-hint { margin-top:-30px; font-size:8.5px; padding:4px 10px; }
       .mbp-switcher { border-radius:18px; padding:6px; gap:4px; }
       .mbp-sw-btn { padding:6px 9px; font-size:9px; }
       .mbp-spin-trigger { padding:6px 10px; font-size:9px; }
@@ -2049,7 +2046,7 @@
     .pp-hero-rig {
       position: relative; width: min(268px, 66vw); aspect-ratio: 1200 / 436;
       transform-style: preserve-3d; cursor: pointer;
-      transition: transform .16s ease-out;
+      will-change: transform;
     }
     .pp-hero-rig .pp-ly { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
     .pp-hero-rig .pp-ly img { width: 100%; height: 100%; object-fit: contain; display: block; }
@@ -2058,7 +2055,7 @@
     .pp-hero-rig .pp-dw {
       position: absolute; left: 30.3159%; top: 20.9030%; width: 8.8700%; height: 24.4147%;
       transform: translate(-50%, -50%) translateZ(44px); z-index: 4; pointer-events: none;
-      transition: transform .14s ease-out;
+      will-change: transform;
     }
     .pp-hero-rig .pp-dot {
       position: absolute; inset: 0; border-radius: 50%;
@@ -2931,23 +2928,54 @@
       var heroRig = document.getElementById('ppHeroRig');
       var heroDot = document.getElementById('ppHeroDot');
       if (heroSec && heroRig && heroDot && !reduced) {
-        function applyHeroTilt(nx, ny) {
-          var cx = Math.max(-1, Math.min(1, nx));
-          var cy = Math.max(-1, Math.min(1, ny));
-          heroRig.style.transform = 'rotateX(' + (-cy * 12).toFixed(2) + 'deg) rotateY(' + (cx * 16).toFixed(2) + 'deg)';
-          heroDot.style.transform = 'translate(calc(-50% + ' + (cx * 11).toFixed(1) + 'px),calc(-50% + ' + (cy * 9).toFixed(1) + 'px)) translateZ(48px) scale(1.08)';
+        // Unified frame-rate-independent damped spring loop for BOTH Desktop Pointer & Mobile Gyroscope
+        var tgtHX = 0, tgtHY = 0, tgtHScale = 1;
+        var curHX = 0, curHY = 0, curHScale = 1;
+        var heroSpringRaf = false;
+        var heroSpringLast = 0;
+
+        function kickHeroSpring() {
+          if (!heroSpringRaf) {
+            heroSpringRaf = true;
+            heroSpringLast = performance.now();
+            requestAnimationFrame(heroSpringTick);
+          }
+        }
+
+        function heroSpringTick(now) {
+          var dt = Math.min(0.05, Math.max(0.004, (now - heroSpringLast) / 1000));
+          heroSpringLast = now;
+          var a = 1 - Math.exp(-9.5 * dt);
+          curHX += (tgtHX - curHX) * a;
+          curHY += (tgtHY - curHY) * a;
+          curHScale += (tgtHScale - curHScale) * a;
+
+          heroRig.style.transform = 'rotateX(' + (-curHY * 12).toFixed(3) + 'deg) rotateY(' + (curHX * 16).toFixed(3) + 'deg)';
+          heroDot.style.transform = 'translate(calc(-50% + ' + (curHX * 11).toFixed(2) + 'px),calc(-50% + ' + (curHY * 9).toFixed(2) + 'px)) translateZ(48px) scale(' + curHScale.toFixed(3) + ')';
+
+          if (Math.abs(tgtHX - curHX) > 0.0012 || Math.abs(tgtHY - curHY) > 0.0012 || Math.abs(tgtHScale - curHScale) > 0.0012) {
+            requestAnimationFrame(heroSpringTick);
+          } else {
+            curHX = tgtHX; curHY = tgtHY; curHScale = tgtHScale;
+            if (tgtHX === 0 && tgtHY === 0) {
+              heroRig.style.transform = '';
+              heroDot.style.transform = 'translate(-50%,-50%) translateZ(44px)';
+            }
+            heroSpringRaf = false;
+          }
         }
 
         // Desktop precision pointer hover
         heroSec.addEventListener('mousemove', function (e) {
           var r = heroSec.getBoundingClientRect();
-          var nx = ((e.clientX - r.left) / r.width) * 2 - 1;
-          var ny = ((e.clientY - r.top) / r.height) * 2 - 1;
-          applyHeroTilt(nx, ny);
-        });
+          tgtHX = Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width) * 2 - 1));
+          tgtHY = Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height) * 2 - 1));
+          tgtHScale = 1.08;
+          kickHeroSpring();
+        }, { passive: true });
         heroSec.addEventListener('mouseleave', function () {
-          heroRig.style.transform = '';
-          heroDot.style.transform = 'translate(-50%,-50%) translateZ(44px)';
+          tgtHX = 0; tgtHY = 0; tgtHScale = 1;
+          kickHeroSpring();
         });
 
         // Mobile Gyroscope / Accelerometer (DeviceOrientationEvent) with Smart Auto-Calibration & iOS Permission
@@ -2955,19 +2983,6 @@
         var gyroActive = false;
         var baseBeta = null;
         var baseGamma = null;
-        var tgtGX = 0, tgtGY = 0, curGX = 0, curGY = 0;
-        var gyroRaf = false;
-
-        function gyroTick() {
-          curGX += (tgtGX - curGX) * 0.14;
-          curGY += (tgtGY - curGY) * 0.14;
-          applyHeroTilt(curGX, curGY);
-          if (Math.abs(tgtGX - curGX) > 0.002 || Math.abs(tgtGY - curGY) > 0.002) {
-            requestAnimationFrame(gyroTick);
-          } else {
-            gyroRaf = false;
-          }
-        }
 
         function onDeviceOrientation(ev) {
           if (ev.beta === null || ev.gamma === null) return;
@@ -2993,12 +3008,10 @@
           }
 
           gyroActive = true;
-          tgtGX = Math.max(-1, Math.min(1, (rawX - baseGamma) / 22));
-          tgtGY = Math.max(-1, Math.min(1, (rawY - baseBeta) / 22));
-          if (!gyroRaf) {
-            gyroRaf = true;
-            requestAnimationFrame(gyroTick);
-          }
+          tgtHX = Math.max(-1, Math.min(1, (rawX - baseGamma) / 22));
+          tgtHY = Math.max(-1, Math.min(1, (rawY - baseBeta) / 22));
+          tgtHScale = 1.07;
+          kickHeroSpring();
         }
 
         function enableGyro() {
