@@ -782,6 +782,111 @@
     }
     .cw-live i { width:6px; height:6px; border-radius:50%; background:var(--lime); display:inline-block; }
 
+
+    /* Bespoke warm editorial stage for LUMA inside Webs a Medida */
+    .cw-card.is-anton {
+      background:linear-gradient(155deg, #12291a 0%, #0c1710 100%);
+      border-color:rgba(233,195,108,.28);
+    }
+    .cw-card.is-luma {
+      --accent: #d9633c;
+      background:linear-gradient(155deg, #211815 0%, #130f0e 100%);
+      border-color:rgba(217,99,60,.32);
+    }
+    .cw-card.is-luma:hover { border-color:rgba(234,132,96,.72); }
+    .cw-luma-stage {
+      position:relative;
+      height:300px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:24px 28px;
+      overflow:hidden;
+      background:
+        radial-gradient(380px 260px at 78% 45%, rgba(217,99,60,.22), transparent 65%),
+        linear-gradient(145deg, #f4efe6 0%, #e9dfd1 100%);
+      border-bottom:1px solid rgba(217,99,60,.22);
+      color:#20221e;
+    }
+    .cw-luma-copy { position:relative; z-index:2; max-width:250px; }
+    .cw-luma-pill {
+      display:inline-block;
+      padding:5px 11px;
+      border-radius:999px;
+      border:1px solid rgba(217,99,60,.4);
+      background:rgba(252,250,246,.82);
+      font-family:var(--mono);
+      font-size:9.5px;
+      font-weight:700;
+      letter-spacing:.1em;
+      color:#b84824;
+      margin-bottom:10px;
+    }
+    .cw-luma-copy h4 {
+      font-family:var(--serif);
+      font-size:32px;
+      line-height:1.02;
+      color:#20221e;
+      margin-bottom:8px;
+    }
+    .cw-luma-copy h4 em { color:#d9633c; font-style:italic; }
+    .cw-luma-copy > span {
+      display:block;
+      font-size:12px;
+      color:#5d6058;
+      font-weight:500;
+    }
+    .cw-luma-visual {
+      position:relative;
+      width:236px;
+      height:252px;
+      flex-shrink:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .cw-luma-arch {
+      width:176px;
+      height:224px;
+      border-radius:96px 96px 18px 18px;
+      overflow:hidden;
+      border:3px solid #fcfaf6;
+      box-shadow:0 20px 42px rgba(32,34,30,.24);
+      transition:transform .5s var(--ease);
+    }
+    .cw-luma-arch img { width:100%; height:100%; object-fit:cover; }
+    .cw-luma-mini {
+      position:absolute;
+      width:74px;
+      height:88px;
+      border-radius:14px;
+      overflow:hidden;
+      border:2.5px solid #fcfaf6;
+      box-shadow:0 12px 26px rgba(32,34,30,.22);
+      transition:transform .5s var(--ease);
+    }
+    .cw-luma-mini img { width:100%; height:100%; object-fit:cover; }
+    .cw-luma-mini.m1 { left:-4px; bottom:10px; transform:rotate(-5deg); }
+    .cw-luma-mini.m2 { right:-4px; top:16px; transform:rotate(6deg); }
+    .cw-card:hover .cw-luma-arch { transform:translateY(-4px) scale(1.03); }
+    .cw-card:hover .cw-luma-mini.m1 { transform:translate(-5px,-6px) rotate(-8deg); }
+    .cw-card:hover .cw-luma-mini.m2 { transform:translate(5px,-5px) rotate(9deg); }
+    .cw-more.wide {
+      grid-column:span 12;
+      flex-direction:row;
+      align-items:center;
+      text-align:left;
+      padding:26px 32px;
+      min-height:0;
+    }
+    .cw-more.wide p { max-width:54ch; }
+    @media (max-width: 960px) {
+      .cw-card.half { grid-column:span 12; }
+      .cw-luma-stage { flex-direction:column; height:auto; padding:22px 20px; text-align:center; }
+      .cw-more.wide { flex-direction:column; align-items:flex-start; }
+    }
+
     /* Bespoke live pizza stage for Antón inside Webs a Medida */
     .cw-anton-stage {
       position:relative;
@@ -1570,6 +1675,21 @@
                 '</div>' +
               '</a>'
             )
+            : w.id === 'luma'
+            ? (
+              '<a class="cw-luma-stage" href="' + esc(w.url) + '" target="_blank" rel="noopener" aria-label="Abrir tienda editorial LUMA">' +
+                '<div class="cw-luma-copy">' +
+                  '<span class="cw-luma-pill">DECO &amp; HOGAR · TIENDA EDITORIAL</span>' +
+                  '<h4>LUMA.<br /><em>Más vos.</em></h4>' +
+                  '<span>Catálogo vivo + carrito + panel propio</span>' +
+                '</div>' +
+                '<div class="cw-luma-visual">' +
+                  '<div class="cw-luma-arch"><img src="luma/assets/lampara-aura.webp" alt="Lámpara Aura de LUMA" loading="lazy" /></div>' +
+                  '<div class="cw-luma-mini m1"><img src="luma/assets/vela-bosque.webp" alt="Vela Bosque de LUMA" loading="lazy" /></div>' +
+                  '<div class="cw-luma-mini m2"><img src="luma/assets/bolso-siena.webp" alt="Bolso Siena de LUMA" loading="lazy" /></div>' +
+                '</div>' +
+              '</a>'
+            )
             : (
               '<a class="cw-shot" href="' + esc(w.url) + '" target="_blank" rel="noopener" aria-label="Abrir ' + esc(w.name) + '">' +
                 '<img src="' + esc(w.image) + '" alt="Vista real de ' + esc(w.name) + '" loading="lazy" />' +
@@ -1577,7 +1697,7 @@
             );
 
           return (
-            '<article class="cw-card' + (single ? '' : ' half') + '">' +
+            '<article class="cw-card' + (single ? '' : ' half') + ' is-' + esc(w.id) + '">' +
               '<div class="cw-bar">' +
                 '<div class="cw-dots" aria-hidden="true"><i></i><i></i><i></i></div>' +
                 '<a class="cw-url" href="' + esc(w.url) + '" target="_blank" rel="noopener">' + esc(w.displayUrl) + '</a>' +

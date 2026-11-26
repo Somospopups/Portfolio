@@ -926,6 +926,7 @@
         const singleFeatured = list.length === 1;
         const cardsHtml = list.map(function (w) {
           const imgPath = '../' + w.image;
+          const liveUrl = /^https?:\/\//i.test(w.url) ? w.url : '../' + w.url;
           const caseBtn = w.caseUrl
             ? '<a href="../' + esc(w.caseUrl) + '" class="btn btn-ghost">Ver caso completo →</a>'
             : '';
@@ -937,10 +938,10 @@
             '<article class="web-card' + (singleFeatured ? '' : ' compact') + '">' +
               '<div class="browser-bar">' +
                 '<div class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></div>' +
-                '<a href="' + esc(w.url) + '" target="_blank" rel="noopener" class="browser-url">' + esc(w.displayUrl) + '</a>' +
+                '<a href="' + esc(liveUrl) + '" target="_blank" rel="noopener" class="browser-url">' + esc(w.displayUrl) + '</a>' +
                 '<span class="browser-live"><span></span>ONLINE</span>' +
               '</div>' +
-              '<a href="' + esc(w.url) + '" target="_blank" rel="noopener" class="web-shot" aria-label="Abrir ' + esc(w.name) + ' en vivo">' +
+              '<a href="' + esc(liveUrl) + '" target="_blank" rel="noopener" class="web-shot" aria-label="Abrir ' + esc(w.name) + ' en vivo">' +
                 '<img src="' + esc(imgPath) + '" alt="Vista previa de ' + esc(w.name) + '" loading="lazy" />' +
                 (w.highlight ? '<span class="web-shot-pill">' + esc(w.highlight) + '</span>' : '') +
               '</a>' +
@@ -954,7 +955,7 @@
                 '<p class="web-desc">' + esc(w.summary) + '</p>' +
                 '<div class="web-tags">' + tagsHtml + '</div>' +
                 '<div class="web-actions">' +
-                  '<a href="' + esc(w.url) + '" target="_blank" rel="noopener" class="btn btn-lime">Abrir web en vivo ↗</a>' +
+                  '<a href="' + esc(liveUrl) + '" target="_blank" rel="noopener" class="btn btn-lime">Abrir web en vivo ↗</a>' +
                   caseBtn +
                 '</div>' +
               '</div>' +

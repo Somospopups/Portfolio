@@ -2,7 +2,7 @@
    POPUPS · Catálogo de Páginas Web a Medida (fuente única de verdad)
    ----------------------------------------------------------------------------
    Para sumar una nueva web creada por POPUPS:
-   1. Guardá una captura (1200x740 recomendado) en assets/<nombre>-shot.png
+   1. Guardá una captura (1200x740 recomendado) en assets/<nombre>-shot.webp
    2. Agregá un objeto a window.POPUPS_WEBS abajo.
    3. Automáticamente aparece en:
       - La portada del Portfolio (index.html#webs-a-medida)
@@ -27,6 +27,24 @@ window.POPUPS_WEBS = [
     tags: ['Pizza 3D', 'Armado 8 pasos', '4 canales', 'WhatsApp 0%'],
     highlight: '0% comisión · Take away, En casa & B2B',
     accent: '#2D6117',
+    featured: true
+  },
+  {
+    id: 'luma',
+    number: '02',
+    name: 'LUMA · Objetos que hacen hogar',
+    category: 'Deco & Hogar',
+    location: 'Córdoba, Argentina',
+    year: '2026',
+    url: 'luma/',
+    displayUrl: 'luma · tienda editorial',
+    caseUrl: null,
+    image: 'assets/luma-shot.webp',
+    tagline: 'Tu espacio. Más vos.',
+    summary: 'Tienda editorial de objetos para el hogar, accesorios y bienestar en paleta crema y terracota: catálogo con búsqueda y filtros, carrito vivo, lista de precios PDF y panel autogestionable.',
+    tags: ['Diseño editorial', 'Catálogo + carrito', 'Panel admin', 'Lista PDF'],
+    highlight: 'E-commerce editorial · Catálogo & Panel',
+    accent: '#D9633C',
     featured: true
   }
 ];
