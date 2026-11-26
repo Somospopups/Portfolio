@@ -117,14 +117,14 @@
     renderer.domElement.setAttribute('aria-label', 'MacBook Pro 3D interactiva: arrastrá para girar 360 grados');
     canvasHost.appendChild(renderer.domElement);
 
-    var FOV_DEG = 15.0;
+    var FOV_DEG = 16.5;
     var TAN_HALF_FOV = Math.tan((FOV_DEG * Math.PI) / 360);
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(FOV_DEG, 16 / 10, 0.1, 80);
-    var baseCamZ = 11.4;
-    var curCamZ = 11.4;
-    var spinDollyAmt = 2.1;
-    var OPEN_CAM_Y = 0.84;
+    var baseCamZ = 10.6;
+    var curCamZ = 10.6;
+    var spinDollyAmt = 2.0;
+    var OPEN_CAM_Y = 0.80;
     var OPEN_LOOK_Y = 0.36;
     var curLookY = OPEN_LOOK_Y;
     camera.position.set(0, OPEN_CAM_Y, baseCamZ);
@@ -463,10 +463,10 @@
     imgs.appi.onload = function () { screenDirty = true; };
     imgs.webs.onload = function () { screenDirty = true; };
     imgs.mark.onload = function () { drawPopupsSticker(imgs.mark); };
-    imgs.miamp.src = 'assets/miamp-real-intro.webp?v=4';
-    imgs.appi.src = 'assets/appi-screen-full.webp?v=4';
-    imgs.webs.src = 'assets/webs-medida-scroll.webp?v=4';
-    imgs.mark.src = 'assets/logo-mark.webp?v=4';
+    imgs.miamp.src = 'assets/miamp-real-intro.webp?v=5';
+    imgs.appi.src = 'assets/appi-screen-full.webp?v=5';
+    imgs.webs.src = 'assets/webs-medida-scroll.webp?v=5';
+    imgs.mark.src = 'assets/logo-mark.webp?v=5';
 
     // -------------------------------------------------------------------------
     // Build True Cinema 16:10 Solid 3D Space Black MacBook Pro 16"
@@ -1069,7 +1069,7 @@
       var rect = portalStage.getBoundingClientRect();
       var vh = window.innerHeight || 800;
       var startY = vh * 0.90;
-      var endY = vh * 0.08;
+      var endY = vh * 0.14;
       var raw = (startY - rect.top) / Math.max(210, startY - endY);
       targetOpen = clamp(raw, 0, 1);
     }
@@ -1124,16 +1124,16 @@
         ];
       }
 
-      var targetMaxW = w <= 640 ? 0.965 : (w <= 1080 ? 0.96 : 0.955);
+      var targetMaxW = w <= 640 ? 0.965 : (w <= 1080 ? 0.955 : 0.95);
       var tlOpen = lidCorner(-W / 2, D, 0);
       var kfOpen = kbdCorner(W / 2, D / 2, 0);
 
-      var lo = 5.0, hi = 34.0;
-      for (var it = 0; it < 28; it++) {
+      var lo = 5.0, hi = 28.0;
+      for (var it = 0; it < 26; it++) {
         var mid = (lo + hi) * 0.5;
         var pTL = projNDC(tlOpen, mid);
         var pKF = projNDC(kfOpen, mid);
-        if (Math.abs(pKF[0]) <= targetMaxW && pTL[1] <= 0.95 && pKF[1] >= -0.97) {
+        if (Math.abs(pKF[0]) <= targetMaxW && pTL[1] <= 0.94 && pKF[1] >= -0.96) {
           hi = mid;
         } else {
           lo = mid;
