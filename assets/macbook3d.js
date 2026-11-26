@@ -120,7 +120,7 @@
     var FOV_DEG = 16.5;
     var TAN_HALF_FOV = Math.tan((FOV_DEG * Math.PI) / 360);
     var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(FOV_DEG, 16 / 10, 0.1, 80);
+    var camera = new THREE.PerspectiveCamera(FOV_DEG, 16 / 10, 1.0, 90);
     var baseCamZ = 10.6;
     var curCamZ = 10.6;
     var spinDollyAmt = 2.0;
@@ -381,6 +381,8 @@
 
     // -------------------------------------------------------------------------
     // TRANSPARENT POPUPS "P●" STICKER DECAL ON SEAMLESS SPACE BLACK LID
+    // Instant Frame-0 POPUPS sticker (never a naked dot!) + high-res official
+    // asset upgrade (popups-lid-sticker.webp / already-loaded DOM logo-mark.webp)
     // -------------------------------------------------------------------------
     var stickerCanvas = document.createElement('canvas');
     stickerCanvas.width = 512;
@@ -388,51 +390,124 @@
     var stickerCtx = stickerCanvas.getContext('2d');
     var stickerTex = new THREE.CanvasTexture(stickerCanvas);
     stickerTex.encoding = THREE.sRGBEncoding;
-    stickerTex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+    stickerTex.generateMipmaps = false;
+    stickerTex.minFilter = THREE.LinearFilter;
+    stickerTex.magFilter = THREE.LinearFilter;
+    stickerTex.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
+    var stickerReady = false;
 
-    function drawPopupsSticker(markImg) {
+    function drawVectorPopupsFallback() {
+      var w = stickerCanvas.width, h = stickerCanvas.height;
+      stickerCtx.clearRect(0, 0, w, h);
+      stickerCtx.save();
+      stickerCtx.translate(w * 0.47, h * 0.54);
+      stickerCtx.rotate(-0.14);
+      // White vinyl outer border
+      function rbox(x, y, bw, bh, r) {
+        stickerCtx.beginPath();
+        stickerCtx.moveTo(x + r, y);
+        stickerCtx.lineTo(x + bw - r, y);
+        stickerCtx.quadraticCurveTo(x + bw, y, x + bw, y + r);
+        stickerCtx.lineTo(x + bw, y + bh - r);
+        stickerCtx.quadraticCurveTo(x + bw, y + bh, x + bw - r, y + bh);
+        stickerCtx.lineTo(x + r, y + bh);
+        stickerCtx.quadraticCurveTo(x, y + bh, x, y + bh - r);
+        stickerCtx.lineTo(x, y + r);
+        stickerCtx.quadraticCurveTo(x, y, x + r, y);
+        stickerCtx.closePath();
+      }
+      rbox(-150, -142, 300, 284, 72);
+      stickerCtx.fillStyle = '#ffffff';
+      stickerCtx.fill();
+      rbox(-138, -130, 276, 260, 62);
+      stickerCtx.fillStyle = '#07090d';
+      stickerCtx.fill();
+      // Bold white P letter
+      stickerCtx.fillStyle = '#ffffff';
+      stickerCtx.font = '900 205px Inter, system-ui, -apple-system, sans-serif';
+      stickerCtx.textAlign = 'center';
+      stickerCtx.textBaseline = 'middle';
+      stickerCtx.fillText('P', 2, 10);
+      stickerCtx.restore();
+
+      // Official neon lime dot top-right with white badge ring
+      var dotX = w * 0.72, dotY = h * 0.27, dotR = 54;
+      stickerCtx.beginPath();
+      stickerCtx.arc(dotX, dotY, dotR + 18, 0, Math.PI * 2);
+      stickerCtx.fillStyle = '#ffffff';
+      stickerCtx.fill();
+      stickerCtx.beginPath();
+      stickerCtx.arc(dotX, dotY, dotR + 9, 0, Math.PI * 2);
+      stickerCtx.fillStyle = '#07090d';
+      stickerCtx.fill();
+      var dg = stickerCtx.createRadialGradient(dotX - 16, dotY - 16, 4, dotX, dotY, dotR);
+      dg.addColorStop(0, '#ecff91');
+      dg.addColorStop(0.55, '#c6f811');
+      dg.addColorStop(1, '#9ece00');
+      stickerCtx.beginPath();
+      stickerCtx.arc(dotX, dotY, dotR, 0, Math.PI * 2);
+      stickerCtx.fillStyle = dg;
+      stickerCtx.fill();
+      stickerTex.needsUpdate = true;
+    }
+
+    function drawPopupsStickerFromFull(stickerImg) {
+      if (!stickerImg || !stickerImg.complete || stickerImg.naturalWidth <= 0) return false;
+      var w = stickerCanvas.width, h = stickerCanvas.height;
+      stickerCtx.clearRect(0, 0, w, h);
+      stickerCtx.drawImage(stickerImg, 0, 0, w, h);
+      stickerTex.needsUpdate = true;
+      stickerReady = true;
+      return true;
+    }
+
+    function drawPopupsStickerFromMark(markImg) {
+      if (!markImg || !markImg.complete || markImg.naturalWidth <= 0) return false;
       var w = stickerCanvas.width, h = stickerCanvas.height;
       stickerCtx.clearRect(0, 0, w, h);
 
-      if (markImg && markImg.complete && markImg.naturalWidth > 0) {
-        var srcW = markImg.naturalWidth * (460 / 1200);
-        var srcH = markImg.naturalHeight;
-        var drawW = 390;
-        var drawH = drawW * (srcH / srcW);
-        var dx = (w - drawW) / 2;
-        var dy = (h - drawH) / 2;
+      var srcW = Math.round(markImg.naturalWidth * (460 / 1200));
+      var srcH = markImg.naturalHeight;
+      var drawW = 410;
+      var drawH = drawW * (srcH / srcW);
+      var dx = (w - drawW) / 2;
+      var dy = (h - drawH) / 2;
 
-        stickerCtx.drawImage(markImg, 0, 0, srcW, srcH, dx, dy, drawW, drawH);
+      stickerCtx.drawImage(markImg, 0, 0, srcW, srcH, dx, dy, drawW, drawH);
 
-        var dotX = dx + drawW * 0.7908;
-        var dotY = dy + drawH * 0.2090;
-        var dotR = drawW * 0.1157;
+      var dotX = dx + drawW * 0.7908;
+      var dotY = dy + drawH * 0.2090;
+      var dotR = drawW * 0.1157;
 
-        var glow = stickerCtx.createRadialGradient(dotX, dotY, dotR * 0.25, dotX, dotY, dotR * 1.9);
-        glow.addColorStop(0, 'rgba(198,248,17,0.44)');
-        glow.addColorStop(1, 'rgba(198,248,17,0)');
-        stickerCtx.fillStyle = glow;
-        stickerCtx.beginPath();
-        stickerCtx.arc(dotX, dotY, dotR * 1.9, 0, Math.PI * 2);
-        stickerCtx.fill();
+      var glow = stickerCtx.createRadialGradient(dotX, dotY, dotR * 0.25, dotX, dotY, dotR * 1.9);
+      glow.addColorStop(0, 'rgba(198,248,17,0.44)');
+      glow.addColorStop(1, 'rgba(198,248,17,0)');
+      stickerCtx.fillStyle = glow;
+      stickerCtx.beginPath();
+      stickerCtx.arc(dotX, dotY, dotR * 1.9, 0, Math.PI * 2);
+      stickerCtx.fill();
 
-        var dg = stickerCtx.createRadialGradient(dotX - dotR * 0.28, dotY - dotR * 0.28, dotR * 0.1, dotX, dotY, dotR);
-        dg.addColorStop(0, '#e8ff85');
-        dg.addColorStop(0.55, '#c6f811');
-        dg.addColorStop(1, '#9ece00');
-        stickerCtx.fillStyle = dg;
-        stickerCtx.beginPath();
-        stickerCtx.arc(dotX, dotY, dotR, 0, Math.PI * 2);
-        stickerCtx.fill();
-      } else {
-        stickerCtx.fillStyle = '#c6f811';
-        stickerCtx.beginPath();
-        stickerCtx.arc(w / 2, h / 2, 34, 0, Math.PI * 2);
-        stickerCtx.fill();
-      }
+      var dg = stickerCtx.createRadialGradient(dotX - dotR * 0.28, dotY - dotR * 0.28, dotR * 0.1, dotX, dotY, dotR);
+      dg.addColorStop(0, '#e8ff85');
+      dg.addColorStop(0.55, '#c6f811');
+      dg.addColorStop(1, '#9ece00');
+      stickerCtx.fillStyle = dg;
+      stickerCtx.beginPath();
+      stickerCtx.arc(dotX, dotY, dotR, 0, Math.PI * 2);
+      stickerCtx.fill();
+
       stickerTex.needsUpdate = true;
+      stickerReady = true;
+      return true;
     }
-    drawPopupsSticker(null);
+
+    // 1) Draw instant crisp vector POPUPS "P●" immediately on Frame 0 (zero naked dot ever!)
+    drawVectorPopupsFallback();
+    // 2) Immediately check if the navbar/hero already decoded assets/logo-mark.webp in the DOM!
+    var domMarkImg = document.querySelector('img[src*="logo-mark"]');
+    if (domMarkImg && domMarkImg.complete && domMarkImg.naturalWidth > 0) {
+      drawPopupsStickerFromMark(domMarkImg);
+    }
 
     // -------------------------------------------------------------------------
     // High-Speed GPU Screen Canvas Texture (1280 x 802 = Exact 16:10 Full-Bleed!)
@@ -441,9 +516,8 @@
     var screenCanvas = document.createElement('canvas');
     screenCanvas.width = 1280;
     screenCanvas.height = 802;
-    var sctx = screenCanvas.getContext('2d', { alpha: false });
-    sctx.fillStyle = '#07090e';
-    sctx.fillRect(0, 0, 1280, 802);
+    var sctx = screenCanvas.getContext('2d', { alpha: true });
+    sctx.clearRect(0, 0, 1280, 802);
 
     var screenTex = new THREE.CanvasTexture(screenCanvas);
     screenTex.encoding = THREE.sRGBEncoding;
@@ -454,19 +528,25 @@
 
     var screenDirty = true;
     var imgs = {
+      sticker: new Image(),
+      mark: new Image(),
       miamp: new Image(),
       appi: new Image(),
-      webs: new Image(),
-      mark: new Image()
+      webs: new Image()
     };
+    imgs.sticker.onload = function () { drawPopupsStickerFromFull(imgs.sticker); };
+    imgs.mark.onload = function () { if (!stickerReady) drawPopupsStickerFromMark(imgs.mark); };
     imgs.miamp.onload = function () { screenDirty = true; };
     imgs.appi.onload = function () { screenDirty = true; };
     imgs.webs.onload = function () { screenDirty = true; };
-    imgs.mark.onload = function () { drawPopupsSticker(imgs.mark); };
-    imgs.miamp.src = 'assets/miamp-real-intro.webp?v=5';
-    imgs.appi.src = 'assets/appi-screen-full.webp?v=5';
-    imgs.webs.src = 'assets/webs-medida-scroll.webp?v=5';
-    imgs.mark.src = 'assets/logo-mark.webp?v=5';
+    // Load the POPUPS lid sticker FIRST (priority #1 so closed Mac ALWAYS shows crisp sticker!)
+    imgs.sticker.src = 'assets/popups-lid-sticker.webp?v=6';
+    imgs.mark.src = 'assets/logo-mark.webp';
+    imgs.miamp.src = 'assets/miamp-real-intro.webp?v=6';
+    imgs.appi.src = 'assets/appi-screen-full.webp?v=6';
+    imgs.webs.src = 'assets/webs-medida-scroll.webp?v=6';
+    if (imgs.sticker.complete && imgs.sticker.naturalWidth > 0) drawPopupsStickerFromFull(imgs.sticker);
+    else if (imgs.mark.complete && imgs.mark.naturalWidth > 0) drawPopupsStickerFromMark(imgs.mark);
 
     // -------------------------------------------------------------------------
     // Build True Cinema 16:10 Solid 3D Space Black MacBook Pro 16"
@@ -600,19 +680,23 @@
     lidPivot.add(lidBody);
 
     // Transparent POPUPS "P●" Sticker Decal on the seamless Space Black aluminum lid (identical closed & 180°!)
-    var stickerGeo = new THREE.PlaneGeometry(1.12, 1.12);
+    var stickerGeo = new THREE.PlaneGeometry(1.24, 1.24);
     stickerGeo.rotateY(Math.PI);
     var stickerMat = new THREE.MeshStandardMaterial({
       map: stickerTex,
       transparent: true,
-      alphaTest: 0.02,
-      metalness: 0.18,
-      roughness: 0.22,
-      envMapIntensity: 1.25,
-      depthWrite: false
+      alphaTest: 0.04,
+      metalness: 0.12,
+      roughness: 0.24,
+      envMapIntensity: 1.15,
+      depthWrite: false,
+      polygonOffset: true,
+      polygonOffsetFactor: -2,
+      polygonOffsetUnits: -2
     });
     var popupsStickerMesh = new THREE.Mesh(stickerGeo, stickerMat);
-    popupsStickerMesh.position.set(0, D / 2, -(LH / 2) - 0.0034);
+    popupsStickerMesh.position.set(0, D / 2, -(LH / 2) - 0.010);
+    popupsStickerMesh.renderOrder = 2;
     lidPivot.add(popupsStickerMesh);
 
     var bezelShape = makeRoundedRectShape(W - 0.046, D - 0.046, R - 0.023);
@@ -1216,6 +1300,17 @@
       var closedLidRotX = Math.PI / 2 - 0.032;
       var openLidRotX = -0.18;
       lidPivot.rotation.x = closedLidRotX + (openLidRotX - closedLidRotX) * e;
+
+      // Self-healing sticker check in case DOM/image finished decoding between ticks
+      if (!stickerReady) {
+        if (imgs.sticker.complete && imgs.sticker.naturalWidth > 0) {
+          drawPopupsStickerFromFull(imgs.sticker);
+        } else if (imgs.mark.complete && imgs.mark.naturalWidth > 0) {
+          drawPopupsStickerFromMark(imgs.mark);
+        } else if (domMarkImg && domMarkImg.complete && domMarkImg.naturalWidth > 0) {
+          drawPopupsStickerFromMark(domMarkImg);
+        }
+      }
 
       // POPUPS sticker stays 100% upright & non-mirrored BOTH closed AND spun 180° open!
       popupsStickerMesh.rotation.z = e < 0.62 ? Math.PI : 0;
