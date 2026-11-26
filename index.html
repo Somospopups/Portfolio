@@ -84,46 +84,319 @@
     .hero-metric b { display:block; color:var(--lime); font-size:20px; letter-spacing:-.06em; }
     .hero-metric span { display:block; margin-top:2px; color:rgba(255,255,255,.68); font-size:9.5px; }
 
-    /* Main portal mockup */
-    .portal-stage { position:relative; width:min(1050px, 96vw); height:415px; margin:56px auto 0; perspective:1600px; }
-    .portal-ring { position:absolute; inset:8% -5% 3%; border:1px solid rgba(255,255,255,.19); border-radius:50%; transform:rotate(-8deg); }
-    .portal-ring::after { content:""; position:absolute; right:12%; top:9%; width:8px; height:8px; border-radius:50%; background:var(--lime); box-shadow:0 0 18px 5px rgba(200,248,16,.52); }
-    .portal-frame { position:absolute; left:50%; bottom:0; width:min(920px, 88vw); height:388px; padding:9px; transform:translateX(-50%) rotateX(3deg); border:1px solid rgba(255,255,255,.3); border-radius:31px 31px 0 0; background:linear-gradient(145deg,rgba(255,255,255,.43),rgba(255,255,255,.08) 20%,rgba(8,10,20,.55) 80%); box-shadow:0 34px 70px rgba(6,7,22,.34), 0 0 0 7px rgba(255,255,255,.1); animation:portalFloat 7s ease-in-out infinite alternate; transition:transform .55s var(--ease); display:block; }
-    @keyframes portalFloat{from{margin-bottom:0}to{margin-bottom:9px}}
+    /* 3D Scroll-Opening Aluminum Laptop Showcase */
+    .portal-stage {
+      position:relative;
+      width:min(1060px, 96vw);
+      margin:56px auto 0;
+      padding:18px 0 46px;
+      perspective:1850px;
+      perspective-origin:50% 16%;
+    }
+    .portal-ring {
+      position:absolute;
+      inset:4% -4% 12%;
+      border:1px solid rgba(255,255,255,.17);
+      border-radius:50%;
+      transform:rotate(-7deg);
+      pointer-events:none;
+    }
+    .portal-ring::after {
+      content:"";
+      position:absolute;
+      right:12%; top:9%;
+      width:8px; height:8px;
+      border-radius:50%;
+      background:var(--lime);
+      box-shadow:0 0 18px 5px rgba(200,248,16,.52);
+    }
+
+    .laptop-rig {
+      position:relative;
+      width:min(840px, 86vw);
+      margin:0 auto;
+      transform-style:preserve-3d;
+      will-change:transform;
+    }
+
+    /* Animated 3D Hinge Lid */
+    .laptop-lid {
+      position:relative;
+      display:block;
+      width:100%;
+      height:clamp(225px, 43vw, 436px);
+      transform-origin:50% 100%;
+      transform-style:preserve-3d;
+      transform:rotateX(0deg);
+      will-change:transform;
+      cursor:pointer;
+    }
+    .laptop-lid-front,
+    .laptop-lid-back {
+      position:absolute;
+      inset:0;
+      border-radius:26px 26px 8px 8px;
+      -webkit-backface-visibility:hidden;
+      backface-visibility:hidden;
+    }
+
+    /* Front Bezel + Live APPI Screen */
+    .laptop-lid-front {
+      padding:11px 11px 10px;
+      background:linear-gradient(155deg, #2d3240 0%, #161922 32%, #0c0e14 100%);
+      border:1.5px solid rgba(255,255,255,.24);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.28),
+        inset 0 0 0 2px rgba(0,0,0,.65),
+        0 26px 70px rgba(4,6,14,.55);
+      display:flex;
+      flex-direction:column;
+    }
+    .laptop-camera {
+      position:absolute;
+      top:5px; left:50%;
+      transform:translateX(-50%);
+      width:5px; height:5px;
+      border-radius:50%;
+      background:radial-gradient(circle at 35% 35%, #556a8a, #101520);
+      box-shadow:0 0 0 1.5px rgba(255,255,255,.08);
+      z-index:4;
+    }
+
+    /* Brushed Anodized Space-Gray Back Shell (visible as lid lifts open!) */
+    .laptop-lid-back {
+      transform:rotateX(180deg) translateZ(2px);
+      background:
+        radial-gradient(70% 85% at 50% 24%, rgba(255,255,255,.14), transparent 60%),
+        radial-gradient(45% 45% at 50% 50%, rgba(198,248,17,.08), transparent 65%),
+        linear-gradient(165deg, #3c4252 0%, #242834 48%, #151821 100%);
+      border:1.5px solid rgba(255,255,255,.22);
+      box-shadow:
+        inset 0 1.5px 0 rgba(255,255,255,.32),
+        inset 0 -3px 10px rgba(0,0,0,.55),
+        0 20px 50px rgba(0,0,0,.55);
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+    }
+    .laptop-lid-back::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:repeating-linear-gradient(90deg, rgba(255,255,255,.018) 0 1px, transparent 1px 3px);
+      pointer-events:none;
+    }
+    .laptop-back-emblem {
+      position:relative;
+      width:128px;
+      aspect-ratio:1200 / 436;
+      opacity:.9;
+      filter:drop-shadow(0 0 22px rgba(198,248,17,.3));
+    }
+    .laptop-back-emblem img { width:100%; height:100%; object-fit:contain; }
+    .laptop-back-emblem span {
+      position:absolute;
+      left:30.3159%; top:20.9030%;
+      width:8.87%; height:24.4147%;
+      transform:translate(-50%,-50%);
+      border-radius:50%;
+      background:#c6f811;
+      box-shadow:0 0 18px 4px rgba(198,248,17,.85);
+    }
+
     .reveal { opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s var(--ease); }
     .reveal.visible { opacity:1; transform:none; }
-    .portal-top { height:31px; display:flex; align-items:center; gap:6px; padding:0 11px; color:rgba(255,255,255,.7); font-size:9px; }
+    .portal-top { height:28px; display:flex; align-items:center; gap:6px; padding:0 10px; color:rgba(255,255,255,.7); font-size:9px; flex-shrink:0; }
     .portal-top i { width:7px; height:7px; border-radius:50%; background:#ff727c; }
     .portal-top i:nth-child(2){background:#ffd263}
     .portal-top i:nth-child(3){background:var(--lime)}
-    .portal-top span { margin-left:8px; padding:4px 10px; border:1px solid rgba(255,255,255,.13); border-radius:99px; color:rgba(255,255,255,.46); font-size:8px; }
-    .portal-screen { position:relative; height:calc(100% - 31px); overflow:hidden; border-radius:22px 22px 0 0; background:#0c0f14; }
+    .portal-top span { margin-left:8px; padding:3px 10px; border:1px solid rgba(255,255,255,.13); border-radius:99px; color:rgba(255,255,255,.46); font-size:8px; }
+    .portal-screen {
+      position:relative;
+      flex:1;
+      overflow:hidden;
+      border-radius:14px 14px 4px 4px;
+      background:#090b10;
+    }
     .portal-screen img { width:100%; height:100%; object-fit:cover; object-position:center 28%; }
-    .portal-caption { position:absolute; z-index:2; left:24px; bottom:22px; width:290px; padding:17px; border:1px solid rgba(255,255,255,.22); border-radius:20px; color:#fff; background:rgba(10,12,18,.82); backdrop-filter:blur(14px); box-shadow:0 12px 32px rgba(0,0,0,.38); transition:border-color .2s ease; }
-    .portal-frame:hover .portal-caption { border-color:var(--lime); }
+    .laptop-screen-veil {
+      position:absolute;
+      inset:0;
+      z-index:2;
+      background:linear-gradient(180deg, rgba(6,8,14,.92), rgba(8,10,18,.78));
+      pointer-events:none;
+      opacity:0;
+      will-change:opacity;
+    }
+    .laptop-glare {
+      position:absolute;
+      inset:-20%;
+      z-index:3;
+      pointer-events:none;
+      background:linear-gradient(118deg, transparent 36%, rgba(255,255,255,.22) 48%, rgba(200,248,16,.08) 53%, transparent 64%);
+      transform:translateX(-40%);
+      opacity:0;
+      will-change:transform, opacity;
+    }
+    .portal-caption {
+      position:absolute;
+      z-index:4;
+      left:22px; bottom:20px;
+      width:286px;
+      padding:16px;
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:18px;
+      color:#fff;
+      background:rgba(10,12,18,.84);
+      backdrop-filter:blur(14px);
+      box-shadow:0 12px 32px rgba(0,0,0,.42);
+      transition:border-color .2s ease;
+      will-change:transform, opacity;
+    }
+    .laptop-lid:hover .portal-caption { border-color:var(--lime); }
     .portal-caption small { color:var(--lime); text-transform:uppercase; letter-spacing:.12em; font-size:8px; font-weight:900; }
-    .portal-caption h3 { margin:7px 0 6px; font-family:var(--serif); font-size:25px; font-weight:400; line-height:.98; letter-spacing:-.04em; color:#fff; }
+    .portal-caption h3 { margin:7px 0 6px; font-family:var(--serif); font-size:24px; font-weight:400; line-height:.98; letter-spacing:-.04em; color:#fff; }
     .portal-caption p { margin:0; color:rgba(255,255,255,.74); font-size:10.5px; line-height:1.4; }
     .portal-caption b { display:inline-block; margin-top:10px; color:var(--lime); font-size:10px; }
-    .portal-float { position:absolute; z-index:4; padding:10px 12px; border:1px solid rgba(255,255,255,.25); border-radius:999px; color:#fff; background:rgba(8,9,13,.45); backdrop-filter:blur(12px); font-size:10px; font-weight:800; box-shadow:0 15px 30px rgba(0,0,0,.18); }
-    .portal-float.one { left:0; top:31%; }
-    .portal-float.two { right:0; top:16%; color:var(--lime); }
-    .portal-float.three { right:6%; bottom:4%; }
 
-    .ticker { overflow:hidden; border-top:1px solid rgba(255,255,255,.12); border-bottom:1px solid rgba(255,255,255,.12); color:var(--lime); background:var(--ink); }
-    .ticker-track { display:flex; width:max-content; gap:30px; padding:16px 0; animation:marquee 30s linear infinite; text-transform:uppercase; letter-spacing:.15em; font-size:10px; font-weight:900; }
-    .ticker-track span::after { content:"✳"; margin-left:30px; color:#696d64; }
+    /* Precision Machined Aluminum Keyboard Base & Hinge */
+    .laptop-base {
+      position:relative;
+      width:110%;
+      margin-left:-5%;
+      z-index:3;
+      pointer-events:none;
+    }
+    .laptop-hinge {
+      width:74%;
+      height:7px;
+      margin:0 auto;
+      border-radius:0 0 6px 6px;
+      background:linear-gradient(180deg, #06070a 0%, #1d212b 60%, #090b10 100%);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.16);
+    }
+    .laptop-deck {
+      position:relative;
+      height:20px;
+      margin:-1px 2.2% 0;
+      background:linear-gradient(180deg, #1b1f29 0%, #2f3545 65%, #464e62 100%);
+      clip-path:polygon(3.5% 0%, 96.5% 0%, 100% 100%, 0% 100%);
+      overflow:hidden;
+    }
+    .laptop-deck-glow {
+      position:absolute;
+      inset:0;
+      background:radial-gradient(56% 120% at 50% 0%, rgba(160,150,255,.38) 0%, rgba(200,248,16,.2) 40%, transparent 78%);
+      opacity:0;
+      will-change:opacity;
+    }
+    .laptop-lip {
+      position:relative;
+      height:15px;
+      border-radius:3px 3px 20px 20px;
+      background:linear-gradient(180deg, #727b90 0%, #454c5d 34%, #252934 78%, #14171f 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.45),
+        inset 0 -2px 4px rgba(0,0,0,.6),
+        0 18px 40px rgba(0,0,0,.65);
+    }
+    .laptop-notch {
+      position:absolute;
+      top:0; left:50%;
+      transform:translateX(-50%);
+      width:118px; height:6px;
+      border-radius:0 0 8px 8px;
+      background:linear-gradient(180deg, #1b1f29, #313746);
+      box-shadow:inset 0 -1px 1px rgba(255,255,255,.22);
+    }
+    .laptop-shadow {
+      width:96%;
+      height:32px;
+      margin:-6px auto 0;
+      border-radius:50%;
+      background:radial-gradient(ellipse, rgba(0,0,0,.78) 0%, rgba(7,9,13,.38) 46%, transparent 74%);
+      filter:blur(6px);
+      will-change:transform, opacity;
+    }
+    .laptop-cue {
+      position:absolute;
+      left:50%; bottom:4px;
+      transform:translateX(-50%);
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:6px 14px;
+      border-radius:999px;
+      border:1px solid rgba(200,248,16,.36);
+      background:rgba(7,9,13,.76);
+      backdrop-filter:blur(10px);
+      color:var(--lime);
+      font-family:var(--mono);
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      pointer-events:none;
+      z-index:6;
+      transition:opacity .3s ease;
+    }
+
+    .portal-float {
+      position:absolute;
+      z-index:5;
+      padding:10px 13px;
+      border:1px solid rgba(255,255,255,.24);
+      border-radius:999px;
+      color:#fff;
+      background:rgba(8,9,13,.56);
+      backdrop-filter:blur(12px);
+      font-size:10px;
+      font-weight:800;
+      box-shadow:0 15px 30px rgba(0,0,0,.22);
+      will-change:transform, opacity;
+    }
+    .portal-float.one { left:0; top:30%; }
+    .portal-float.two { right:0; top:14%; color:var(--lime); }
+    .portal-float.three { right:5%; bottom:16%; }
+
+    .ticker {
+      position:relative;
+      overflow:hidden;
+      color:var(--lime);
+      background:var(--ink);
+    }
+    .ticker::before,
+    .ticker::after {
+      content:"";
+      position:absolute;
+      left:50%; transform:translateX(-50%);
+      width:min(1180px, 90vw); height:1px;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.12) 20%, rgba(200,248,16,.24) 50%, rgba(255,255,255,.12) 80%, transparent);
+    }
+    .ticker::before { top:0; }
+    .ticker::after { bottom:0; }
+    .ticker-track { display:flex; width:max-content; gap:30px; padding:17px 0; animation:marquee 30s linear infinite; text-transform:uppercase; letter-spacing:.15em; font-size:10px; font-weight:900; }
+    .ticker-track span::after { content:"✳"; margin-left:30px; color:#5a6058; }
     @keyframes marquee{to{transform:translateX(-50%)}}
 
-    /* Editorial introduction (compact light breather before dark showcase) */
-    .intro { padding:96px 0 100px; color:var(--text); background:var(--paper); }
+    /* Editorial introduction — unified dark obsidian atmosphere (zero jarring white cut) */
+    .intro {
+      position:relative;
+      padding:104px 0 92px;
+      color:#f4f5f0;
+      background:
+        radial-gradient(720px 420px at 82% 40%, rgba(139,112,239,.08), transparent 68%),
+        radial-gradient(640px 380px at 14% 70%, rgba(200,248,16,.045), transparent 68%),
+        var(--ink);
+    }
     .intro-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:84px; align-items:start; }
-    .intro h2 { max-width:650px; margin:16px 0 0; font-family:var(--serif); font-size:clamp(40px, 5.4vw, 72px); font-weight:400; line-height:.94; letter-spacing:-.065em; }
-    .intro-copy { max-width:430px; padding-top:34px; color:#666b65; font-size:15px; line-height:1.55; }
+    .intro h2 { max-width:650px; margin:16px 0 0; color:#fff; font-family:var(--serif); font-size:clamp(40px, 5.4vw, 72px); font-weight:400; line-height:.94; letter-spacing:-.065em; }
+    .intro .muted { color:rgba(244,245,240,.46); }
+    .intro-copy { max-width:440px; padding-top:34px; color:rgba(244,245,240,.72); font-size:15px; line-height:1.58; }
     .intro-copy p { margin:0 0 18px; }
-    .intro-list { margin:24px 0 0; padding:0; list-style:none; border-top:1px solid var(--line); }
-    .intro-list li { display:flex; justify-content:space-between; gap:20px; padding:13px 0; border-bottom:1px solid var(--line); color:#33352f; font-size:12px; font-weight:700; }
-    .intro-list li span { color:#969a91; font-weight:500; }
+    .intro-list { margin:26px 0 0; padding:0; list-style:none; border-top:1px solid rgba(255,255,255,.12); }
+    .intro-list li { display:flex; justify-content:space-between; gap:20px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,.12); color:#fff; font-size:12.5px; font-weight:700; }
+    .intro-list li span { color:rgba(200,248,16,.84); font-weight:600; }
 
     /* =========================================================================
        DARK EDITORIAL WORKS SHOWCASE — BESPOKE PERSONALITY PER PROJECT
@@ -1600,23 +1873,43 @@
           </div>
         </div>
 
-        <div class="portal-stage" aria-label="Vista previa de un proyecto de POPUPS">
+        <div class="portal-stage" id="portalStage" aria-label="Vista previa interactiva en laptop de un proyecto de POPUPS">
           <div class="portal-ring"></div>
-          <span class="portal-float one">Una solución real</span>
-          <span class="portal-float two">Diseño con propósito</span>
-          <span class="portal-float three">Hecho para crecer</span>
-          <a class="portal-frame" href="appi/" aria-label="Explorar caso destacado APPI">
-            <div class="portal-top"><i></i><i></i><i></i><span>popups / showcase / appi</span></div>
-            <div class="portal-screen">
-              <img src="assets/appi-landing-shot.png" alt="APPI · plataforma de gestión diseñada por POPUPS" />
-              <div class="portal-caption">
-                <small>Caso destacado · 01</small>
-                <h3>APPI pone tu vida y tu negocio en foco.</h3>
-                <p>Planificación, finanzas, equipo y seguimiento en una PWA instalable con 7 días offline.</p>
-                <b>Explorar caso ↗</b>
+          <span class="portal-float one" id="pfOne">Una solución real</span>
+          <span class="portal-float two" id="pfTwo">Diseño con propósito</span>
+          <span class="portal-float three" id="pfThree">Hecho para crecer</span>
+          <div class="laptop-rig" id="laptopRig">
+            <a class="laptop-lid" id="laptopLid" href="appi/" aria-label="Explorar caso destacado APPI">
+              <div class="laptop-lid-back" aria-hidden="true">
+                <div class="laptop-back-emblem">
+                  <img src="assets/logo-mark.webp" alt="" />
+                  <span></span>
+                </div>
               </div>
+              <div class="laptop-lid-front">
+                <span class="laptop-camera" aria-hidden="true"></span>
+                <div class="portal-top"><i></i><i></i><i></i><span>popups / showcase / appi</span></div>
+                <div class="portal-screen">
+                  <img src="assets/appi-landing-shot.png" alt="APPI · plataforma de gestión diseñada por POPUPS" />
+                  <div class="laptop-screen-veil" id="laptopVeil" aria-hidden="true"></div>
+                  <div class="laptop-glare" id="laptopGlare" aria-hidden="true"></div>
+                  <div class="portal-caption" id="laptopCaption">
+                    <small>Caso destacado · 01</small>
+                    <h3>APPI pone tu vida y tu negocio en foco.</h3>
+                    <p>Planificación, finanzas, equipo y seguimiento en una PWA instalable con 7 días offline.</p>
+                    <b>Explorar caso ↗</b>
+                  </div>
+                </div>
+              </div>
+            </a>
+            <div class="laptop-base" aria-hidden="true">
+              <div class="laptop-hinge"></div>
+              <div class="laptop-deck"><div class="laptop-deck-glow" id="laptopDeckGlow"></div></div>
+              <div class="laptop-lip"><div class="laptop-notch"></div></div>
+              <div class="laptop-shadow" id="laptopShadow"></div>
             </div>
-          </a>
+          </div>
+          <span class="laptop-cue" id="laptopCue" aria-hidden="true">↓ Scrolleá para abrir</span>
         </div>
       </div>
     </section>
@@ -1625,7 +1918,7 @@
 
     <section class="intro" id="popups">
       <div class="container intro-grid">
-        <div><span class="eyebrow dark">La idea detrás de POPUPS</span><h2>Una aplicación no debería obligarte a aprender su lógica. <span class="muted">Debería entender la tuya.</span></h2></div>
+        <div><span class="eyebrow">La idea detrás de POPUPS</span><h2>Una aplicación no debería obligarte a aprender su lógica. <span class="muted">Debería entender la tuya.</span></h2></div>
         <div class="intro-copy"><p>Cuando una herramienta es confusa, lenta o visualmente pobre, las personas vuelven a la planilla, al mensaje y al papel.</p><p>Por eso unimos automatización, diseño y movimiento: para crear soluciones útiles que también se sienten naturales.</p><ul class="intro-list"><li>Funcional <span>es el punto de partida</span></li><li>Claro <span>es parte del producto</span></li><li>Extraordinario <span>es lo que hace que vuelva</span></li></ul></div>
       </div>
     </section>
@@ -1854,19 +2147,132 @@
       document.getElementById('menu').addEventListener('click', () => nav.classList.toggle('open'));
       document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
 
-      // Subtle hero portal tilt
-      const portalStage = document.querySelector('.portal-stage');
-      const portalFrame = document.querySelector('.portal-frame');
-      if (portalStage && portalFrame && matchMedia('(pointer:fine)').matches && !reduced) {
-        portalStage.addEventListener('pointermove', event => {
-          const box = portalStage.getBoundingClientRect();
-          const x = (event.clientX - box.left) / box.width - .5;
-          const y = (event.clientY - box.top) / box.height - .5;
-          portalFrame.style.transform = `translateX(-50%) rotateX(${3 - y * 5}deg) rotateY(${x * 5}deg)`;
-        });
-        portalStage.addEventListener('pointerleave', () => {
-          portalFrame.style.transform = 'translateX(-50%) rotateX(3deg) rotateY(0deg)';
-        });
+      // 3D Scroll-Opening Laptop Physics (60fps damped spring + screen wake + deck light spill + pointer tilt)
+      const portalStage = document.getElementById('portalStage');
+      const laptopRig = document.getElementById('laptopRig');
+      const laptopLid = document.getElementById('laptopLid');
+      const laptopVeil = document.getElementById('laptopVeil');
+      const laptopGlare = document.getElementById('laptopGlare');
+      const laptopCaption = document.getElementById('laptopCaption');
+      const laptopDeckGlow = document.getElementById('laptopDeckGlow');
+      const laptopShadow = document.getElementById('laptopShadow');
+      const laptopCue = document.getElementById('laptopCue');
+      const pfOne = document.getElementById('pfOne');
+      const pfTwo = document.getElementById('pfTwo');
+      const pfThree = document.getElementById('pfThree');
+
+      if (portalStage && laptopLid && laptopRig) {
+        let targetOpen = reduced ? 1 : 0;
+        let currentOpen = reduced ? 1 : 0;
+        let hoverX = 0, hoverY = 0, curHX = 0, curHY = 0;
+        let rafActive = false;
+
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+
+        function computeTarget() {
+          if (reduced) { targetOpen = 1; return; }
+          const rect = portalStage.getBoundingClientRect();
+          const vh = window.innerHeight || 800;
+          // Starts closed/cracked when peeking near bottom (0.86vh), reaches 100% open around 0.22vh
+          const startY = vh * 0.88;
+          const endY = vh * 0.20;
+          const raw = (startY - rect.top) / Math.max(240, startY - endY);
+          targetOpen = clamp(raw, 0, 1);
+        }
+
+        function applyLaptopState(p) {
+          const e = easeOutCubic(p);
+          // Lid smoothly opens from -85deg (folded forward showing aluminum cover + POPUPS emblem) -> 0deg wide open!
+          const lidAngle = -85 * (1 - e);
+          const rigScale = 0.91 + 0.09 * e;
+          const rigLift = 22 * (1 - e);
+          const tiltAmt = Math.max(0, (e - 0.55) / 0.45);
+
+          laptopRig.style.transform = `translate3d(0, ${rigLift.toFixed(2)}px, 0) scale(${rigScale.toFixed(4)}) rotateY(${(curHX * 5.5 * tiltAmt).toFixed(2)}deg) rotateX(${(-curHY * 3.2 * tiltAmt).toFixed(2)}deg)`;
+          laptopLid.style.transform = `rotateX(${lidAngle.toFixed(2)}deg)`;
+
+          // Display wakes up smoothly as the lid lifts past ~20%
+          if (laptopVeil) {
+            const awake = clamp((e - 0.16) / 0.62, 0, 1);
+            laptopVeil.style.opacity = ((1 - awake) * 0.88).toFixed(3);
+          }
+          // Specular glass glare glides diagonally across display during opening
+          if (laptopGlare) {
+            const gOp = Math.sin(e * Math.PI) * 0.85;
+            const gX = -45 + e * 95;
+            laptopGlare.style.opacity = gOp.toFixed(3);
+            laptopGlare.style.transform = `translateX(${gX.toFixed(1)}%)`;
+          }
+          // Floating APPI card rises gently once lid opens past halfway
+          if (laptopCaption) {
+            const cap = clamp((e - 0.48) / 0.46, 0, 1);
+            laptopCaption.style.opacity = cap.toFixed(3);
+            laptopCaption.style.transform = `translate3d(0, ${((1 - cap) * 26).toFixed(1)}px, 0)`;
+          }
+          // Screen light spill blooms across aluminum keyboard deck
+          if (laptopDeckGlow) {
+            laptopDeckGlow.style.opacity = clamp((e - 0.25) / 0.7, 0, 1).toFixed(3);
+          }
+          if (laptopShadow) {
+            laptopShadow.style.opacity = (0.55 + 0.45 * e).toFixed(3);
+            laptopShadow.style.transform = `scaleX(${(0.9 + 0.1 * e).toFixed(3)})`;
+          }
+          if (laptopCue) {
+            laptopCue.style.opacity = clamp(1 - e * 3.2, 0, 1).toFixed(3);
+          }
+          // Parallax drift on the 3 orbit pills as laptop opens
+          const pillOp = clamp((e - 0.30) / 0.55, 0, 1);
+          if (pfOne) { pfOne.style.opacity = pillOp.toFixed(3); pfOne.style.transform = `translate3d(${((1 - pillOp) * -28).toFixed(1)}px, ${((1 - pillOp) * 18).toFixed(1)}px, 0)`; }
+          if (pfTwo) { pfTwo.style.opacity = pillOp.toFixed(3); pfTwo.style.transform = `translate3d(${((1 - pillOp) * 28).toFixed(1)}px, ${((1 - pillOp) * -14).toFixed(1)}px, 0)`; }
+          if (pfThree) { pfThree.style.opacity = pillOp.toFixed(3); pfThree.style.transform = `translate3d(${((1 - pillOp) * 22).toFixed(1)}px, ${((1 - pillOp) * 22).toFixed(1)}px, 0)`; }
+        }
+
+        function tick() {
+          currentOpen += (targetOpen - currentOpen) * 0.11;
+          curHX += (hoverX - curHX) * 0.1;
+          curHY += (hoverY - curHY) * 0.1;
+          applyLaptopState(currentOpen);
+
+          const settled = Math.abs(targetOpen - currentOpen) < 0.0008 && Math.abs(hoverX - curHX) < 0.002 && Math.abs(hoverY - curHY) < 0.002;
+          if (!settled) {
+            requestAnimationFrame(tick);
+          } else {
+            currentOpen = targetOpen;
+            curHX = hoverX;
+            curHY = hoverY;
+            applyLaptopState(currentOpen);
+            rafActive = false;
+          }
+        }
+
+        function wake() {
+          if (!rafActive) {
+            rafActive = true;
+            requestAnimationFrame(tick);
+          }
+        }
+
+        const onScrollResize = () => { computeTarget(); wake(); };
+        addEventListener('scroll', onScrollResize, { passive: true });
+        addEventListener('resize', onScrollResize, { passive: true });
+
+        if (matchMedia('(pointer:fine)').matches && !reduced) {
+          portalStage.addEventListener('pointermove', event => {
+            const box = portalStage.getBoundingClientRect();
+            hoverX = ((event.clientX - box.left) / box.width - 0.5) * 2;
+            hoverY = ((event.clientY - box.top) / box.height - 0.5) * 2;
+            wake();
+          });
+          portalStage.addEventListener('pointerleave', () => {
+            hoverX = 0; hoverY = 0;
+            wake();
+          });
+        }
+
+        computeTarget();
+        currentOpen = targetOpen;
+        applyLaptopState(currentOpen);
       }
 
       // Dynamic custom webs renderer (from assets/webs-data.js)
