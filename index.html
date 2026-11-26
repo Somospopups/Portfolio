@@ -451,8 +451,8 @@
 
     .mbp-webgl-stage {
       position:relative;
-      width:clamp(300px, min(900px, calc((100vh - 230px) * 1.56)), 96vw);
-      aspect-ratio:16 / 10.4;
+      width:clamp(320px, min(1160px, 95vw), 98vw);
+      height:clamp(360px, min(690px, 76vh), 78vh);
       margin:0 auto;
       user-select:none;
       -webkit-user-select:none;
@@ -476,16 +476,17 @@
     }
     .mbp-drag-hint {
       position:relative;
-      z-index:6;
-      margin:2px auto 0;
+      z-index:7;
+      margin:-68px auto 0;
       display:inline-flex;
       align-items:center;
       gap:7px;
-      padding:4px 12px;
+      padding:5px 13px;
       border-radius:999px;
-      background:rgba(10,12,18,.52);
-      border:1px solid rgba(255,255,255,.11);
-      color:rgba(244,245,240,.68);
+      background:rgba(10,12,18,.72);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,.14);
+      color:rgba(244,245,240,.78);
       font-family:var(--mono);
       font-size:9.5px;
       letter-spacing:.07em;
@@ -502,11 +503,11 @@
     .reveal { opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s var(--ease); }
     .reveal.visible { opacity:1; transform:none; }
 
-    /* Compact 360-Degree Product Switcher Dock BELOW the MacBook */
+    /* Compact 360-Degree Product Switcher Dock BELOW the MacBook (keyboard tucks smoothly behind it) */
     .mbp-switcher {
       position:relative;
-      z-index:6;
-      margin:14px auto 0;
+      z-index:7;
+      margin:10px auto 0;
       display:inline-flex;
       align-items:center;
       justify-content:center;
@@ -689,8 +690,8 @@
     .laptop-cue:hover { border-color:var(--lime); }
 
     @media (max-width: 640px) {
-      .mbp-webgl-stage { width:98vw; aspect-ratio:16 / 12.2; }
-      .mbp-drag-hint { font-size:8.5px; padding:4px 10px; }
+      .mbp-webgl-stage { width:100vw; height:clamp(300px, 52vh, 430px); }
+      .mbp-drag-hint { margin-top:-26px; font-size:8.5px; padding:4px 10px; }
       .mbp-switcher { border-radius:18px; padding:6px; gap:4px; }
       .mbp-sw-btn { padding:6px 9px; font-size:9px; }
       .mbp-spin-trigger { padding:6px 10px; font-size:9px; }
