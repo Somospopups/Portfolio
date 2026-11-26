@@ -63,10 +63,39 @@
 
     /* Twilight hero */
     .hero { position:relative; isolation:isolate; min-height:940px; overflow:hidden; padding:152px 0 0; color:#fff; background:linear-gradient(180deg, #375fe0 0%, #636be9 23%, #9b79e8 49%, #cf87b4 66%, #242138 82%, #0c0e17 92%, var(--ink) 100%); }
-    .hero::before { content:""; position:absolute; z-index:-3; inset:0; opacity:.75; background-image:radial-gradient(circle at 15% 16%, rgba(255,255,255,.95) 0 1px, transparent 2px),radial-gradient(circle at 74% 11%, rgba(255,255,255,.8) 0 1px, transparent 2px),radial-gradient(circle at 44% 8%, rgba(255,255,255,.9) 0 1.5px, transparent 2.5px),radial-gradient(circle at 91% 31%, rgba(255,255,255,.75) 0 1px, transparent 2px),radial-gradient(circle at 24% 38%, rgba(255,255,255,.65) 0 1px, transparent 2px),radial-gradient(circle at 63% 29%, rgba(255,255,255,.75) 0 1px, transparent 2px),radial-gradient(circle at 83% 22%, rgba(255,255,255,.7) 0 1px, transparent 2px); background-size:440px 260px,520px 300px,610px 360px,720px 420px,820px 500px,930px 540px,1020px 620px; }
+    .hero::before { content:""; position:absolute; z-index:-3; inset:0; opacity:.75; background-image:radial-gradient(circle at 15% 16%, rgba(255,255,255,.95) 0 1px, transparent 2px),radial-gradient(circle at 74% 11%, rgba(255,255,255,.8) 0 1px, transparent 2px),radial-gradient(circle at 44% 8%, rgba(255,255,255,.9) 0 1.5px, transparent 2.5px),radial-gradient(circle at 91% 31%, rgba(255,255,255,.75) 0 1px, transparent 2px),radial-gradient(circle at 24% 38%, rgba(255,255,255,.65) 0 1px, transparent 2px),radial-gradient(circle at 63% 29%, rgba(255,255,255,.75) 0 1px, transparent 2px),radial-gradient(circle at 83% 22%, rgba(255,255,255,.7) 0 1px, transparent 2px); background-size:440px 260px,520px 300px,610px 360px,720px 420px,820px 500px,930px 540px,1020px 620px; animation:heroStarsTwinkle 5.6s ease-in-out infinite alternate; }
     .hero::after { content:""; position:absolute; z-index:-2; left:-5%; right:-5%; bottom:155px; height:170px; opacity:.75; background:linear-gradient(180deg, transparent 0%, rgba(7,11,24,.08) 34%, rgba(7,11,24,.78) 100%); clip-path:polygon(0 70%,5% 51%,11% 63%,17% 42%,24% 61%,31% 30%,38% 60%,44% 45%,51% 66%,58% 36%,65% 58%,74% 29%,80% 60%,88% 43%,94% 57%,100% 36%,100% 100%,0 100%); }
-    .hero-glow { position:absolute; z-index:-1; width:760px; height:390px; left:50%; bottom:210px; transform:translateX(-50%); border-radius:50%; background:radial-gradient(ellipse, rgba(200,248,16,.2), rgba(255,255,255,.08) 22%, transparent 70%); filter:blur(22px); }
-    .hero-copy { max-width:840px; margin:0 auto; text-align:center; }
+    .hero-glow { position:absolute; z-index:-1; width:760px; height:390px; left:50%; bottom:210px; transform:translateX(-50%); border-radius:50%; background:radial-gradient(ellipse, rgba(200,248,16,.2), rgba(255,255,255,.08) 22%, transparent 70%); filter:blur(22px); animation:heroGlowBreathe 7.5s ease-in-out infinite alternate; }
+    @keyframes heroStarsTwinkle { 0% { opacity:.58; } 100% { opacity:.92; } }
+    @keyframes heroGlowBreathe { 0% { transform:translateX(-50%) scale(1); opacity:.78; } 100% { transform:translateX(-50%) scale(1.12); opacity:1; } }
+
+    /* Occasional subtle twilight shooting-star comets */
+    .hero-comets { position:absolute; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
+    .hero-comet {
+      position:absolute;
+      height:1.5px;
+      border-radius:99px;
+      background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,.32) 55%, rgba(200,248,16,.95) 94%, #fff 100%);
+      box-shadow:0 0 10px rgba(200,248,16,.55);
+      opacity:0;
+      will-change:transform, opacity;
+    }
+    .hero-comet.c1 { width:165px; top:14%; left:10%; animation:heroCometA 10.5s cubic-bezier(.22,1,.36,1) infinite; }
+    .hero-comet.c2 { width:130px; top:26%; left:54%; animation:heroCometB 15s cubic-bezier(.22,1,.36,1) 4.8s infinite; }
+    @keyframes heroCometA {
+      0%, 82% { opacity:0; transform:translate3d(-120px, -40px, 0) rotate(22deg) scaleX(.5); }
+      85% { opacity:.95; }
+      95% { opacity:0; transform:translate3d(420px, 170px, 0) rotate(22deg) scaleX(1.1); }
+      100% { opacity:0; transform:translate3d(420px, 170px, 0) rotate(22deg); }
+    }
+    @keyframes heroCometB {
+      0%, 84% { opacity:0; transform:translate3d(-80px, -30px, 0) rotate(18deg) scaleX(.5); }
+      88% { opacity:.82; }
+      97% { opacity:0; transform:translate3d(340px, 115px, 0) rotate(18deg) scaleX(1.05); }
+      100% { opacity:0; transform:translate3d(340px, 115px, 0) rotate(18deg); }
+    }
+
+    .hero-copy { position:relative; z-index:4; max-width:840px; margin:0 auto; text-align:center; }
     .hero-copy .eyebrow { color:rgba(255,255,255,.78); }
     .hero h1 { max-width:890px; margin:26px auto 20px; font-family:var(--serif); font-size:clamp(54px, 8vw, 106px); font-weight:400; line-height:.92; letter-spacing:-.065em; }
     .hero h1 em { color:#fff; font-style:normal; }
@@ -74,7 +103,9 @@
     .hero-lead { max-width:560px; margin:0 auto; color:rgba(255,255,255,.84); font-size:16px; line-height:1.48; letter-spacing:-.015em; }
     .hero-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:26px; }
     .button { min-height:51px; padding:0 20px; }
-    .button.primary { color:var(--ink); background:var(--lime); }
+    .button.primary { position:relative; overflow:hidden; color:var(--ink); background:var(--lime); }
+    .button.primary::after { content:""; position:absolute; top:0; bottom:0; left:-75%; width:52%; background:linear-gradient(110deg, transparent 0%, rgba(255,255,255,.55) 50%, transparent 100%); transform:skewX(-18deg); animation:btnShimmer 5.4s ease-in-out infinite; pointer-events:none; }
+    @keyframes btnShimmer { 0%, 72% { left:-75%; opacity:0; } 78% { opacity:1; } 96%, 100% { left:135%; opacity:0; } }
     .button.primary:hover { transform:translateY(-3px); background:#d9ff3d; }
     .button.ghost { color:#fff; border:1px solid rgba(255,255,255,.34); background:rgba(255,255,255,.08); backdrop-filter:blur(10px); }
     .button.ghost:hover { transform:translateY(-3px); border-color:var(--lime); background:rgba(200,248,16,.12); }
@@ -180,10 +211,11 @@
     }
 
     /* =========================================================================
-       PHOTOREALISTIC 3D MACBOOK PRO 16" SPACE BLACK — STUDIO SCROLL-OPENING RIG
+       PHOTOREALISTIC 3D MACBOOK PRO 16" SPACE BLACK — LIVING STUDIO STAGE
        ========================================================================= */
     .portal-stage {
       position:relative;
+      isolation:isolate;
       width:min(1120px, 96vw);
       margin:34px auto 0;
       padding:14px 0 36px;
@@ -191,22 +223,187 @@
       flex-direction:column;
       align-items:center;
     }
-    .portal-ring {
+
+    /* Depth Layer 1: Dual Counter-Rotating Orbital Rings + Floating Ambient Motes */
+    .portal-orbits {
       position:absolute;
-      inset:4% -4% 18%;
-      border:1px solid rgba(255,255,255,.11);
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+      will-change:transform;
+    }
+    .portal-ring,
+    .portal-ring-2 {
+      position:absolute;
       border-radius:50%;
-      transform:rotate(-7deg);
       pointer-events:none;
     }
-    .portal-ring::after {
-      content:"";
+    .portal-ring {
+      inset:4% -5% 18%;
+      border:1px solid rgba(255,255,255,.12);
+      transform:rotate(-7deg);
+    }
+    .portal-ring-2 {
+      inset:-2% -11% 10%;
+      border:1px dashed rgba(200,248,16,.11);
+      transform:rotate(8deg);
+    }
+    .portal-orbit-spin {
       position:absolute;
-      right:12%; top:10%;
+      inset:0;
+      border-radius:50%;
+      animation:orbitSpin 38s linear infinite;
+    }
+    .portal-orbit-spin.rev {
+      animation:orbitSpin 56s linear infinite reverse;
+    }
+    .portal-orbit-dot {
+      position:absolute;
+      top:-4px; left:50%;
+      transform:translateX(-50%);
       width:8px; height:8px;
       border-radius:50%;
       background:var(--lime);
-      box-shadow:0 0 18px 5px rgba(200,248,16,.52);
+      box-shadow:0 0 18px 5px rgba(200,248,16,.58);
+    }
+    .portal-orbit-dot.soft {
+      width:6px; height:6px;
+      top:auto; bottom:-3px;
+      background:#d4c8ff;
+      box-shadow:0 0 14px 4px rgba(175,152,255,.55);
+    }
+    @keyframes orbitSpin { to { transform:rotate(360deg); } }
+
+    /* Rising Luminous Micro-Motes in Twilight Air */
+    .hero-mote {
+      position:absolute;
+      width:3px; height:3px;
+      border-radius:50%;
+      background:rgba(255,255,255,.85);
+      box-shadow:0 0 10px 2px rgba(200,248,16,.4);
+      opacity:0;
+      animation:moteRise var(--mdur, 11s) ease-in-out var(--mdel, 0s) infinite;
+    }
+    .hero-mote.lime { background:var(--lime); width:4px; height:4px; }
+    .hero-mote.m1 { left:8%; bottom:18%; --mdur:11s; --mdel:-2s; }
+    .hero-mote.m2 { left:22%; bottom:10%; --mdur:14s; --mdel:-7s; }
+    .hero-mote.m3 { right:14%; bottom:16%; --mdur:12s; --mdel:-4s; }
+    .hero-mote.m4 { right:6%; bottom:26%; --mdur:15s; --mdel:-9s; }
+    .hero-mote.m5 { left:36%; bottom:12%; --mdur:13s; --mdel:-5s; }
+    .hero-mote.m6 { right:28%; bottom:14%; --mdur:10s; --mdel:-1s; }
+    @keyframes moteRise {
+      0% { opacity:0; transform:translate3d(0, 24px, 0) scale(.6); }
+      22% { opacity:.75; }
+      78% { opacity:.55; }
+      100% { opacity:0; transform:translate3d(18px, -170px, 0) scale(1.1); }
+    }
+
+    /* Depth Layer 2 (BEHIND MACBOOK): Full-Viewport Drifting Glass Pills Passing Behind Mac */
+    .portal-pills-layer {
+      position:absolute;
+      top:-24px; bottom:24px;
+      left:50%;
+      width:100vw;
+      transform:translateX(-50%);
+      z-index:2;
+      pointer-events:none;
+      overflow:hidden;
+      -webkit-mask-image:linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+      mask-image:linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+    }
+    .pill-track {
+      position:absolute;
+      left:0;
+      top:var(--lane, 24%);
+      will-change:transform;
+      animation:pillDriftRight var(--dur, 28s) linear var(--del, 0s) infinite;
+    }
+    .pill-track.rtl {
+      animation-name:pillDriftLeft;
+    }
+    @keyframes pillDriftRight {
+      0% { transform:translate3d(-26vw, 0, 0); }
+      100% { transform:translate3d(118vw, 0, 0); }
+    }
+    @keyframes pillDriftLeft {
+      0% { transform:translate3d(118vw, 0, 0); }
+      100% { transform:translate3d(-26vw, 0, 0); }
+    }
+    .pill-body {
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:9px 15px;
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:999px;
+      color:rgba(255,255,255,.94);
+      background:rgba(10,12,20,.64);
+      backdrop-filter:blur(12px);
+      font-size:10.5px;
+      font-weight:800;
+      letter-spacing:.01em;
+      white-space:nowrap;
+      box-shadow:0 14px 32px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.16);
+      will-change:transform;
+      animation:pillBob var(--bob, 5.4s) ease-in-out var(--bdel, 0s) infinite alternate;
+    }
+    .pill-body::before {
+      content:"";
+      width:6px; height:6px;
+      border-radius:50%;
+      background:rgba(255,255,255,.72);
+      flex:0 0 auto;
+    }
+    .pill-body.accent {
+      color:var(--lime);
+      border-color:rgba(200,248,16,.38);
+      background:rgba(10,13,16,.72);
+    }
+    .pill-body.accent::before {
+      background:var(--lime);
+      box-shadow:0 0 10px rgba(200,248,16,.85);
+    }
+    .pill-body.deep {
+      opacity:.62;
+      transform-origin:center;
+      font-size:9.5px;
+      padding:7px 13px;
+      filter:blur(.35px);
+      background:rgba(10,12,20,.48);
+    }
+    @keyframes pillBob {
+      0% { transform:translate3d(0, -10px, 0) rotate(-1.6deg); }
+      100% { transform:translate3d(0, 10px, 0) rotate(1.6deg); }
+    }
+
+    /* Depth Layer 3 (BEHIND MACBOOK): Breathing Studio Backlight Aurora Halo */
+    .mbp-aurora {
+      position:absolute;
+      left:50%; top:42%;
+      width:min(820px, 92vw);
+      height:min(460px, 56vw);
+      transform:translate(-50%, -50%);
+      z-index:3;
+      pointer-events:none;
+      border-radius:50%;
+      background:
+        radial-gradient(ellipse 62% 54% at 44% 48%, rgba(139,112,239,.34) 0%, transparent 72%),
+        radial-gradient(ellipse 52% 46% at 62% 54%, rgba(237,143,166,.22) 0%, transparent 70%),
+        radial-gradient(ellipse 38% 34% at 50% 62%, rgba(200,248,16,.14) 0%, transparent 68%);
+      filter:blur(34px);
+      animation:mbpAuroraBreathe 6.5s ease-in-out infinite alternate;
+      will-change:transform, opacity;
+    }
+    @keyframes mbpAuroraBreathe {
+      0% { transform:translate(-50%, -50%) scale(.93); }
+      100% { transform:translate(-50%, -50%) scale(1.08); }
+    }
+
+    /* Depth Layer 5 (IN FRONT OF PILLS & ORBITS): Flattened Stacking Wrapper for Photorealistic MacBook */
+    .mbp-front-layer {
+      position:relative;
+      z-index:5;
+      transform:translateZ(0);
     }
 
     /* Unified Photorealistic MacBook Pro Coordinate Stage (exact 1020:678 studio ratio)
@@ -453,32 +650,12 @@
     }
     .laptop-cue:hover { border-color:var(--lime); }
 
-    .portal-float {
-      position:absolute;
-      z-index:7;
-      padding:9px 13px;
-      border:1px solid rgba(255,255,255,.22);
-      border-radius:999px;
-      color:#fff;
-      background:rgba(8,9,13,.62);
-      backdrop-filter:blur(12px);
-      font-size:10px;
-      font-weight:800;
-      box-shadow:0 15px 30px rgba(0,0,0,.24);
-      pointer-events:none;
-      will-change:transform, opacity;
-    }
-    .portal-float.one { left:1%; top:24%; }
-    .portal-float.two { right:1%; top:14%; color:var(--lime); }
-    .portal-float.three { right:3%; bottom:28%; }
-
-    @media (max-width: 980px) {
-      .portal-float { display:none; }
-    }
     @media (max-width: 640px) {
       .mbp-scene { width:94vw; }
       .mbp-caption-bar { border-radius:18px; padding:12px 14px; text-align:center; }
       .mbp-cap-sep { display:none; }
+      .pill-body { padding:6px 11px; font-size:9px; }
+      .pill-track.mob-hide { display:none; }
     }
 
     .ticker {
@@ -1710,7 +1887,7 @@
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior:auto; }
-      .portal-frame, .ticker-track { animation:none !important; }
+      .portal-frame, .ticker-track, .pill-track, .pill-body, .portal-orbit-spin, .hero-comet, .hero-mote, .mbp-aurora, .hero-glow, .hero::before, .button.primary::after { animation:none !important; }
       *, *::before, *::after { transition-duration:0.01ms !important; }
     }
 
@@ -1955,6 +2132,10 @@
   <main>
     <section class="hero" id="inicio">
       <div class="hero-glow"></div>
+      <div class="hero-comets" aria-hidden="true">
+        <span class="hero-comet c1"></span>
+        <span class="hero-comet c2"></span>
+      </div>
       <div class="container">
         <div class="hero-copy">
           <div class="pp-hero-stage" id="ppHeroStage">
@@ -1989,36 +2170,59 @@
         </div>
 
         <div class="portal-stage" id="portalStage" aria-label="MacBook Pro 16 pulgadas Space Black mostrando el proyecto APPI de POPUPS">
-          <div class="portal-ring"></div>
-          <span class="portal-float one" id="pfOne">Una solución real</span>
-          <span class="portal-float two" id="pfTwo">Diseño con propósito</span>
-          <span class="portal-float three" id="pfThree">Hecho para crecer</span>
+          <!-- Depth 1: Dual Counter-Rotating Celestial Orbits + Rising Micro-Motes -->
+          <div class="portal-orbits" id="portalOrbits" aria-hidden="true">
+            <div class="portal-ring"><div class="portal-orbit-spin"><span class="portal-orbit-dot"></span></div></div>
+            <div class="portal-ring-2"><div class="portal-orbit-spin rev"><span class="portal-orbit-dot soft"></span></div></div>
+            <span class="hero-mote lime m1"></span>
+            <span class="hero-mote m2"></span>
+            <span class="hero-mote lime m3"></span>
+            <span class="hero-mote m4"></span>
+            <span class="hero-mote m5"></span>
+            <span class="hero-mote lime m6"></span>
+          </div>
 
-          <div class="mbp-scene" id="mbpScene">
-            <div class="mbp-floor-shadow" id="mbpShadow" aria-hidden="true"></div>
+          <!-- Depth 2 (BEHIND MACBOOK): Drifting Glass Pills Gliding Across & Passing Behind the Mac -->
+          <div class="portal-pills-layer" aria-hidden="true">
+            <div class="pill-track" style="--lane:12%;--dur:26s;--del:-4s"><span class="pill-body" style="--bob:5.2s;--bdel:-1.2s">Una solución real</span></div>
+            <div class="pill-track rtl" style="--lane:27%;--dur:30s;--del:-14s"><span class="pill-body accent" style="--bob:6.1s;--bdel:-2.6s">Diseño con propósito</span></div>
+            <div class="pill-track" style="--lane:52%;--dur:24s;--del:-16s"><span class="pill-body" style="--bob:4.9s;--bdel:-0.8s">Hecho para crecer</span></div>
+            <div class="pill-track rtl mob-hide" style="--lane:19%;--dur:38s;--del:-25s"><span class="pill-body deep" style="--bob:6.8s;--bdel:-3.1s">0% plantillas</span></div>
+            <div class="pill-track mob-hide" style="--lane:41%;--dur:34s;--del:-28s"><span class="pill-body deep" style="--bob:5.8s;--bdel:-2.0s">Software que se usa</span></div>
+            <div class="pill-track rtl" style="--lane:66%;--dur:29s;--del:-7s"><span class="pill-body accent" style="--bob:5.5s;--bdel:-1.5s">Automatización real</span></div>
+          </div>
 
-            <!-- Real Studio-Photographed Single-Piece Space Black Unibody Base -->
-            <div class="mbp-base" aria-hidden="true">
-              <img class="mbp-base-img" src="assets/mbp-real-base.webp" alt="" />
-              <div class="mbp-base-shade" id="mbpDeckShade"></div>
-              <div class="mbp-base-glow" id="mbpDeckReflection"></div>
-            </div>
+          <!-- Depth 3 (BEHIND MACBOOK): Breathing Studio Backlight Aurora Halo -->
+          <div class="mbp-aurora" id="mbpAurora" aria-hidden="true"></div>
 
-            <!-- Real Hinged 16" Liquid Retina XDR Display Assembly -->
-            <a class="mbp-lid" id="mbpLid" href="appi/" aria-label="Explorar caso destacado APPI en MacBook Pro">
-              <div class="mbp-lid-back" aria-hidden="true">
-                <img src="assets/mbp-real-lid-back.webp" alt="" />
+          <!-- Depth 5 (IN FRONT): Photorealistic MacBook Pro 16" Space Black -->
+          <div class="mbp-front-layer">
+            <div class="mbp-scene" id="mbpScene">
+              <div class="mbp-floor-shadow" id="mbpShadow" aria-hidden="true"></div>
+
+              <!-- Real Studio-Photographed Single-Piece Space Black Unibody Base -->
+              <div class="mbp-base" aria-hidden="true">
+                <img class="mbp-base-img" src="assets/mbp-real-base.webp" alt="" />
+                <div class="mbp-base-shade" id="mbpDeckShade"></div>
+                <div class="mbp-base-glow" id="mbpDeckReflection"></div>
               </div>
 
-              <div class="mbp-lid-front">
-                <div class="mbp-lcd">
-                  <img class="mbp-screen-img" src="assets/appi-screen-full.webp" alt="APPI · Tu vida. Tu negocio. Todo en foco. — Plataforma diseñada por POPUPS" />
-                  <div class="laptop-glare" id="mbpGlare" aria-hidden="true"></div>
-                  <div class="laptop-screen-veil" id="mbpVeil" aria-hidden="true"></div>
+              <!-- Real Hinged 16" Liquid Retina XDR Display Assembly -->
+              <a class="mbp-lid" id="mbpLid" href="appi/" aria-label="Explorar caso destacado APPI en MacBook Pro">
+                <div class="mbp-lid-back" aria-hidden="true">
+                  <img src="assets/mbp-real-lid-back.webp" alt="" />
                 </div>
-                <img class="mbp-bezel-img" src="assets/mbp-real-lid.webp" alt="" aria-hidden="true" />
-              </div>
-            </a>
+
+                <div class="mbp-lid-front">
+                  <div class="mbp-lcd">
+                    <img class="mbp-screen-img" src="assets/appi-screen-full.webp" alt="APPI · Tu vida. Tu negocio. Todo en foco. — Plataforma diseñada por POPUPS" />
+                    <div class="laptop-glare" id="mbpGlare" aria-hidden="true"></div>
+                    <div class="laptop-screen-veil" id="mbpVeil" aria-hidden="true"></div>
+                  </div>
+                  <img class="mbp-bezel-img" src="assets/mbp-real-lid.webp" alt="" aria-hidden="true" />
+                </div>
+              </a>
+            </div>
           </div>
 
           <a class="mbp-caption-bar" id="mbpCaption" href="appi/">
@@ -2473,9 +2677,8 @@
       const mbpDeckShade = document.getElementById('mbpDeckShade');
       const mbpShadow = document.getElementById('mbpShadow');
       const mbpCue = document.getElementById('mbpCue');
-      const pfOne = document.getElementById('pfOne');
-      const pfTwo = document.getElementById('pfTwo');
-      const pfThree = document.getElementById('pfThree');
+      const portalOrbits = document.getElementById('portalOrbits');
+      const mbpAurora = document.getElementById('mbpAurora');
 
       if (portalStage && mbpScene && mbpLid) {
         let targetOpen = reduced ? 1 : 0;
@@ -2551,11 +2754,13 @@
             mbpCue.style.pointerEvents = cueOp > 0.15 ? 'auto' : 'none';
           }
 
-          // Studio callout pills bloom gently outside the MacBook frame
-          const pillOp = clamp((e - 0.40) / 0.50, 0, 1);
-          if (pfOne) { pfOne.style.opacity = pillOp.toFixed(3); pfOne.style.transform = `translate3d(${((1 - pillOp) * -22).toFixed(1)}px, ${((1 - pillOp) * 12).toFixed(1)}px, 0)`; }
-          if (pfTwo) { pfTwo.style.opacity = pillOp.toFixed(3); pfTwo.style.transform = `translate3d(${((1 - pillOp) * 22).toFixed(1)}px, ${((1 - pillOp) * -10).toFixed(1)}px, 0)`; }
-          if (pfThree) { pfThree.style.opacity = pillOp.toFixed(3); pfThree.style.transform = `translate3d(${((1 - pillOp) * 18).toFixed(1)}px, ${((1 - pillOp) * 16).toFixed(1)}px, 0)`; }
+          // Inverse depth parallax on background orbits & aurora behind the MacBook Pro
+          if (portalOrbits) {
+            portalOrbits.style.transform = `translate3d(${(-curHX * 14 * orbitAmt).toFixed(1)}px, ${(-curHY * 9 * orbitAmt).toFixed(1)}px, 0)`;
+          }
+          if (mbpAurora) {
+            mbpAurora.style.opacity = (0.48 + 0.50 * e).toFixed(3);
+          }
         }
 
         function tick() {
