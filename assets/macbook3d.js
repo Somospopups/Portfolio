@@ -117,14 +117,14 @@
     renderer.domElement.setAttribute('aria-label', 'MacBook Pro 3D interactiva: arrastrá para girar 360 grados');
     canvasHost.appendChild(renderer.domElement);
 
-    var FOV_DEG = 16.5;
+    var FOV_DEG = 15.0;
     var TAN_HALF_FOV = Math.tan((FOV_DEG * Math.PI) / 360);
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(FOV_DEG, 16 / 10, 0.1, 80);
-    var baseCamZ = 10.6;
-    var curCamZ = 10.6;
-    var spinDollyAmt = 2.0;
-    var OPEN_CAM_Y = 0.80;
+    var baseCamZ = 11.4;
+    var curCamZ = 11.4;
+    var spinDollyAmt = 2.1;
+    var OPEN_CAM_Y = 0.84;
     var OPEN_LOOK_Y = 0.36;
     var curLookY = OPEN_LOOK_Y;
     camera.position.set(0, OPEN_CAM_Y, baseCamZ);
@@ -193,6 +193,18 @@
       shape.lineTo(x, y + r);
       shape.quadraticCurveTo(x, y, x + r, y);
       return shape;
+    }
+
+    function makeRoundedPlaneGeometry(w, h, r, segs) {
+      var shape = makeRoundedRectShape(w, h, r);
+      var geo = new THREE.ShapeGeometry(shape, segs || 24);
+      var pos = geo.attributes.position;
+      var uv = geo.attributes.uv;
+      for (var i = 0; i < pos.count; i++) {
+        uv.setXY(i, (pos.getX(i) + w * 0.5) / w, (pos.getY(i) + h * 0.5) / h);
+      }
+      uv.needsUpdate = true;
+      return geo;
     }
 
     function makeChamferedSlab(w, d, thickness, radius, bevel) {
@@ -451,10 +463,10 @@
     imgs.appi.onload = function () { screenDirty = true; };
     imgs.webs.onload = function () { screenDirty = true; };
     imgs.mark.onload = function () { drawPopupsSticker(imgs.mark); };
-    imgs.miamp.src = 'assets/miamp-real-intro.webp';
-    imgs.appi.src = 'assets/appi-screen-full.webp';
-    imgs.webs.src = 'assets/webs-medida-scroll.webp';
-    imgs.mark.src = 'assets/logo-mark.webp';
+    imgs.miamp.src = 'assets/miamp-real-intro.webp?v=4';
+    imgs.appi.src = 'assets/appi-screen-full.webp?v=4';
+    imgs.webs.src = 'assets/webs-medida-scroll.webp?v=4';
+    imgs.mark.src = 'assets/logo-mark.webp?v=4';
 
     // -------------------------------------------------------------------------
     // Build True Cinema 16:10 Solid 3D Space Black MacBook Pro 16"
@@ -603,25 +615,26 @@
     popupsStickerMesh.position.set(0, D / 2, -(LH / 2) - 0.0034);
     lidPivot.add(popupsStickerMesh);
 
-    var bezelShape = makeRoundedRectShape(W - 0.048, D - 0.048, R - 0.020);
-    var bezelMesh = new THREE.Mesh(new THREE.ShapeGeometry(bezelShape, 18), matGlassBezel);
+    var bezelShape = makeRoundedRectShape(W - 0.046, D - 0.046, R - 0.023);
+    var bezelMesh = new THREE.Mesh(new THREE.ShapeGeometry(bezelShape, 24), matGlassBezel);
     bezelMesh.position.set(0, D / 2, LH / 2 + 0.0015);
     lidPivot.add(bezelMesh);
 
-    // 100% Edge-to-Edge Borderless Display (ZERO bottom bar, ZERO notch!)
-    var scrW = W - 0.10; // 3.66
-    var scrH = D - 0.10; // 2.28  (exact 1.605 ratio matching 1280x802 / 1600x1002!)
+    // 100% Authentic Concentric Rounded Liquid Retina XDR Display (ALL 4 CORNERS ROUNDED, ZERO NOTCH, ZERO CHIN!)
+    var scrW = W - 0.12; // 3.64
+    var scrH = D - 0.12; // 2.26 (1.610 ratio matching 1600x1002!)
+    var scrR = R - 0.050; // 0.095 concentric rounded display corner radius matching real MacBook Pro!
     var scrY = D / 2;
 
     var screenMesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(scrW, scrH),
-      new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false })
+      makeRoundedPlaneGeometry(scrW, scrH, scrR, 28),
+      new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false, transparent: true })
     );
     screenMesh.position.set(0, scrY, LH / 2 + 0.0034);
     lidPivot.add(screenMesh);
 
     var glassSheen = new THREE.Mesh(
-      new THREE.PlaneGeometry(scrW, scrH),
+      makeRoundedPlaneGeometry(scrW, scrH, scrR, 28),
       new THREE.MeshStandardMaterial({
         color: 0xffffff,
         transparent: true,
@@ -698,6 +711,22 @@
       lastStaticWake = awake;
 
       var cw = screenCanvas.width, ch = screenCanvas.height;
+      var cr = Math.round(cw * (scrR / scrW)); // exact concentric rounded display corner radius (~33px)!
+      sctx.clearRect(0, 0, cw, ch);
+      sctx.save();
+      sctx.beginPath();
+      sctx.moveTo(cr, 0);
+      sctx.lineTo(cw - cr, 0);
+      sctx.quadraticCurveTo(cw, 0, cw, cr);
+      sctx.lineTo(cw, ch - cr);
+      sctx.quadraticCurveTo(cw, ch, cw - cr, ch);
+      sctx.lineTo(cr, ch);
+      sctx.quadraticCurveTo(0, ch, 0, ch - cr);
+      sctx.lineTo(0, cr);
+      sctx.quadraticCurveTo(0, 0, cr, 0);
+      sctx.closePath();
+      sctx.clip();
+
       sctx.fillStyle = '#07090e';
       sctx.fillRect(0, 0, cw, ch);
 
@@ -757,9 +786,9 @@
         sctx.drawImage(imgs.webs, 0, srcY, wNatW, viewSrcH, 0, 0, cw, ch);
 
         var barH = ch * 0.28;
-        var barY = 16 + frac * (ch - barH - 32);
+        var barY = 44 + frac * (ch - barH - 88);
         sctx.fillStyle = 'rgba(12, 14, 18, 0.28)';
-        sctx.fillRect(cw - 11, barY, 5, barH);
+        sctx.fillRect(cw - 14, barY, 5, barH);
       }
 
       if (awake < 0.995) {
@@ -767,6 +796,7 @@
         sctx.fillRect(0, 0, cw, ch);
       }
 
+      sctx.restore();
       screenTex.needsUpdate = true;
     }
 
@@ -1039,7 +1069,7 @@
       var rect = portalStage.getBoundingClientRect();
       var vh = window.innerHeight || 800;
       var startY = vh * 0.90;
-      var endY = vh * 0.14;
+      var endY = vh * 0.08;
       var raw = (startY - rect.top) / Math.max(210, startY - endY);
       targetOpen = clamp(raw, 0, 1);
     }
@@ -1094,16 +1124,16 @@
         ];
       }
 
-      var targetMaxW = w <= 640 ? 0.965 : (w <= 1080 ? 0.955 : 0.95);
+      var targetMaxW = w <= 640 ? 0.965 : (w <= 1080 ? 0.96 : 0.955);
       var tlOpen = lidCorner(-W / 2, D, 0);
       var kfOpen = kbdCorner(W / 2, D / 2, 0);
 
-      var lo = 5.0, hi = 28.0;
-      for (var it = 0; it < 26; it++) {
+      var lo = 5.0, hi = 34.0;
+      for (var it = 0; it < 28; it++) {
         var mid = (lo + hi) * 0.5;
         var pTL = projNDC(tlOpen, mid);
         var pKF = projNDC(kfOpen, mid);
-        if (Math.abs(pKF[0]) <= targetMaxW && pTL[1] <= 0.94 && pKF[1] >= -0.96) {
+        if (Math.abs(pKF[0]) <= targetMaxW && pTL[1] <= 0.95 && pKF[1] >= -0.97) {
           hi = mid;
         } else {
           lo = mid;

@@ -449,7 +449,7 @@
     .mbp-webgl-stage {
       position:relative;
       width:100vw;
-      height:clamp(540px, min(62vw, calc(100vh - 24px)), 1140px);
+      height:clamp(580px, min(58vw, calc(100vh + 100px)), 1080px);
       margin:0 auto;
       user-select:none;
       -webkit-user-select:none;
@@ -474,7 +474,7 @@
     .mbp-drag-hint {
       position:relative;
       z-index:7;
-      margin:-78px auto 0;
+      margin:-102px auto 0;
       display:inline-flex;
       align-items:center;
       gap:7px;
@@ -687,8 +687,8 @@
     .laptop-cue:hover { border-color:var(--lime); }
 
     @media (max-width: 640px) {
-      .mbp-webgl-stage { width:100vw; height:clamp(320px, 54vh, 460px); }
-      .mbp-drag-hint { margin-top:-30px; font-size:8.5px; padding:4px 10px; }
+      .mbp-webgl-stage { width:100vw; height:clamp(340px, 56vh, 480px); }
+      .mbp-drag-hint { margin-top:-32px; font-size:8.5px; padding:4px 10px; }
       .mbp-switcher { border-radius:18px; padding:6px; gap:4px; }
       .mbp-sw-btn { padding:6px 9px; font-size:9px; }
       .mbp-spin-trigger { padding:6px 10px; font-size:9px; }
@@ -3089,6 +3089,6 @@
   </script>
 
   <script defer src="assets/three.min.js"></script>
-  <script defer src="assets/macbook3d.js"></script>
+  <script defer src="assets/macbook3d.js?v=4"></script>
 </body>
 </html>
