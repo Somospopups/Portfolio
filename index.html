@@ -310,6 +310,29 @@
       overflow:hidden;
       -webkit-mask-image:linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
       mask-image:linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+      --pill-accent:#54e3b4;
+      --pill-accent-border:rgba(84,227,180,.42);
+      --pill-accent-glow:rgba(84,227,180,.85);
+      transition:opacity .26s ease, filter .26s ease;
+    }
+    .portal-pills-layer.is-swapping {
+      opacity:0;
+      filter:blur(5px);
+    }
+    .portal-stage.theme-miamp .portal-pills-layer {
+      --pill-accent:#54e3b4;
+      --pill-accent-border:rgba(84,227,180,.44);
+      --pill-accent-glow:rgba(84,227,180,.85);
+    }
+    .portal-stage.theme-appi .portal-pills-layer {
+      --pill-accent:#c8f810;
+      --pill-accent-border:rgba(200,248,16,.40);
+      --pill-accent-glow:rgba(200,248,16,.85);
+    }
+    .portal-stage.theme-ezepece .portal-pills-layer {
+      --pill-accent:#f2c61f;
+      --pill-accent-border:rgba(242,198,31,.46);
+      --pill-accent-glow:rgba(242,198,31,.85);
     }
     .pill-track {
       position:absolute;
@@ -337,7 +360,7 @@
       border:1px solid rgba(255,255,255,.22);
       border-radius:999px;
       color:rgba(255,255,255,.94);
-      background:rgba(10,12,20,.64);
+      background:rgba(10,12,20,.66);
       backdrop-filter:blur(12px);
       font-size:10.5px;
       font-weight:800;
@@ -346,6 +369,7 @@
       box-shadow:0 14px 32px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.16);
       will-change:transform;
       animation:pillBob var(--bob, 5.4s) ease-in-out var(--bdel, 0s) infinite alternate;
+      transition:color .35s ease, border-color .35s ease;
     }
     .pill-body::before {
       content:"";
@@ -355,44 +379,57 @@
       flex:0 0 auto;
     }
     .pill-body.accent {
-      color:var(--lime);
-      border-color:rgba(200,248,16,.38);
-      background:rgba(10,13,16,.72);
+      color:var(--pill-accent);
+      border-color:var(--pill-accent-border);
+      background:rgba(10,13,16,.76);
     }
     .pill-body.accent::before {
-      background:var(--lime);
-      box-shadow:0 0 10px rgba(200,248,16,.85);
+      background:var(--pill-accent);
+      box-shadow:0 0 10px var(--pill-accent-glow);
     }
     .pill-body.deep {
-      opacity:.62;
+      opacity:.64;
       transform-origin:center;
       font-size:9.5px;
       padding:7px 13px;
       filter:blur(.35px);
-      background:rgba(10,12,20,.48);
+      background:rgba(10,12,20,.50);
     }
     @keyframes pillBob {
       0% { transform:translate3d(0, -10px, 0) rotate(-1.6deg); }
       100% { transform:translate3d(0, 10px, 0) rotate(1.6deg); }
     }
 
-    /* Depth Layer 3 (BEHIND MACBOOK): Breathing Studio Backlight Aurora Halo */
+    /* Depth Layer 3 (BEHIND MACBOOK): Breathing Studio Backlight Aurora Halo (per-product theme!) */
     .mbp-aurora {
       position:absolute;
-      left:50%; top:42%;
-      width:min(820px, 92vw);
+      left:50%; top:40%;
+      width:min(840px, 92vw);
       height:min(460px, 56vw);
       transform:translate(-50%, -50%);
       z-index:3;
       pointer-events:none;
       border-radius:50%;
       background:
-        radial-gradient(ellipse 62% 54% at 44% 48%, rgba(139,112,239,.34) 0%, transparent 72%),
-        radial-gradient(ellipse 52% 46% at 62% 54%, rgba(237,143,166,.22) 0%, transparent 70%),
+        radial-gradient(ellipse 62% 54% at 44% 48%, rgba(84,227,180,.36) 0%, transparent 72%),
+        radial-gradient(ellipse 52% 46% at 62% 54%, rgba(36,162,148,.22) 0%, transparent 70%),
         radial-gradient(ellipse 38% 34% at 50% 62%, rgba(200,248,16,.14) 0%, transparent 68%);
       filter:blur(34px);
       animation:mbpAuroraBreathe 6.5s ease-in-out infinite alternate;
+      transition:background .65s ease;
       will-change:transform, opacity;
+    }
+    .portal-stage.theme-appi .mbp-aurora {
+      background:
+        radial-gradient(ellipse 62% 54% at 44% 48%, rgba(139,112,239,.36) 0%, transparent 72%),
+        radial-gradient(ellipse 52% 46% at 62% 54%, rgba(237,143,166,.22) 0%, transparent 70%),
+        radial-gradient(ellipse 38% 34% at 50% 62%, rgba(200,248,16,.14) 0%, transparent 68%);
+    }
+    .portal-stage.theme-ezepece .mbp-aurora {
+      background:
+        radial-gradient(ellipse 62% 54% at 44% 48%, rgba(227,168,152,.38) 0%, transparent 72%),
+        radial-gradient(ellipse 52% 46% at 62% 54%, rgba(242,198,31,.24) 0%, transparent 70%),
+        radial-gradient(ellipse 38% 34% at 50% 62%, rgba(200,248,16,.16) 0%, transparent 68%);
     }
     @keyframes mbpAuroraBreathe {
       0% { transform:translate(-50%, -50%) scale(.93); }
@@ -406,15 +443,14 @@
       transform:translateZ(0);
     }
 
-    /* Unified Photorealistic MacBook Pro Coordinate Stage (exact 1020:678 studio ratio)
-       Sized so the ENTIRE MacBook + caption bar fits cleanly below the fixed navbar */
+    /* Unified Photorealistic MacBook Pro Coordinate Stage (exact 1020:678 studio ratio) */
     .mbp-scene {
       position:relative;
-      width:clamp(290px, min(860px, calc((100vh - 196px) * 1.5044)), 94vw);
+      width:clamp(290px, min(850px, calc((100vh - 236px) * 1.5044)), 94vw);
       aspect-ratio:1020 / 678;
       margin:0 auto;
       perspective:2200px;
-      perspective-origin:50% 34%;
+      perspective-origin:50% 36%;
       transform-style:preserve-3d;
       will-change:transform;
     }
@@ -432,7 +468,16 @@
       will-change:opacity, transform;
     }
 
-    /* REAL Studio-Photographed Single-Piece Space Black Unibody Base (exact 1020x214 slice) */
+    /* 360-Degree Rigid Turntable Wrapper around Base + Lid */
+    .mbp-spin-body {
+      position:absolute;
+      inset:0;
+      transform-style:preserve-3d;
+      transform-origin:50% 56%;
+      will-change:transform;
+    }
+
+    /* REAL Studio-Photographed Single-Piece Space Black Unibody Base (front + solid back for 360deg spin) */
     .mbp-base {
       position:absolute;
       left:0;
@@ -441,6 +486,20 @@
       height:31.5634%;
       pointer-events:none;
       user-select:none;
+      transform-style:preserve-3d;
+    }
+    .mbp-base-front,
+    .mbp-base-back {
+      position:absolute;
+      inset:0;
+      -webkit-backface-visibility:hidden;
+      backface-visibility:hidden;
+    }
+    .mbp-base-front {
+      transform:translateZ(1px);
+    }
+    .mbp-base-back {
+      transform:rotateY(180deg) translateZ(1px);
     }
     .mbp-base-img {
       width:100%;
@@ -458,16 +517,23 @@
       pointer-events:none;
       will-change:opacity;
     }
-    /* Subtle live violet/cosmic bounce light cast onto the upper keys once APPI wakes */
+    /* Subtle live colored bounce light cast onto the upper keys matching active product */
     .mbp-base-glow {
       position:absolute;
       inset:4% 15% 28% 15%;
       border-radius:14px;
-      background:radial-gradient(ellipse 74% 66% at 50% 18%, rgba(164,132,255,.32) 0%, rgba(235,120,196,.12) 44%, transparent 78%);
+      background:radial-gradient(ellipse 74% 66% at 50% 18%, rgba(84,227,180,.34) 0%, rgba(36,162,148,.14) 44%, transparent 78%);
       mix-blend-mode:screen;
       opacity:0;
       pointer-events:none;
+      transition:background .5s ease;
       will-change:opacity;
+    }
+    .portal-stage.theme-appi .mbp-base-glow {
+      background:radial-gradient(ellipse 74% 66% at 50% 18%, rgba(164,132,255,.32) 0%, rgba(235,120,196,.12) 44%, transparent 78%);
+    }
+    .portal-stage.theme-ezepece .mbp-base-glow {
+      background:radial-gradient(ellipse 74% 66% at 50% 18%, rgba(242,198,31,.30) 0%, rgba(227,168,152,.18) 44%, transparent 78%);
     }
 
     /* REAL Hinged 16" Display Lid Assembly (pivots around exact physical hinge scanline!) */
@@ -493,10 +559,15 @@
       backface-visibility:hidden;
     }
 
-    /* Outer Space Black Brushed Aluminum Lid Back (visible while closed / opening) */
+    /* Outer Space Black Brushed Aluminum Lid Back:
+       - While closed (rotateX -96deg): rotateX(180deg) keeps POPUPS emblem upright
+       - Once open (.is-open-rig) for 360deg Y-axis spin: rotateY(180deg) keeps POPUPS emblem upright at 180deg! */
     .mbp-lid-back {
       transform:rotateX(180deg) translateZ(1px);
       pointer-events:none;
+    }
+    .mbp-spin-body.is-open-rig .mbp-lid-back {
+      transform:rotateY(180deg) translateZ(1px);
     }
     .mbp-lid-back img {
       width:100%;
@@ -505,7 +576,7 @@
       object-fit:fill;
     }
 
-    /* Front Open Display Assembly: 100% Uncropped Full-Fit APPI LCD + Real Studio Bezel & Notch */
+    /* Front Open Display Assembly: 3-Product Showcase LCD + Real Studio Bezel & Notch */
     .mbp-lid-front {
       transform:translateZ(1px);
     }
@@ -519,12 +590,162 @@
       border-radius:1.4% / 2.2%;
       background:#08080c;
     }
+    .mbp-slide {
+      position:absolute;
+      inset:0;
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transition:opacity .26s ease;
+    }
+    .mbp-slide.is-active {
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+      z-index:1;
+    }
     .mbp-screen-img {
       width:100%;
       height:100%;
       display:block;
       object-fit:fill;
     }
+
+    /* Product 3 (EZE-PECE · Webs a Medida): macOS Safari Browser Frame + Fast Live Auto-Scroll */
+    .eze-browser {
+      position:relative;
+      width:100%;
+      height:100%;
+      background:#f4f0e8;
+      overflow:hidden;
+    }
+    .eze-bar {
+      position:absolute;
+      top:0; left:0; right:0;
+      height:8.6%;
+      background:linear-gradient(180deg, #1a1c22 0%, #121419 100%);
+      border-bottom:1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 2.6%;
+      gap:2%;
+      z-index:3;
+      box-sizing:border-box;
+    }
+    .eze-dots {
+      display:flex;
+      align-items:center;
+      gap:clamp(3px, .55vw, 6px);
+      flex:0 0 auto;
+    }
+    .eze-dots i {
+      width:clamp(5px, .72vw, 8px);
+      height:clamp(5px, .72vw, 8px);
+      border-radius:50%;
+      display:block;
+    }
+    .eze-dots i:nth-child(1) { background:#ff5f57; }
+    .eze-dots i:nth-child(2) { background:#febc2e; }
+    .eze-dots i:nth-child(3) { background:#28c840; }
+    .eze-url {
+      flex:1 1 auto;
+      max-width:62%;
+      margin:0 auto;
+      padding:2px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.10);
+      color:rgba(244,245,240,.86);
+      font-family:var(--mono);
+      font-size:clamp(6.5px, .82vw, 10px);
+      letter-spacing:.02em;
+      text-align:center;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .eze-url b { color:#f2c61f; font-weight:700; }
+    .eze-badge {
+      flex:0 0 auto;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      padding:2px 7px;
+      border-radius:999px;
+      background:rgba(200,248,16,.14);
+      border:1px solid rgba(200,248,16,.38);
+      color:var(--lime);
+      font-family:var(--mono);
+      font-size:clamp(5.5px, .68vw, 8.5px);
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .eze-badge::before {
+      content:"";
+      width:4px; height:4px;
+      border-radius:50%;
+      background:var(--lime);
+    }
+    .eze-viewport {
+      position:absolute;
+      left:0; right:0;
+      top:8.6%; bottom:0;
+      overflow:hidden;
+      background:#f4f0e8;
+    }
+    .eze-scroll-img {
+      width:100%;
+      height:auto;
+      display:block;
+      transform:translate3d(0, 0, 0);
+      will-change:transform;
+    }
+    .mbp-slide.is-active .eze-scroll-img {
+      animation:ezeFastScroll 6.8s cubic-bezier(.42, 0, .24, 1) .35s infinite;
+    }
+    .portal-stage.is-paused .eze-scroll-img,
+    .portal-stage.is-paused .eze-sb-thumb {
+      animation-play-state:paused;
+    }
+    @keyframes ezeFastScroll {
+      0%, 7%   { transform:translate3d(0, 0%, 0); }
+      28%      { transform:translate3d(0, -29.5%, 0); }
+      52%      { transform:translate3d(0, -56.5%, 0); }
+      68%, 80% { transform:translate3d(0, -68.58%, 0); }
+      95%, 100%{ transform:translate3d(0, 0%, 0); }
+    }
+    /* Synchronized slim macOS scrollbar rail inside Safari viewport */
+    .eze-sb-rail {
+      position:absolute;
+      top:2.5%; right:1%; bottom:2.5%;
+      width:4px;
+      border-radius:99px;
+      background:rgba(15,15,18,.18);
+      pointer-events:none;
+      z-index:4;
+    }
+    .eze-sb-thumb {
+      position:absolute;
+      left:0; right:0; top:0;
+      height:30%;
+      border-radius:99px;
+      background:rgba(20,20,24,.64);
+      will-change:transform;
+    }
+    .mbp-slide.is-active .eze-sb-thumb {
+      animation:ezeThumbScroll 6.8s cubic-bezier(.42, 0, .24, 1) .35s infinite;
+    }
+    @keyframes ezeThumbScroll {
+      0%, 7%   { transform:translate3d(0, 0%, 0); }
+      28%      { transform:translate3d(0, 100%, 0); }
+      52%      { transform:translate3d(0, 192%, 0); }
+      68%, 80% { transform:translate3d(0, 233%, 0); }
+      95%, 100%{ transform:translate3d(0, 0%, 0); }
+    }
+
     .mbp-bezel-img {
       position:absolute;
       inset:0;
@@ -551,7 +772,7 @@
       inset:-20%;
       z-index:2;
       pointer-events:none;
-      background:linear-gradient(118deg, transparent 36%, rgba(255,255,255,.16) 48%, rgba(200,248,16,.04) 53%, transparent 64%);
+      background:linear-gradient(118deg, transparent 36%, rgba(255,255,255,.18) 48%, rgba(200,248,16,.05) 53%, transparent 64%);
       transform:translateX(-48%);
       opacity:0;
       will-change:transform, opacity;
@@ -560,13 +781,109 @@
     .reveal { opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s var(--ease); }
     .reveal.visible { opacity:1; transform:none; }
 
-    /* Clean Studio Case Bar BELOW the MacBook (never covers a single pixel of the screen!) */
+    /* Compact 360-Degree Product Switcher Dock BELOW the MacBook */
+    .mbp-switcher {
+      position:relative;
+      z-index:6;
+      margin:14px auto 0;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:6px;
+      padding:5px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(10,12,18,.78);
+      backdrop-filter:blur(14px);
+      box-shadow:0 12px 30px rgba(0,0,0,.38);
+      will-change:transform, opacity;
+    }
+    .mbp-sw-btn {
+      position:relative;
+      overflow:hidden;
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:7px 13px;
+      border:1px solid transparent;
+      border-radius:999px;
+      background:transparent;
+      color:rgba(244,245,240,.66);
+      font-family:var(--mono);
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      cursor:pointer;
+      transition:color .22s ease, background .22s ease, border-color .22s ease;
+    }
+    .mbp-sw-btn:hover { color:#fff; background:rgba(255,255,255,.06); }
+    .mbp-sw-btn .sw-dot {
+      width:6px; height:6px;
+      border-radius:50%;
+      background:var(--sw-c, var(--lime));
+      opacity:.48;
+      transition:opacity .22s ease, box-shadow .22s ease;
+    }
+    .mbp-sw-btn.is-active {
+      color:#fff;
+      background:rgba(255,255,255,.09);
+      border-color:rgba(255,255,255,.22);
+    }
+    .mbp-sw-btn.is-active .sw-dot {
+      opacity:1;
+      box-shadow:0 0 10px var(--sw-c, var(--lime));
+    }
+    .mbp-sw-btn .sw-prog {
+      position:absolute;
+      left:12px; right:12px; bottom:2px;
+      height:2px;
+      border-radius:99px;
+      background:var(--sw-c, var(--lime));
+      transform:scaleX(0);
+      transform-origin:0 50%;
+      opacity:0;
+    }
+    .mbp-sw-btn.is-active .sw-prog {
+      opacity:.9;
+    }
+    .mbp-spin-trigger {
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      padding:7px 12px;
+      border:1px solid rgba(200,248,16,.32);
+      border-radius:999px;
+      background:rgba(200,248,16,.10);
+      color:var(--lime);
+      font-family:var(--mono);
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.06em;
+      cursor:pointer;
+      transition:background .2s ease, border-color .2s ease, transform .25s var(--ease);
+    }
+    .mbp-spin-trigger:hover {
+      background:rgba(200,248,16,.20);
+      border-color:var(--lime);
+      transform:scale(1.04);
+    }
+    .mbp-spin-trigger svg {
+      width:12px; height:12px;
+      transition:transform .55s var(--ease);
+    }
+    .mbp-spin-trigger.is-spinning svg {
+      transform:rotate(360deg);
+    }
+
+    /* Clean Studio Case Bar BELOW the Switcher (never covers a single pixel of the screen!) */
     .mbp-caption-bar {
       position:relative;
       z-index:6;
-      margin:20px auto 0;
+      margin:10px auto 0;
       max-width:min(760px, 94vw);
-      padding:10px 14px 10px 18px;
+      padding:9px 14px 9px 18px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.16);
       background:rgba(10,12,18,.78);
@@ -578,7 +895,7 @@
       flex-wrap:wrap;
       gap:10px 14px;
       color:#fff;
-      transition:border-color .22s ease, transform .25s var(--ease), background .22s ease;
+      transition:border-color .22s ease, transform .25s var(--ease), background .22s ease, opacity .25s ease;
       will-change:transform, opacity;
     }
     .mbp-caption-bar:hover {
@@ -590,7 +907,7 @@
       display:inline-flex;
       align-items:center;
       gap:7px;
-      color:var(--lime);
+      color:var(--cap-accent, #54e3b4);
       font-family:var(--mono);
       font-size:9.5px;
       font-weight:800;
@@ -602,8 +919,8 @@
       content:"";
       width:6px; height:6px;
       border-radius:50%;
-      background:var(--lime);
-      box-shadow:0 0 12px rgba(200,248,16,.75);
+      background:var(--cap-accent, #54e3b4);
+      box-shadow:0 0 12px var(--cap-accent, #54e3b4);
     }
     .mbp-cap-sep { width:1px; height:14px; background:rgba(255,255,255,.16); }
     .mbp-cap-text {
@@ -628,7 +945,7 @@
 
     .laptop-cue {
       position:absolute;
-      left:50%; bottom:58px;
+      left:50%; bottom:74px;
       transform:translateX(-50%);
       display:inline-flex;
       align-items:center;
@@ -652,10 +969,14 @@
 
     @media (max-width: 640px) {
       .mbp-scene { width:94vw; }
-      .mbp-caption-bar { border-radius:18px; padding:12px 14px; text-align:center; }
+      .mbp-switcher { border-radius:18px; padding:6px; gap:4px; }
+      .mbp-sw-btn { padding:6px 9px; font-size:9px; }
+      .mbp-spin-trigger { padding:6px 10px; font-size:9px; }
+      .mbp-caption-bar { border-radius:18px; padding:11px 14px; text-align:center; }
       .mbp-cap-sep { display:none; }
       .pill-body { padding:6px 11px; font-size:9px; }
       .pill-track.mob-hide { display:none; }
+      .eze-badge { display:none; }
     }
 
     .ticker {
@@ -1887,7 +2208,7 @@
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior:auto; }
-      .portal-frame, .ticker-track, .pill-track, .pill-body, .portal-orbit-spin, .hero-comet, .hero-mote, .mbp-aurora, .hero-glow, .hero::before, .button.primary::after { animation:none !important; }
+      .portal-frame, .ticker-track, .pill-track, .pill-body, .portal-orbit-spin, .hero-comet, .hero-mote, .mbp-aurora, .hero-glow, .hero::before, .button.primary::after, .eze-scroll-img, .eze-sb-thumb { animation:none !important; }
       *, *::before, *::after { transition-duration:0.01ms !important; }
     }
 
@@ -2169,7 +2490,7 @@
           </div>
         </div>
 
-        <div class="portal-stage" id="portalStage" aria-label="MacBook Pro 16 pulgadas Space Black mostrando el proyecto APPI de POPUPS">
+        <div class="portal-stage theme-miamp" id="portalStage" aria-label="MacBook Pro 16 pulgadas Space Black girando 360 grados con los productos destacados de POPUPS: MI AMP, APPI y EZE-PECE">
           <!-- Depth 1: Dual Counter-Rotating Celestial Orbits + Rising Micro-Motes -->
           <div class="portal-orbits" id="portalOrbits" aria-hidden="true">
             <div class="portal-ring"><div class="portal-orbit-spin"><span class="portal-orbit-dot"></span></div></div>
@@ -2182,54 +2503,96 @@
             <span class="hero-mote lime m6"></span>
           </div>
 
-          <!-- Depth 2 (BEHIND MACBOOK): Drifting Glass Pills Gliding Across & Passing Behind the Mac -->
-          <div class="portal-pills-layer" aria-hidden="true">
-            <div class="pill-track" style="--lane:12%;--dur:26s;--del:-4s"><span class="pill-body" style="--bob:5.2s;--bdel:-1.2s">Una solución real</span></div>
-            <div class="pill-track rtl" style="--lane:27%;--dur:30s;--del:-14s"><span class="pill-body accent" style="--bob:6.1s;--bdel:-2.6s">Diseño con propósito</span></div>
-            <div class="pill-track" style="--lane:52%;--dur:24s;--del:-16s"><span class="pill-body" style="--bob:4.9s;--bdel:-0.8s">Hecho para crecer</span></div>
-            <div class="pill-track rtl mob-hide" style="--lane:19%;--dur:38s;--del:-25s"><span class="pill-body deep" style="--bob:6.8s;--bdel:-3.1s">0% plantillas</span></div>
-            <div class="pill-track mob-hide" style="--lane:41%;--dur:34s;--del:-28s"><span class="pill-body deep" style="--bob:5.8s;--bdel:-2.0s">Software que se usa</span></div>
-            <div class="pill-track rtl" style="--lane:66%;--dur:29s;--del:-7s"><span class="pill-body accent" style="--bob:5.5s;--bdel:-1.5s">Automatización real</span></div>
+          <!-- Depth 2 (BEHIND MACBOOK): 6 Dynamic Floating Pills Updating on Every 360° Spin -->
+          <div class="portal-pills-layer" id="portalPills" aria-hidden="true">
+            <div class="pill-track" style="--lane:12%;--dur:26s;--del:-4s"><span class="pill-body" data-pill-idx="0" style="--bob:5.2s;--bdel:-1.2s">18 cabezales modelados</span></div>
+            <div class="pill-track rtl" style="--lane:27%;--dur:30s;--del:-14s"><span class="pill-body accent" data-pill-idx="1" style="--bob:6.1s;--bdel:-2.6s">27 pedales boutique</span></div>
+            <div class="pill-track" style="--lane:52%;--dur:24s;--del:-16s"><span class="pill-body" data-pill-idx="2" style="--bob:4.9s;--bdel:-0.8s">C++20 · JUCE 8 DSP</span></div>
+            <div class="pill-track rtl mob-hide" style="--lane:19%;--dur:38s;--del:-25s"><span class="pill-body deep" data-pill-idx="3" style="--bob:6.8s;--bdel:-3.1s">19 cabinas + carga .WAV IR</span></div>
+            <div class="pill-track mob-hide" style="--lane:41%;--dur:34s;--del:-28s"><span class="pill-body deep" data-pill-idx="4" style="--bob:5.8s;--bdel:-2.0s">VST3 · AU · Standalone</span></div>
+            <div class="pill-track rtl" style="--lane:66%;--dur:29s;--del:-7s"><span class="pill-body accent" data-pill-idx="5" style="--bob:5.5s;--bdel:-1.5s">Latencia ultra baja · 0 drama</span></div>
           </div>
 
           <!-- Depth 3 (BEHIND MACBOOK): Breathing Studio Backlight Aurora Halo -->
           <div class="mbp-aurora" id="mbpAurora" aria-hidden="true"></div>
 
-          <!-- Depth 5 (IN FRONT): Photorealistic MacBook Pro 16" Space Black -->
+          <!-- Depth 5 (IN FRONT): Photorealistic 360° Spinning MacBook Pro 16" Space Black -->
           <div class="mbp-front-layer">
             <div class="mbp-scene" id="mbpScene">
               <div class="mbp-floor-shadow" id="mbpShadow" aria-hidden="true"></div>
 
-              <!-- Real Studio-Photographed Single-Piece Space Black Unibody Base -->
-              <div class="mbp-base" aria-hidden="true">
-                <img class="mbp-base-img" src="assets/mbp-real-base.webp" alt="" />
-                <div class="mbp-base-shade" id="mbpDeckShade"></div>
-                <div class="mbp-base-glow" id="mbpDeckReflection"></div>
-              </div>
-
-              <!-- Real Hinged 16" Liquid Retina XDR Display Assembly -->
-              <a class="mbp-lid" id="mbpLid" href="appi/" aria-label="Explorar caso destacado APPI en MacBook Pro">
-                <div class="mbp-lid-back" aria-hidden="true">
-                  <img src="assets/mbp-real-lid-back.webp" alt="" />
-                </div>
-
-                <div class="mbp-lid-front">
-                  <div class="mbp-lcd">
-                    <img class="mbp-screen-img" src="assets/appi-screen-full.webp" alt="APPI · Tu vida. Tu negocio. Todo en foco. — Plataforma diseñada por POPUPS" />
-                    <div class="laptop-glare" id="mbpGlare" aria-hidden="true"></div>
-                    <div class="laptop-screen-veil" id="mbpVeil" aria-hidden="true"></div>
+              <div class="mbp-spin-body" id="mbpSpinBody">
+                <!-- Real Studio-Photographed Space Black Unibody Base (Front + Solid Rear for 360° Spin) -->
+                <div class="mbp-base" aria-hidden="true">
+                  <div class="mbp-base-front">
+                    <img class="mbp-base-img" src="assets/mbp-real-base.webp" alt="" />
+                    <div class="mbp-base-shade" id="mbpDeckShade"></div>
+                    <div class="mbp-base-glow" id="mbpDeckReflection"></div>
                   </div>
-                  <img class="mbp-bezel-img" src="assets/mbp-real-lid.webp" alt="" aria-hidden="true" />
+                  <div class="mbp-base-back">
+                    <img class="mbp-base-img" src="assets/mbp-real-base-back.webp" alt="" />
+                  </div>
                 </div>
-              </a>
+
+                <!-- Real Hinged 16" Liquid Retina XDR Display Assembly -->
+                <a class="mbp-lid" id="mbpLid" href="mi-amp/" aria-label="Explorar caso destacado MI AMP en MacBook Pro">
+                  <div class="mbp-lid-back" aria-hidden="true">
+                    <img src="assets/mbp-real-lid-back.webp" alt="" />
+                  </div>
+
+                  <div class="mbp-lid-front">
+                    <div class="mbp-lcd">
+                      <!-- 01 · MI AMP -->
+                      <div class="mbp-slide is-active" data-slide="0">
+                        <img class="mbp-screen-img" src="assets/miamp-screen-full.webp" alt="MI AMP · Suite de amplificadores y pedales DSP en tiempo real por POPUPS" />
+                      </div>
+
+                      <!-- 02 · APPI -->
+                      <div class="mbp-slide" data-slide="1">
+                        <img class="mbp-screen-img" src="assets/appi-screen-full.webp" alt="APPI · Tu vida. Tu negocio. Todo en foco. — Plataforma diseñada por POPUPS" />
+                      </div>
+
+                      <!-- 03 · EZE-PECE (Webs a Medida con scroll rápido en vivo) -->
+                      <div class="mbp-slide" data-slide="2">
+                        <div class="eze-browser">
+                          <div class="eze-bar" aria-hidden="true">
+                            <span class="eze-dots"><i></i><i></i><i></i></span>
+                            <span class="eze-url">somospopups.github.io/Mi-Tienda/?tienda=<b>eze-pece</b></span>
+                            <span class="eze-badge">Web a medida</span>
+                          </div>
+                          <div class="eze-viewport">
+                            <img class="eze-scroll-img" id="ezeScrollImg" src="assets/ezepece-scroll-full.webp" alt="EZE-PECE · Tienda web a medida con catálogo vivo, carrito y pedidos por WhatsApp" />
+                            <div class="eze-sb-rail" aria-hidden="true"><div class="eze-sb-thumb" id="ezeSbThumb"></div></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="laptop-glare" id="mbpGlare" aria-hidden="true"></div>
+                      <div class="laptop-screen-veil" id="mbpVeil" aria-hidden="true"></div>
+                    </div>
+                    <img class="mbp-bezel-img" src="assets/mbp-real-lid.webp" alt="" aria-hidden="true" />
+                  </div>
+                </a>
+              </div>
             </div>
           </div>
 
-          <a class="mbp-caption-bar" id="mbpCaption" href="appi/">
-            <span class="mbp-cap-tag">Caso destacado · 01</span>
+          <!-- 360° Product Switcher Dock (zero screen obstruction) -->
+          <div class="mbp-switcher" id="mbpSwitcher" role="tablist" aria-label="Cambiar producto en la MacBook Pro 360 grados">
+            <button type="button" class="mbp-sw-btn is-active" data-idx="0" role="tab" aria-selected="true" style="--sw-c:#54e3b4"><i class="sw-dot"></i>01 · MI AMP<span class="sw-prog"></span></button>
+            <button type="button" class="mbp-sw-btn" data-idx="1" role="tab" aria-selected="false" style="--sw-c:#c8f810"><i class="sw-dot"></i>02 · APPI<span class="sw-prog"></span></button>
+            <button type="button" class="mbp-sw-btn" data-idx="2" role="tab" aria-selected="false" style="--sw-c:#f2c61f"><i class="sw-dot"></i>03 · EZE-PECE · Webs<span class="sw-prog"></span></button>
+            <button type="button" class="mbp-spin-trigger" id="mbpSpinBtn" title="Girar MacBook Pro 360° al siguiente producto" aria-label="Girar MacBook Pro 360 grados al siguiente producto">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>
+              360°
+            </button>
+          </div>
+
+          <a class="mbp-caption-bar" id="mbpCaption" href="mi-amp/" style="--cap-accent:#54e3b4">
+            <span class="mbp-cap-tag" id="mbpCapTag">01 · MI AMP · Audio DSP</span>
             <span class="mbp-cap-sep" aria-hidden="true"></span>
-            <span class="mbp-cap-text"><strong>APPI</strong> — Planificación, finanzas y equipo en una PWA offline.</span>
-            <span class="mbp-cap-cta">Explorar caso ↗</span>
+            <span class="mbp-cap-text" id="mbpCapText"><strong>MI AMP</strong> — 18 cabezales, 19 cabinas IR y 27 pedales boutique en tiempo real.</span>
+            <span class="mbp-cap-cta" id="mbpCapCta">Explorar MI AMP ↗</span>
           </a>
 
           <button type="button" class="laptop-cue" id="mbpCue" aria-label="Deslizar para abrir la MacBook Pro">↓ Scrolleá para abrir la Mac</button>
@@ -2666,70 +3029,318 @@
         }
       }
 
-      // Photorealistic MacBook Pro 16" Space Black Scroll-Opening Kinematics (60fps damped spring)
+      // Photorealistic MacBook Pro 16" Space Black: Scroll-Opening + 360° 3-Product Showcase
       const portalStage = document.getElementById('portalStage');
       const mbpScene = document.getElementById('mbpScene');
+      const mbpSpinBody = document.getElementById('mbpSpinBody');
       const mbpLid = document.getElementById('mbpLid');
       const mbpVeil = document.getElementById('mbpVeil');
       const mbpGlare = document.getElementById('mbpGlare');
       const mbpCaption = document.getElementById('mbpCaption');
+      const mbpCapTag = document.getElementById('mbpCapTag');
+      const mbpCapText = document.getElementById('mbpCapText');
+      const mbpCapCta = document.getElementById('mbpCapCta');
+      const mbpSwitcher = document.getElementById('mbpSwitcher');
+      const mbpSpinBtn = document.getElementById('mbpSpinBtn');
       const mbpDeckReflection = document.getElementById('mbpDeckReflection');
       const mbpDeckShade = document.getElementById('mbpDeckShade');
       const mbpShadow = document.getElementById('mbpShadow');
       const mbpCue = document.getElementById('mbpCue');
       const portalOrbits = document.getElementById('portalOrbits');
+      const portalPills = document.getElementById('portalPills');
       const mbpAurora = document.getElementById('mbpAurora');
 
       if (portalStage && mbpScene && mbpLid) {
+        const SHOWCASE = [
+          {
+            key: 'miamp',
+            theme: 'theme-miamp',
+            accent: '#54e3b4',
+            dwell: 6000,
+            href: 'mi-amp/',
+            external: false,
+            aria: 'Explorar caso destacado MI AMP en MacBook Pro',
+            tag: '01 · MI AMP · Audio DSP',
+            html: '<strong>MI AMP</strong> — 18 cabezales, 19 cabinas IR y 27 pedales boutique en tiempo real.',
+            cta: 'Explorar MI AMP ↗',
+            pills: [
+              '18 cabezales modelados',
+              '27 pedales boutique',
+              'C++20 · JUCE 8 DSP',
+              '19 cabinas + carga .WAV IR',
+              'VST3 · AU · Standalone',
+              'Latencia ultra baja · 0 drama'
+            ]
+          },
+          {
+            key: 'appi',
+            theme: 'theme-appi',
+            accent: '#c8f810',
+            dwell: 6000,
+            href: 'appi/',
+            external: false,
+            aria: 'Explorar caso destacado APPI en MacBook Pro',
+            tag: '02 · APPI · PWA Offline',
+            html: '<strong>APPI</strong> — Planificación, finanzas y equipo en una PWA instalable sin conexión.',
+            cta: 'Explorar APPI ↗',
+            pills: [
+              'Tu vida y negocio en foco',
+              '7 días 100% offline',
+              '+15 herramientas conectadas',
+              'PWA instalable en segundos',
+              '2 espacios · Titular + Socio',
+              'Cero planillas sueltas'
+            ]
+          },
+          {
+            key: 'ezepece',
+            theme: 'theme-ezepece',
+            accent: '#f2c61f',
+            dwell: 7400,
+            href: 'https://somospopups.github.io/Mi-Tienda/?tienda=eze-pece',
+            external: true,
+            aria: 'Abrir web a medida EZE-PECE en vivo',
+            tag: '03 · Webs a medida · En vivo',
+            html: '<strong>EZE-PECE</strong> — Tienda diseñada desde cero con catálogo vivo y pedidos por WhatsApp.',
+            cta: 'Abrir web en vivo ↗',
+            pills: [
+              'Webs a medida · 0% plantillas',
+              'EZE-PECE · Tienda en vivo',
+              'Catálogo vivo + carrito real',
+              '0% comisión por venta',
+              'Identidad visual desde cero',
+              'Pedidos directo a WhatsApp'
+            ]
+          }
+        ];
+
+        const slideEls = Array.from(mbpLid.querySelectorAll('.mbp-slide'));
+        const pillEls = portalPills ? Array.from(portalPills.querySelectorAll('[data-pill-idx]')) : [];
+        const swBtns = mbpSwitcher ? Array.from(mbpSwitcher.querySelectorAll('.mbp-sw-btn')) : [];
+        const ezeScrollImg = document.getElementById('ezeScrollImg');
+        const ezeSbThumb = document.getElementById('ezeSbThumb');
+
+        let activeIdx = 0;
         let targetOpen = reduced ? 1 : 0;
         let currentOpen = reduced ? 1 : 0;
         let hoverX = 0, hoverY = 0, curHX = 0, curHY = 0;
-        let rafActive = false;
+        let inView = true;
+        let isHoverPaused = false;
+        let rafId = null;
+        let lastTs = 0;
+        let dwellElapsed = 0;
+
+        // 360° Spin animation state
+        const SPIN_MS = 1420;
+        let spinActive = false;
+        let spinStartTs = 0;
+        let spinDir = 1;
+        let spinTargetIdx = 0;
+        let spinSwapped = false;
+        let spinPillsDimmed = false;
 
         const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
         const easeOutQuart = t => 1 - Math.pow(1 - t, 4);
+        const easeInOutCubic = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+        function restartEzeScroll() {
+          if (!ezeScrollImg || !ezeSbThumb) return;
+          ezeScrollImg.style.animation = 'none';
+          ezeSbThumb.style.animation = 'none';
+          void ezeScrollImg.offsetWidth;
+          ezeScrollImg.style.animation = '';
+          ezeSbThumb.style.animation = '';
+        }
+
+        function applyProductData(idx) {
+          activeIdx = idx;
+          const item = SHOWCASE[idx];
+
+          // Theme class for aurora, keyboard reflection & accent pills
+          portalStage.classList.remove('theme-miamp', 'theme-appi', 'theme-ezepece');
+          portalStage.classList.add(item.theme);
+
+          // Swap active LCD slide
+          slideEls.forEach((el, i) => el.classList.toggle('is-active', i === idx));
+          if (item.key === 'ezepece') restartEzeScroll();
+
+          // Update 6 floating pills passing behind the MacBook
+          pillEls.forEach((el, i) => {
+            if (item.pills[i] !== undefined) el.textContent = item.pills[i];
+          });
+
+          // Update MacBook lid click target
+          mbpLid.setAttribute('href', item.href);
+          mbpLid.setAttribute('aria-label', item.aria);
+          if (item.external) {
+            mbpLid.setAttribute('target', '_blank');
+            mbpLid.setAttribute('rel', 'noopener');
+          } else {
+            mbpLid.removeAttribute('target');
+            mbpLid.removeAttribute('rel');
+          }
+
+          // Update caption bar
+          if (mbpCaption) {
+            mbpCaption.setAttribute('href', item.href);
+            mbpCaption.style.setProperty('--cap-accent', item.accent);
+            if (item.external) {
+              mbpCaption.setAttribute('target', '_blank');
+              mbpCaption.setAttribute('rel', 'noopener');
+            } else {
+              mbpCaption.removeAttribute('target');
+              mbpCaption.removeAttribute('rel');
+            }
+          }
+          if (mbpCapTag) mbpCapTag.textContent = item.tag;
+          if (mbpCapText) mbpCapText.innerHTML = item.html;
+          if (mbpCapCta) mbpCapCta.textContent = item.cta;
+
+          // Update switcher tabs
+          swBtns.forEach((btn, i) => {
+            const on = i === idx;
+            btn.classList.toggle('is-active', on);
+            btn.setAttribute('aria-selected', on ? 'true' : 'false');
+            const prog = btn.querySelector('.sw-prog');
+            if (prog) prog.style.transform = 'scaleX(0)';
+          });
+
+          dwellElapsed = 0;
+        }
+
+        function triggerSpinTo(nextIdx, dirOverride) {
+          const dest = ((nextIdx % SHOWCASE.length) + SHOWCASE.length) % SHOWCASE.length;
+          if (reduced) {
+            applyProductData(dest);
+            return;
+          }
+          if (spinActive) {
+            // If already spinning, smoothly redirect destination before midpoint
+            if (!spinSwapped) spinTargetIdx = dest;
+            return;
+          }
+          spinActive = true;
+          spinStartTs = performance.now();
+          spinTargetIdx = dest;
+          spinDir = dirOverride || (dest < activeIdx && !(activeIdx === SHOWCASE.length - 1 && dest === 0) ? -1 : 1);
+          spinSwapped = false;
+          spinPillsDimmed = false;
+          dwellElapsed = 0;
+          if (mbpSpinBtn) mbpSpinBtn.classList.add('is-spinning');
+          ensureLoop();
+        }
 
         function computeTarget() {
           if (reduced) { targetOpen = 1; return; }
           const rect = portalStage.getBoundingClientRect();
           const vh = window.innerHeight || 800;
-          // Starts resting closed near bottom of hero, reaches 100% pixel-aligned open cleanly below navbar
           const startY = vh * 0.88;
           const endY = vh * 0.18;
           const raw = (startY - rect.top) / Math.max(220, startY - endY);
           targetOpen = clamp(raw, 0, 1);
         }
 
-        function applyMacBookState(p) {
-          const e = easeOutQuart(p);
-          // Exact hinge swing: -96deg (closed over base, Space Black outer lid facing up) -> 0deg (pixel-exact studio open!)
+        function renderFrame(now) {
+          const dt = lastTs ? Math.min(80, now - lastTs) : 16;
+          lastTs = now;
+
+          currentOpen += (targetOpen - currentOpen) * 0.12;
+          curHX += (hoverX - curHX) * 0.09;
+          curHY += (hoverY - curHY) * 0.09;
+
+          const e = easeOutQuart(currentOpen);
           const lidAngle = -96 * (1 - e);
           const sceneScale = 0.94 + 0.06 * e;
           const sceneDrop = 20 * (1 - e);
           const orbitAmt = clamp((e - 0.65) / 0.35, 0, 1);
+
+          // Flip outer lid back-face orientation invisibly once open so POPUPS emblem stays upright during 360° Y-spin
+          if (mbpSpinBody) {
+            mbpSpinBody.classList.toggle('is-open-rig', e > 0.72);
+          }
+
+          // Compute 360° spin kinematics
+          let spinDeg = 0;
+          let spinLift = 0;
+          let spinScaleBoost = 0;
+          let shadowStretch = 1;
+          let spinGlareBoost = 0;
+
+          if (spinActive) {
+            const rawT = clamp((now - spinStartTs) / SPIN_MS, 0, 1);
+            const easedT = easeInOutCubic(rawT);
+            spinDeg = spinDir * easedT * 360;
+            const arc = Math.sin(rawT * Math.PI);
+            spinLift = -11 * arc;
+            spinScaleBoost = 0.045 * arc;
+            shadowStretch = 1 - 0.28 * Math.abs(Math.sin(easedT * Math.PI * 2));
+
+            // Fade behind-MacBook pills cleanly right before 180°, swap text at 180°, fade back in after
+            if (rawT >= 0.26 && !spinPillsDimmed) {
+              spinPillsDimmed = true;
+              if (portalPills) portalPills.classList.add('is-swapping');
+            }
+            if (rawT >= 0.48 && !spinSwapped) {
+              spinSwapped = true;
+              applyProductData(spinTargetIdx);
+            }
+            if (rawT >= 0.66 && spinPillsDimmed) {
+              spinPillsDimmed = false;
+              if (portalPills) portalPills.classList.remove('is-swapping');
+            }
+            if (rawT > 0.68) {
+              spinGlareBoost = Math.sin(((rawT - 0.68) / 0.32) * Math.PI) * 0.58;
+            }
+            if (rawT >= 1) {
+              spinActive = false;
+              spinDeg = 0;
+              spinLift = 0;
+              spinScaleBoost = 0;
+              shadowStretch = 1;
+              if (portalPills) portalPills.classList.remove('is-swapping');
+              if (mbpSpinBtn) mbpSpinBtn.classList.remove('is-spinning');
+            }
+          } else if (!reduced && inView && currentOpen > 0.84 && !isHoverPaused) {
+            // Auto-advance 360° timer when MacBook is open & in viewport
+            const dwellMs = SHOWCASE[activeIdx].dwell;
+            dwellElapsed += dt;
+            const pct = clamp(dwellElapsed / dwellMs, 0, 1);
+            const activeProg = swBtns[activeIdx] && swBtns[activeIdx].querySelector('.sw-prog');
+            if (activeProg) activeProg.style.transform = `scaleX(${pct.toFixed(4)})`;
+            if (dwellElapsed >= dwellMs) {
+              triggerSpinTo((activeIdx + 1) % SHOWCASE.length, 1);
+            }
+          }
 
           mbpScene.style.transform =
             `translate3d(0, ${sceneDrop.toFixed(2)}px, 0) scale(${sceneScale.toFixed(4)}) ` +
             `rotateX(${(-curHY * 1.2 * orbitAmt).toFixed(2)}deg) ` +
             `rotateY(${(curHX * 2.4 * orbitAmt).toFixed(2)}deg)`;
 
+          if (mbpSpinBody) {
+            mbpSpinBody.style.transform =
+              `translate3d(0, ${spinLift.toFixed(2)}px, 0) ` +
+              `scale(${(1 + spinScaleBoost).toFixed(4)}) ` +
+              `rotateY(${spinDeg.toFixed(2)}deg)`;
+          }
+
           mbpLid.style.transform = `rotateX(${lidAngle.toFixed(2)}deg)`;
 
-          // Liquid Retina XDR display wakes smoothly from dark sleep once lid passes ~24% open
           if (mbpVeil) {
             const awake = clamp((e - 0.22) / 0.56, 0, 1);
             mbpVeil.style.opacity = ((1 - awake) * 0.94).toFixed(3);
           }
 
-          // Subtle studio glass catchlight sweeps diagonally as screen wakes
           if (mbpGlare) {
-            const gOp = Math.sin(clamp((e - 0.18) / 0.82, 0, 1) * Math.PI) * 0.72;
-            const gX = -48 + e * 104 + curHX * 12 * orbitAmt;
+            const baseGlare = Math.sin(clamp((e - 0.18) / 0.82, 0, 1) * Math.PI) * 0.72;
+            const gOp = clamp(Math.max(baseGlare, spinGlareBoost), 0, 0.85);
+            const gX = spinGlareBoost > 0.01
+              ? (-40 + (1 - spinGlareBoost) * 90)
+              : (-48 + e * 104 + curHX * 12 * orbitAmt);
             mbpGlare.style.opacity = gOp.toFixed(3);
             mbpGlare.style.transform = `translateX(${gX.toFixed(1)}%)`;
           }
 
-          // Keyboard shadow lifts & soft screen bounce light warms upper keys as lid opens
           if (mbpDeckShade) {
             mbpDeckShade.style.opacity = clamp(0.84 * (1 - e * 1.18), 0, 0.84).toFixed(3);
           }
@@ -2737,15 +3348,19 @@
             mbpDeckReflection.style.opacity = clamp((e - 0.34) / 0.62, 0, 0.75).toFixed(3);
           }
 
-          // Clean case-study bar below the MacBook rises smoothly once open
+          const uiRise = clamp((e - 0.45) / 0.50, 0, 1);
+          if (mbpSwitcher) {
+            mbpSwitcher.style.opacity = uiRise.toFixed(3);
+            mbpSwitcher.style.transform = `translate3d(0, ${((1 - uiRise) * 14).toFixed(1)}px, 0)`;
+          }
           if (mbpCaption) {
-            const cap = clamp((e - 0.45) / 0.50, 0, 1);
-            mbpCaption.style.opacity = cap.toFixed(3);
-            mbpCaption.style.transform = `translate3d(0, ${((1 - cap) * 16).toFixed(1)}px, 0)`;
+            mbpCaption.style.opacity = uiRise.toFixed(3);
+            mbpCaption.style.transform = `translate3d(0, ${((1 - uiRise) * 16).toFixed(1)}px, 0)`;
           }
 
           if (mbpShadow) {
             mbpShadow.style.opacity = (0.72 + 0.28 * e).toFixed(3);
+            mbpShadow.style.transform = `scaleX(${shadowStretch.toFixed(3)})`;
           }
 
           if (mbpCue) {
@@ -2754,41 +3369,83 @@
             mbpCue.style.pointerEvents = cueOp > 0.15 ? 'auto' : 'none';
           }
 
-          // Inverse depth parallax on background orbits & aurora behind the MacBook Pro
           if (portalOrbits) {
             portalOrbits.style.transform = `translate3d(${(-curHX * 14 * orbitAmt).toFixed(1)}px, ${(-curHY * 9 * orbitAmt).toFixed(1)}px, 0)`;
           }
           if (mbpAurora) {
             mbpAurora.style.opacity = (0.48 + 0.50 * e).toFixed(3);
           }
-        }
-
-        function tick() {
-          currentOpen += (targetOpen - currentOpen) * 0.12;
-          curHX += (hoverX - curHX) * 0.09;
-          curHY += (hoverY - curHY) * 0.09;
-          applyMacBookState(currentOpen);
 
           const settled =
+            !spinActive &&
             Math.abs(targetOpen - currentOpen) < 0.0007 &&
             Math.abs(hoverX - curHX) < 0.002 &&
-            Math.abs(hoverY - curHY) < 0.002;
+            Math.abs(hoverY - curHY) < 0.002 &&
+            (reduced || !inView || currentOpen <= 0.84 || isHoverPaused);
+
           if (!settled) {
-            requestAnimationFrame(tick);
+            rafId = requestAnimationFrame(renderFrame);
           } else {
             currentOpen = targetOpen;
             curHX = hoverX;
             curHY = hoverY;
-            applyMacBookState(currentOpen);
-            rafActive = false;
+            rafId = null;
+            lastTs = 0;
           }
         }
 
-        function wake() {
-          if (!rafActive) {
-            rafActive = true;
-            requestAnimationFrame(tick);
+        function ensureLoop() {
+          if (!rafId) {
+            lastTs = 0;
+            rafId = requestAnimationFrame(renderFrame);
           }
+        }
+
+        // Switcher clicks -> smooth 360° spin to chosen product
+        swBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = Number(btn.dataset.idx);
+            if (idx === activeIdx) {
+              triggerSpinTo((activeIdx + 1) % SHOWCASE.length, 1);
+            } else {
+              triggerSpinTo(idx);
+            }
+          });
+        });
+
+        if (mbpSpinBtn) {
+          mbpSpinBtn.addEventListener('click', () => {
+            triggerSpinTo((activeIdx + 1) % SHOWCASE.length, 1);
+          });
+        }
+
+        // Hovering MacBook or switcher pauses auto-spin; hovering the MacBook itself also pauses live EZE scroll
+        if (mbpScene) {
+          mbpScene.addEventListener('pointerenter', () => {
+            isHoverPaused = true;
+            portalStage.classList.add('is-paused');
+          });
+          mbpScene.addEventListener('pointerleave', () => {
+            isHoverPaused = false;
+            portalStage.classList.remove('is-paused');
+            ensureLoop();
+          });
+        }
+        if (mbpSwitcher) {
+          mbpSwitcher.addEventListener('pointerenter', () => {
+            isHoverPaused = true;
+          });
+          mbpSwitcher.addEventListener('pointerleave', () => {
+            isHoverPaused = false;
+            ensureLoop();
+          });
+        }
+
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(entries => {
+            inView = entries[0] ? entries[0].isIntersecting : true;
+            if (inView) ensureLoop();
+          }, { threshold: 0.15 }).observe(portalStage);
         }
 
         if (mbpCue) {
@@ -2798,7 +3455,7 @@
           });
         }
 
-        const onScrollResize = () => { computeTarget(); wake(); };
+        const onScrollResize = () => { computeTarget(); ensureLoop(); };
         addEventListener('scroll', onScrollResize, { passive: true });
         addEventListener('resize', onScrollResize, { passive: true });
 
@@ -2807,17 +3464,18 @@
             const box = portalStage.getBoundingClientRect();
             hoverX = ((event.clientX - box.left) / box.width - 0.5) * 2;
             hoverY = ((event.clientY - box.top) / box.height - 0.5) * 2;
-            wake();
+            ensureLoop();
           });
           portalStage.addEventListener('pointerleave', () => {
             hoverX = 0; hoverY = 0;
-            wake();
+            ensureLoop();
           });
         }
 
+        applyProductData(0);
         computeTarget();
         currentOpen = targetOpen;
-        applyMacBookState(currentOpen);
+        ensureLoop();
       }
 
       // Dynamic custom webs renderer (from assets/webs-data.js)
