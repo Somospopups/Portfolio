@@ -23,8 +23,8 @@ window.POPUPS_WEBS = [
     caseUrl: 'anton/',
     image: 'assets/anton-shot.png',
     tagline: 'Pizza de barrio. Producto tope de gama.',
-    summary: 'Web interactiva con pizza 3D giratoria, historia visual de la masa madre, armado paso a paso en 8 momentos y cuatro canales de venta directos a WhatsApp sin comisiones.',
-    tags: ['Pizza 3D', 'Armado 8 pasos', '4 canales', 'WhatsApp 0%'],
+    summary: 'Web interactiva con pizza 3D giratoria, historia visual de la masa madre, armado en 8 pasos y cuatro canales directos a WhatsApp sin comisiones.',
+    tags: ['Pizza 3D', 'Armado 8 pasos', 'WhatsApp 0%'],
     highlight: '0% comisión · Take away, En casa & B2B',
     accent: '#2D6117',
     featured: true
@@ -41,10 +41,28 @@ window.POPUPS_WEBS = [
     caseUrl: null,
     image: 'assets/luma-shot.webp',
     tagline: 'Tu espacio. Más vos.',
-    summary: 'Tienda editorial de objetos para el hogar, accesorios y bienestar en paleta crema y terracota: catálogo con búsqueda y filtros, carrito vivo, lista de precios PDF y panel autogestionable.',
-    tags: ['Diseño editorial', 'Catálogo + carrito', 'Panel admin', 'Lista PDF'],
+    summary: 'Tienda editorial de hogar, accesorios y bienestar en paleta crema y terracota: catálogo vivo, carrito, lista PDF y panel autogestionable.',
+    tags: ['Diseño editorial', 'Catálogo + carrito', 'Panel admin'],
     highlight: 'E-commerce editorial · Catálogo & Panel',
     accent: '#D9633C',
+    featured: true
+  },
+  {
+    id: 'eze-pece',
+    number: '03',
+    name: 'Eze-Pece · Tecnología con actitud',
+    category: 'Tecnología',
+    location: 'Córdoba, Argentina',
+    year: '2026',
+    url: 'https://somospopups.github.io/Mi-Tienda/?tienda=eze-pece',
+    displayUrl: 'mi-tienda · ?tienda=eze-pece',
+    caseUrl: null,
+    image: 'assets/eze-pece-shot.webp',
+    tagline: 'Buen hardware. Cero drama.',
+    summary: 'Tienda de celulares, audio, periféricos y componentes con estética pop editorial propia, catálogo en la nube, carrito directo y panel vivo.',
+    tags: ['Celulares & Tech', 'Catálogo nube', 'WhatsApp 0%'],
+    highlight: 'Tienda en vivo · Tecnología & Hardware',
+    accent: '#D32929',
     featured: true
   }
 ];

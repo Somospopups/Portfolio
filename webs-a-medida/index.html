@@ -335,6 +335,15 @@
       transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
     }
     .web-card.compact { grid-column: span 6; }
+    .web-card.third { grid-column: span 4; border-radius: 24px; }
+    .web-card.third .browser-bar { padding: 10px 13px; gap: 8px; }
+    .web-card.third .browser-url { max-width: 170px; font-size: 9.5px; padding: 4px 9px; }
+    .web-card.third .web-body { padding: 20px 20px 22px; }
+    .web-card.third .web-body h3 { font-size: 23px; }
+    .web-card.third .web-desc { font-size: 13.5px; }
+    .web-card.third .web-actions .btn { padding: 10px 14px; font-size: 12.5px; }
+    @media (max-width: 1120px) { .web-card.third { grid-column: span 6; } }
+    @media (max-width: 720px) { .web-card.third { grid-column: span 12; } }
     .web-card:hover {
       transform: translateY(-6px);
       box-shadow: 0 30px 66px rgba(17, 20, 15, 0.2);
@@ -924,18 +933,19 @@
           : webs.filter(function (w) { return w.category === activeCat; });
 
         const singleFeatured = list.length === 1;
+        const cardSizeCls = singleFeatured ? '' : (list.length >= 3 ? ' third' : ' compact');
         const cardsHtml = list.map(function (w) {
           const imgPath = '../' + w.image;
           const liveUrl = /^https?:\/\//i.test(w.url) ? w.url : '../' + w.url;
           const caseBtn = w.caseUrl
-            ? '<a href="../' + esc(w.caseUrl) + '" class="btn btn-ghost">Ver caso completo →</a>'
+            ? '<a href="../' + esc(w.caseUrl) + '" class="btn btn-ghost">Ver caso →</a>'
             : '';
           const tagsHtml = (w.tags || []).map(function (t) {
             return '<span>' + esc(t) + '</span>';
           }).join('');
 
           return (
-            '<article class="web-card' + (singleFeatured ? '' : ' compact') + '">' +
+            '<article class="web-card' + cardSizeCls + '">' +
               '<div class="browser-bar">' +
                 '<div class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></div>' +
                 '<a href="' + esc(liveUrl) + '" target="_blank" rel="noopener" class="browser-url">' + esc(w.displayUrl) + '</a>' +

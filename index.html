@@ -744,6 +744,146 @@
       transition:transform .4s var(--ease), border-color .3s ease;
     }
     .cw-card.half { grid-column:span 6; background:rgba(255,255,255,.035); border-color:rgba(255,255,255,.14); }
+    .cw-card.third { grid-column:span 4; border-radius:24px; }
+    .cw-card.third .cw-bar { padding:10px 13px; gap:8px; }
+    .cw-card.third .cw-url { max-width:165px; font-size:9.5px; padding:3px 9px; }
+    .cw-card.third .cw-live { font-size:9px; }
+    .cw-card.third .cw-body { padding:18px 18px 20px; }
+    .cw-card.third .cw-kicker { font-size:9.5px; }
+    .cw-card.third .cw-body h4 { font-size:21px; line-height:1.12; margin:6px 0 8px; }
+    .cw-card.third .cw-body p { font-size:13px; line-height:1.5; margin-bottom:13px; }
+    .cw-card.third .cw-tags { gap:6px; margin-bottom:14px; }
+    .cw-card.third .cw-tags span { font-size:10px; padding:4px 9px; }
+    .cw-card.third .cw-actions { gap:8px; }
+    .cw-card.third .cw-btn-primary,
+    .cw-card.third .cw-btn-ghost { padding:9px 13px; font-size:12px; }
+    .cw-card.third .cw-anton-stage,
+    .cw-card.third .cw-luma-stage,
+    .cw-card.third .cw-eze-stage,
+    .cw-card.third .cw-shot { height:215px; padding:18px 18px; gap:12px; }
+    .cw-card.third .cw-anton-copy { max-width:170px; }
+    .cw-card.third .cw-anton-pill { font-size:8.5px; padding:4px 8px; }
+    .cw-card.third .cw-anton-copy h4 { font-size:24px; margin:8px 0 5px; }
+    .cw-card.third .cw-anton-copy span { font-size:11.5px; }
+    .cw-card.third .cw-anton-pizza-wrap { width:146px; height:146px; }
+    .cw-card.third .cw-anton-pizza { width:136px; height:136px; }
+    .cw-card.third .cw-anton-ing.i1 { width:40px; top:0; left:-10px; }
+    .cw-card.third .cw-anton-ing.i2 { width:36px; bottom:2px; right:-6px; }
+    .cw-card.third .cw-luma-copy { max-width:155px; }
+    .cw-card.third .cw-luma-pill { font-size:8.5px; padding:4px 8px; margin-bottom:7px; }
+    .cw-card.third .cw-luma-copy h4 { font-size:24px; margin-bottom:5px; }
+    .cw-card.third .cw-luma-copy > span { font-size:11px; }
+    .cw-card.third .cw-luma-visual { width:154px; height:172px; }
+    .cw-card.third .cw-luma-arch { width:114px; height:152px; border-radius:64px 64px 12px 12px; }
+    .cw-card.third .cw-luma-mini { width:50px; height:60px; border-radius:10px; }
+
+    /* Bespoke editorial pop-tech stage for Eze-Pece inside Webs a Medida */
+    .cw-card.is-eze-pece {
+      --accent: #efc415;
+      background:linear-gradient(155deg, #251715 0%, #150e0d 100%);
+      border-color:rgba(227,168,152,.34);
+    }
+    .cw-card.is-eze-pece:hover { border-color:rgba(239,196,21,.75); }
+    .cw-eze-stage {
+      position:relative;
+      height:215px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:18px 18px;
+      overflow:hidden;
+      background:
+        radial-gradient(280px 200px at 80% 45%, rgba(239,196,21,.28), transparent 64%),
+        radial-gradient(220px 180px at 14% 90%, rgba(211,41,41,.24), transparent 65%),
+        linear-gradient(145deg, #e3a898 0%, #d8907e 100%);
+      border-bottom:1px solid rgba(45,42,38,.22);
+      color:#2d2a26;
+    }
+    .cw-eze-copy { position:relative; z-index:2; max-width:162px; }
+    .cw-eze-pill {
+      display:inline-block;
+      padding:4px 8px;
+      border-radius:999px;
+      background:#efc415;
+      border:1.5px solid #2d2a26;
+      font-family:var(--mono);
+      font-size:8.5px;
+      font-weight:800;
+      letter-spacing:.06em;
+      color:#2d2a26;
+      margin-bottom:8px;
+    }
+    .cw-eze-copy h4 {
+      font-family:var(--sans);
+      font-weight:900;
+      font-size:23px;
+      line-height:.98;
+      letter-spacing:-.04em;
+      color:#2d2a26;
+      margin-bottom:6px;
+    }
+    .cw-eze-copy h4 em { font-style:normal; color:#d32929; display:block; }
+    .cw-eze-copy > span {
+      display:block;
+      font-size:11px;
+      color:#3d2f2a;
+      font-weight:700;
+    }
+    .cw-eze-visual {
+      position:relative;
+      width:154px;
+      height:172px;
+      flex-shrink:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .cw-eze-disc {
+      position:absolute;
+      width:136px;
+      height:136px;
+      border-radius:50%;
+      background:rgba(234,230,227,.72);
+      border:2px solid rgba(45,42,38,.16);
+    }
+    .cw-eze-phone {
+      position:relative;
+      z-index:2;
+      width:128px;
+      transform:rotate(8deg);
+      filter:drop-shadow(0 14px 20px rgba(45,42,38,.36));
+      transition:transform .5s var(--ease);
+    }
+    .cw-eze-bud {
+      position:absolute;
+      z-index:3;
+      width:68px;
+      left:-6px;
+      bottom:8px;
+      transform:rotate(-8deg);
+      filter:drop-shadow(0 10px 14px rgba(45,42,38,.32));
+      transition:transform .5s var(--ease);
+    }
+    .cw-eze-gpu {
+      position:absolute;
+      z-index:3;
+      width:74px;
+      right:-6px;
+      top:8px;
+      transform:rotate(8deg);
+      filter:drop-shadow(0 10px 14px rgba(45,42,38,.32));
+      transition:transform .5s var(--ease);
+    }
+    .cw-card:hover .cw-eze-phone { transform:translateY(-4px) rotate(12deg) scale(1.05); }
+    .cw-card:hover .cw-eze-bud { transform:translate(-5px,-4px) rotate(-14deg); }
+    .cw-card:hover .cw-eze-gpu { transform:translate(5px,-4px) rotate(14deg); }
+    @media (max-width: 1120px) {
+      .cw-card.third { grid-column:span 6; }
+    }
+    @media (max-width: 720px) {
+      .cw-card.third { grid-column:span 12; }
+    }
     .cw-card:hover { transform:translateY(-6px); border-color:rgba(233,195,108,.62); }
     .cw-bar {
       display:flex;
@@ -1657,16 +1797,17 @@
 
       if (cwGrid) {
         const single = webs.length === 1;
+        const sizeCls = single ? '' : (webs.length >= 3 ? ' third' : ' half');
         const cards = webs.map(function (w) {
           const tags = (w.tags || []).map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('');
-          const caseBtn = w.caseUrl ? '<a class="cw-btn-ghost" href="' + esc(w.caseUrl) + '">Ver caso completo →</a>' : '';
+          const caseBtn = w.caseUrl ? '<a class="cw-btn-ghost" href="' + esc(w.caseUrl) + '">Ver caso →</a>' : '';
           const stage = w.id === 'anton'
             ? (
               '<a class="cw-anton-stage" href="' + esc(w.url) + '" target="_blank" rel="noopener" aria-label="Abrir web de Antón Cocina de Barrio">' +
                 '<div class="cw-anton-copy">' +
-                  '<span class="cw-anton-pill">ALTA CÓRDOBA · CLIENTE REAL</span>' +
+                  '<span class="cw-anton-pill">ALTA CÓRDOBA</span>' +
                   '<h4>Antón.<br />Cocina de Barrio.</h4>' +
-                  '<span>Pizza de masa madre · 0% comisión</span>' +
+                  '<span>Masa madre · 0% comisión</span>' +
                 '</div>' +
                 '<div class="cw-anton-pizza-wrap">' +
                   '<img class="cw-anton-ing i1" src="anton/assets/ing-albahaca.webp" alt="" loading="lazy" aria-hidden="true" />' +
@@ -1679,14 +1820,30 @@
             ? (
               '<a class="cw-luma-stage" href="' + esc(w.url) + '" target="_blank" rel="noopener" aria-label="Abrir tienda editorial LUMA">' +
                 '<div class="cw-luma-copy">' +
-                  '<span class="cw-luma-pill">DECO &amp; HOGAR · TIENDA EDITORIAL</span>' +
+                  '<span class="cw-luma-pill">DECO &amp; HOGAR</span>' +
                   '<h4>LUMA.<br /><em>Más vos.</em></h4>' +
-                  '<span>Catálogo vivo + carrito + panel propio</span>' +
+                  '<span>Catálogo vivo + panel propio</span>' +
                 '</div>' +
                 '<div class="cw-luma-visual">' +
-                  '<div class="cw-luma-arch"><img src="luma/assets/lampara-aura.webp" alt="Lámpara Aura de LUMA" loading="lazy" /></div>' +
-                  '<div class="cw-luma-mini m1"><img src="luma/assets/vela-bosque.webp" alt="Vela Bosque de LUMA" loading="lazy" /></div>' +
-                  '<div class="cw-luma-mini m2"><img src="luma/assets/bolso-siena.webp" alt="Bolso Siena de LUMA" loading="lazy" /></div>' +
+                  '<div class="cw-luma-arch"><img src="assets/luma-lampara.webp" alt="Lámpara Aura de LUMA" loading="lazy" /></div>' +
+                  '<div class="cw-luma-mini m1"><img src="assets/luma-vela.webp" alt="Vela Bosque de LUMA" loading="lazy" /></div>' +
+                  '<div class="cw-luma-mini m2"><img src="assets/luma-bolso.webp" alt="Bolso Siena de LUMA" loading="lazy" /></div>' +
+                '</div>' +
+              '</a>'
+            )
+            : w.id === 'eze-pece'
+            ? (
+              '<a class="cw-eze-stage" href="' + esc(w.url) + '" target="_blank" rel="noopener" aria-label="Abrir tienda Eze-Pece">' +
+                '<div class="cw-eze-copy">' +
+                  '<span class="cw-eze-pill">TECNOLOGÍA</span>' +
+                  '<h4>EZE-PECE<em>CON ACTITUD.</em></h4>' +
+                  '<span>Celulares, audio &amp; setups</span>' +
+                '</div>' +
+                '<div class="cw-eze-visual">' +
+                  '<span class="cw-eze-disc" aria-hidden="true"></span>' +
+                  '<img class="cw-eze-gpu" src="assets/eze-gpu.webp" alt="" loading="lazy" aria-hidden="true" />' +
+                  '<img class="cw-eze-phone" src="assets/eze-phone.webp" alt="Celular en tienda Eze-Pece" loading="lazy" />' +
+                  '<img class="cw-eze-bud" src="assets/eze-earbuds.webp" alt="" loading="lazy" aria-hidden="true" />' +
                 '</div>' +
               '</a>'
             )
@@ -1697,7 +1854,7 @@
             );
 
           return (
-            '<article class="cw-card' + (single ? '' : ' half') + ' is-' + esc(w.id) + '">' +
+            '<article class="cw-card' + sizeCls + ' is-' + esc(w.id) + '">' +
               '<div class="cw-bar">' +
                 '<div class="cw-dots" aria-hidden="true"><i></i><i></i><i></i></div>' +
                 '<a class="cw-url" href="' + esc(w.url) + '" target="_blank" rel="noopener">' + esc(w.displayUrl) + '</a>' +
