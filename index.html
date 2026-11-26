@@ -84,19 +84,21 @@
     .hero-metric b { display:block; color:var(--lime); font-size:20px; letter-spacing:-.06em; }
     .hero-metric span { display:block; margin-top:2px; color:rgba(255,255,255,.68); font-size:9.5px; }
 
-    /* 3D Scroll-Opening Aluminum Laptop Showcase */
+    /* =========================================================================
+       TRUE 3D MACBOOK PRO 16" SPACE BLACK — SCROLL-OPENING STUDIO HARDWARE RIG
+       ========================================================================= */
     .portal-stage {
       position:relative;
-      width:min(1060px, 96vw);
-      margin:56px auto 0;
-      padding:18px 0 46px;
-      perspective:1850px;
-      perspective-origin:50% 16%;
+      width:min(1100px, 96vw);
+      margin:44px auto 0;
+      padding:26px 0 clamp(148px, 23vw, 248px);
+      perspective:2200px;
+      perspective-origin:50% 22%;
     }
     .portal-ring {
       position:absolute;
-      inset:4% -4% 12%;
-      border:1px solid rgba(255,255,255,.17);
+      inset:2% -4% 26%;
+      border:1px solid rgba(255,255,255,.14);
       border-radius:50%;
       transform:rotate(-7deg);
       pointer-events:none;
@@ -111,119 +113,361 @@
       box-shadow:0 0 18px 5px rgba(200,248,16,.52);
     }
 
-    .laptop-rig {
+    /* Master 3D MacBook Pro 16" assembly (16:10 Liquid Retina XDR proportions) */
+    .mbp-scene {
       position:relative;
-      width:min(840px, 86vw);
+      width:min(740px, 84vw);
+      aspect-ratio:16 / 10;
       margin:0 auto;
       transform-style:preserve-3d;
       will-change:transform;
     }
 
-    /* Animated 3D Hinge Lid */
-    .laptop-lid {
-      position:relative;
+    /* Grounded Studio Horizon Shadow beneath the aluminum unibody */
+    .mbp-floor-shadow {
+      position:absolute;
+      left:-12%; right:-12%;
+      top:100%;
+      height:78%;
+      transform-origin:50% 0%;
+      transform:translateY(20px) rotateX(76deg) translateZ(-26px);
+      border-radius:36px;
+      background:radial-gradient(ellipse at 50% 48%, rgba(0,0,0,.86) 0%, rgba(5,7,14,.52) 48%, transparent 74%);
+      filter:blur(22px);
+      pointer-events:none;
+      will-change:transform, opacity;
+    }
+
+    /* TRUE 3D KEYBOARD DECK (full 16:10 depth tilted forward at +76deg from hinge!) */
+    .mbp-deck-3d {
+      position:absolute;
+      top:100%; left:0;
+      width:100%; height:100%;
+      transform-origin:50% 0%;
+      transform:rotateX(76deg);
+      transform-style:preserve-3d;
+      border-radius:16px 16px 24px 24px;
+      background:#1d2028;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);
+      pointer-events:none;
+    }
+    .mbp-deck-surface {
+      position:absolute;
+      inset:0;
+      border-radius:16px 16px 24px 24px;
+      overflow:hidden;
+      background:url('assets/mbp-keyboard-deck.webp') center / 100% 100% no-repeat;
+    }
+    /* Real-time screen reflection + keyboard backlight boost as MacBook opens */
+    .mbp-deck-reflection {
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(68% 58% at 50% 6%, rgba(168,148,255,.46) 0%, rgba(200,248,16,.16) 36%, transparent 72%),
+        linear-gradient(180deg, rgba(255,255,255,.16) 0%, rgba(180,195,255,.06) 38%, transparent 72%);
+      mix-blend-mode:screen;
+      opacity:0;
+      will-change:opacity;
+    }
+    /* Dark dimming veil over keyboard when lid is nearly closed */
+    .mbp-deck-shade {
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(4,5,9,.92) 0%, rgba(4,5,9,.72) 55%, rgba(4,5,9,.45) 100%);
+      opacity:.82;
+      will-change:opacity;
+    }
+
+    /* 3D Extruded Space Black CNC Aluminum Unibody Walls (Front + Left + Right) */
+    .mbp-front-wall {
+      position:absolute;
+      top:100%; left:0;
+      width:100%; height:16px;
+      transform-origin:50% 0%;
+      transform:rotateX(-90deg);
+      border-radius:2px 2px 10px 10px;
+      background:linear-gradient(180deg, #646c7f 0%, #3d4352 24%, #262a35 66%, #13161d 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.46),
+        inset 0 -2px 3px rgba(0,0,0,.7),
+        0 10px 28px rgba(0,0,0,.65);
+    }
+    /* Authentic MacBook Pro Centered Thumb Scoop Notch */
+    .mbp-front-notch {
+      position:absolute;
+      top:0; left:50%;
+      transform:translateX(-50%);
+      width:14.5%; height:7px;
+      border-radius:0 0 8px 8px;
+      background:linear-gradient(180deg, #12151c 0%, #2b303e 100%);
+      box-shadow:inset 0 -1px 1px rgba(255,255,255,.28), inset 1px 0 0 rgba(0,0,0,.55), inset -1px 0 0 rgba(0,0,0,.55);
+    }
+    /* Subtle precision anodized rubber feet peeking under corners */
+    .mbp-front-wall::before,
+    .mbp-front-wall::after {
+      content:"";
+      position:absolute;
+      bottom:-3px;
+      width:44px; height:3px;
+      border-radius:0 0 6px 6px;
+      background:#090b0f;
+    }
+    .mbp-front-wall::before { left:8%; }
+    .mbp-front-wall::after { right:8%; }
+
+    .mbp-side-left,
+    .mbp-side-right {
+      position:absolute;
+      top:14px;
+      width:16px;
+      height:calc(100% - 28px);
+      background:linear-gradient(90deg, #4b5264 0%, #292d38 45%, #13161e 100%);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
+    }
+    .mbp-side-left { left:0; transform-origin:0% 50%; transform:rotateY(90deg); }
+    .mbp-side-right { right:0; transform-origin:100% 50%; transform:rotateY(-90deg); }
+    /* Precision CNC Thunderbolt USB-C + MagSafe Port Details on Left Chassis Edge */
+    .mbp-side-left::before {
+      content:"";
+      position:absolute;
+      top:12%; left:5px;
+      width:5px; height:24px;
+      border-radius:3px;
+      background:#07080b;
+      box-shadow:0 36px 0 #07080b, 0 58px 0 #07080b, 0 0 0 1px rgba(255,255,255,.15);
+    }
+
+    /* Precision Black Anodized Hinge Barrel connecting Display to Unibody */
+    .mbp-hinge-barrel {
+      position:absolute;
+      left:12%; right:12%;
+      bottom:-5px;
+      height:10px;
+      border-radius:6px;
+      background:linear-gradient(180deg, #050608 0%, #232732 45%, #07090d 100%);
+      transform:translateZ(-1px);
+      pointer-events:none;
+    }
+
+    /* HINGED 16" LIQUID RETINA XDR DISPLAY LID */
+    .mbp-lid-3d {
+      position:absolute;
+      inset:0;
       display:block;
-      width:100%;
-      height:clamp(225px, 43vw, 436px);
       transform-origin:50% 100%;
       transform-style:preserve-3d;
-      transform:rotateX(0deg);
+      transform:translate3d(0, -3px, 2px) rotateX(4deg);
       will-change:transform;
       cursor:pointer;
     }
-    .laptop-lid-front,
-    .laptop-lid-back {
+    .mbp-lid-front,
+    .mbp-lid-back {
       position:absolute;
       inset:0;
-      border-radius:26px 26px 8px 8px;
+      border-radius:22px 22px 8px 8px;
       -webkit-backface-visibility:hidden;
       backface-visibility:hidden;
     }
 
-    /* Front Bezel + Live APPI Screen */
-    .laptop-lid-front {
-      padding:11px 11px 10px;
-      background:linear-gradient(155deg, #2d3240 0%, #161922 32%, #0c0e14 100%);
+    /* Real CNC Anodized Aluminum Lid Top Edge (5px thickness gleaming as lid swings!) */
+    .mbp-lid-rim {
+      position:absolute;
+      top:0; left:18px; right:18px;
+      height:5px;
+      transform-origin:50% 0%;
+      transform:rotateX(90deg) translateZ(0px);
+      background:linear-gradient(90deg, #3b4152 0%, #909ab2 28%, #c7d0e2 50%, #909ab2 72%, #3b4152 100%);
+      border-radius:2px;
+      pointer-events:none;
+    }
+
+    /* Outer Space Black Brushed Aluminum Lid Back (visible while closed / opening!) */
+    .mbp-lid-back {
+      transform:rotateX(180deg) translateZ(1px);
+      background:url('assets/mbp-lid-back.webp') center / 100% 100% no-repeat;
+      border:1.5px solid rgba(255,255,255,.22);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.32),
+        0 20px 52px rgba(0,0,0,.62);
+      overflow:hidden;
+    }
+    /* Dynamic metallic studio catchlight sliding across outer aluminum cover as lid lifts */
+    .mbp-lid-back-sheen {
+      position:absolute;
+      inset:0;
+      background:linear-gradient(175deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,.04) 28%, transparent 56%);
+      pointer-events:none;
+      will-change:opacity;
+    }
+
+    /* Front Glass Bezel + MacBook Pro Camera Notch + Live Liquid Retina XDR Display */
+    .mbp-lid-front {
+      transform:translateZ(3px);
+      padding:9px 9px 14px;
+      background:linear-gradient(160deg, #1b1e27 0%, #090a0e 36%, #050608 100%);
       border:1.5px solid rgba(255,255,255,.24);
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.28),
-        inset 0 0 0 2px rgba(0,0,0,.65),
-        0 26px 70px rgba(4,6,14,.55);
+        inset 0 1px 0 rgba(255,255,255,.3),
+        inset 0 0 0 2px #000,
+        0 26px 65px rgba(3,5,12,.58);
       display:flex;
       flex-direction:column;
     }
-    .laptop-camera {
-      position:absolute;
-      top:5px; left:50%;
-      transform:translateX(-50%);
-      width:5px; height:5px;
-      border-radius:50%;
-      background:radial-gradient(circle at 35% 35%, #556a8a, #101520);
-      box-shadow:0 0 0 1.5px rgba(255,255,255,.08);
-      z-index:4;
-    }
 
-    /* Brushed Anodized Space-Gray Back Shell (visible as lid lifts open!) */
-    .laptop-lid-back {
-      transform:rotateX(180deg) translateZ(2px);
-      background:
-        radial-gradient(70% 85% at 50% 24%, rgba(255,255,255,.14), transparent 60%),
-        radial-gradient(45% 45% at 50% 50%, rgba(198,248,17,.08), transparent 65%),
-        linear-gradient(165deg, #3c4252 0%, #242834 48%, #151821 100%);
-      border:1.5px solid rgba(255,255,255,.22);
-      box-shadow:
-        inset 0 1.5px 0 rgba(255,255,255,.32),
-        inset 0 -3px 10px rgba(0,0,0,.55),
-        0 20px 50px rgba(0,0,0,.55);
-      display:grid;
-      place-items:center;
-      overflow:hidden;
-    }
-    .laptop-lid-back::before {
-      content:"";
-      position:absolute;
-      inset:0;
-      background:repeating-linear-gradient(90deg, rgba(255,255,255,.018) 0 1px, transparent 1px 3px);
-      pointer-events:none;
-    }
-    .laptop-back-emblem {
+    .mbp-display {
       position:relative;
-      width:128px;
-      aspect-ratio:1200 / 436;
-      opacity:.9;
-      filter:drop-shadow(0 0 22px rgba(198,248,17,.3));
-    }
-    .laptop-back-emblem img { width:100%; height:100%; object-fit:contain; }
-    .laptop-back-emblem span {
-      position:absolute;
-      left:30.3159%; top:20.9030%;
-      width:8.87%; height:24.4147%;
-      transform:translate(-50%,-50%);
-      border-radius:50%;
-      background:#c6f811;
-      box-shadow:0 0 18px 4px rgba(198,248,17,.85);
+      flex:1;
+      overflow:hidden;
+      border-radius:12px 12px 4px 4px;
+      background:#07090e;
+      display:flex;
+      flex-direction:column;
     }
 
-    .reveal { opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s var(--ease); }
-    .reveal.visible { opacity:1; transform:none; }
-    .portal-top { height:28px; display:flex; align-items:center; gap:6px; padding:0 10px; color:rgba(255,255,255,.7); font-size:9px; flex-shrink:0; }
-    .portal-top i { width:7px; height:7px; border-radius:50%; background:#ff727c; }
-    .portal-top i:nth-child(2){background:#ffd263}
-    .portal-top i:nth-child(3){background:var(--lime)}
-    .portal-top span { margin-left:8px; padding:3px 10px; border:1px solid rgba(255,255,255,.13); border-radius:99px; color:rgba(255,255,255,.46); font-size:8px; }
+    /* Authentic MacBook Pro 16" Hardware Camera Notch */
+    .mbp-notch {
+      position:absolute;
+      top:0; left:50%;
+      transform:translateX(-50%);
+      width:108px; height:20px;
+      border-radius:0 0 10px 10px;
+      background:#000000;
+      z-index:8;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      box-shadow:0 2px 6px rgba(0,0,0,.65);
+    }
+    .mbp-cam-lens {
+      width:6px; height:6px;
+      border-radius:50%;
+      background:radial-gradient(circle at 35% 35%, #5b78a8 0%, #162135 55%, #070a12 100%);
+      box-shadow:0 0 0 1.5px rgba(255,255,255,.1);
+    }
+    .mbp-cam-led {
+      width:3.5px; height:3.5px;
+      border-radius:50%;
+      background:#34d399;
+      box-shadow:0 0 6px #34d399;
+      opacity:.85;
+    }
+
+    /* Authentic macOS Translucent Top Menu Bar */
+    .mbp-menubar {
+      position:relative;
+      z-index:6;
+      height:22px;
+      padding:0 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:rgba(10,12,19,.66);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(255,255,255,.07);
+      color:rgba(255,255,255,.88);
+      font-size:9.5px;
+      font-weight:600;
+      letter-spacing:-.01em;
+      user-select:none;
+    }
+    .mbp-mb-left, .mbp-mb-right { display:flex; align-items:center; gap:11px; }
+    .mbp-mb-left b { font-weight:800; color:#fff; }
+    .mbp-mb-dim { color:rgba(255,255,255,.58); font-weight:500; }
+    .mbp-batt {
+      display:inline-flex; align-items:center; gap:4px;
+      font-size:8.5px; color:rgba(255,255,255,.78);
+    }
+    .mbp-batt i {
+      display:inline-block;
+      width:16px; height:8px;
+      border-radius:2.5px;
+      border:1px solid rgba(255,255,255,.55);
+      padding:1px;
+      position:relative;
+    }
+    .mbp-batt i::before {
+      content:"";
+      display:block;
+      width:100%; height:100%;
+      border-radius:1px;
+      background:var(--lime);
+    }
+
+    /* Live APPI Showcase Viewport inside macOS */
     .portal-screen {
       position:relative;
       flex:1;
       overflow:hidden;
-      border-radius:14px 14px 4px 4px;
       background:#090b10;
     }
-    .portal-screen img { width:100%; height:100%; object-fit:cover; object-position:center 28%; }
+    .portal-screen > img {
+      width:100%; height:100%;
+      object-fit:cover;
+      object-position:center 26%;
+    }
+    /* Authentic macOS Bottom Frosted Glass Dock */
+    .mbp-dock {
+      position:absolute;
+      left:50%; bottom:7px;
+      transform:translateX(-50%);
+      z-index:5;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:5px 9px;
+      border-radius:13px;
+      background:rgba(20,24,34,.58);
+      backdrop-filter:blur(16px) saturate(160%);
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 8px 24px rgba(0,0,0,.45);
+      pointer-events:none;
+    }
+    .mbp-dock i {
+      position:relative;
+      width:20px; height:20px;
+      border-radius:6px;
+      display:grid;
+      place-items:center;
+      font-style:normal;
+      font-size:9px;
+      font-weight:900;
+      color:#fff;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
+    }
+    .mbp-dock i.d1 { background:linear-gradient(135deg,#38bdf8,#2563eb); }
+    .mbp-dock i.d2 { background:linear-gradient(135deg,#a855f7,#ec4899); }
+    .mbp-dock i.d3 { background:linear-gradient(135deg,#f59e0b,#d97706); }
+    .mbp-dock i.d4 { background:linear-gradient(135deg,#22c55e,#15803d); }
+    .mbp-dock i.d5 { background:linear-gradient(135deg,#181b22,#050608); color:var(--lime); border:1px solid rgba(200,248,16,.55); }
+    .mbp-dock i.active::after {
+      content:"";
+      position:absolute;
+      bottom:-4px; left:50%;
+      transform:translateX(-50%);
+      width:3px; height:3px;
+      border-radius:50%;
+      background:#fff;
+    }
+
+    /* Subtle engraved "MacBook Pro" brand chin on bottom glass bezel */
+    .mbp-chin-label {
+      height:0;
+      text-align:center;
+      font-size:7px;
+      letter-spacing:.14em;
+      color:rgba(255,255,255,.22);
+      line-height:13px;
+      font-weight:600;
+      user-select:none;
+    }
+
+    /* Sleep -> Wake Veil & Dynamic Specular Glass Glare */
     .laptop-screen-veil {
       position:absolute;
       inset:0;
-      z-index:2;
-      background:linear-gradient(180deg, rgba(6,8,14,.92), rgba(8,10,18,.78));
+      z-index:7;
+      background:linear-gradient(180deg, rgba(4,6,11,.96), rgba(6,8,15,.88));
       pointer-events:none;
       opacity:0;
       will-change:opacity;
@@ -231,104 +475,49 @@
     .laptop-glare {
       position:absolute;
       inset:-20%;
-      z-index:3;
+      z-index:6;
       pointer-events:none;
-      background:linear-gradient(118deg, transparent 36%, rgba(255,255,255,.22) 48%, rgba(200,248,16,.08) 53%, transparent 64%);
-      transform:translateX(-40%);
+      background:linear-gradient(118deg, transparent 34%, rgba(255,255,255,.24) 47%, rgba(200,248,16,.07) 52%, transparent 64%);
+      transform:translateX(-45%);
       opacity:0;
       will-change:transform, opacity;
     }
+
+    .reveal { opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s var(--ease); }
+    .reveal.visible { opacity:1; transform:none; }
+
     .portal-caption {
       position:absolute;
-      z-index:4;
-      left:22px; bottom:20px;
-      width:286px;
-      padding:16px;
+      z-index:5;
+      left:18px; bottom:42px;
+      width:262px;
+      padding:14px 15px;
       border:1px solid rgba(255,255,255,.22);
-      border-radius:18px;
+      border-radius:16px;
       color:#fff;
       background:rgba(10,12,18,.84);
       backdrop-filter:blur(14px);
-      box-shadow:0 12px 32px rgba(0,0,0,.42);
+      box-shadow:0 12px 32px rgba(0,0,0,.44);
       transition:border-color .2s ease;
       will-change:transform, opacity;
     }
-    .laptop-lid:hover .portal-caption { border-color:var(--lime); }
-    .portal-caption small { color:var(--lime); text-transform:uppercase; letter-spacing:.12em; font-size:8px; font-weight:900; }
-    .portal-caption h3 { margin:7px 0 6px; font-family:var(--serif); font-size:24px; font-weight:400; line-height:.98; letter-spacing:-.04em; color:#fff; }
-    .portal-caption p { margin:0; color:rgba(255,255,255,.74); font-size:10.5px; line-height:1.4; }
-    .portal-caption b { display:inline-block; margin-top:10px; color:var(--lime); font-size:10px; }
+    .mbp-lid-3d:hover .portal-caption { border-color:var(--lime); }
+    .portal-caption small { color:var(--lime); text-transform:uppercase; letter-spacing:.12em; font-size:7.5px; font-weight:900; }
+    .portal-caption h3 { margin:6px 0 5px; font-family:var(--serif); font-size:21px; font-weight:400; line-height:.98; letter-spacing:-.04em; color:#fff; }
+    .portal-caption p { margin:0; color:rgba(255,255,255,.74); font-size:10px; line-height:1.38; }
+    .portal-caption b { display:inline-block; margin-top:8px; color:var(--lime); font-size:9.5px; }
 
-    /* Precision Machined Aluminum Keyboard Base & Hinge */
-    .laptop-base {
-      position:relative;
-      width:110%;
-      margin-left:-5%;
-      z-index:3;
-      pointer-events:none;
-    }
-    .laptop-hinge {
-      width:74%;
-      height:7px;
-      margin:0 auto;
-      border-radius:0 0 6px 6px;
-      background:linear-gradient(180deg, #06070a 0%, #1d212b 60%, #090b10 100%);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.16);
-    }
-    .laptop-deck {
-      position:relative;
-      height:20px;
-      margin:-1px 2.2% 0;
-      background:linear-gradient(180deg, #1b1f29 0%, #2f3545 65%, #464e62 100%);
-      clip-path:polygon(3.5% 0%, 96.5% 0%, 100% 100%, 0% 100%);
-      overflow:hidden;
-    }
-    .laptop-deck-glow {
-      position:absolute;
-      inset:0;
-      background:radial-gradient(56% 120% at 50% 0%, rgba(160,150,255,.38) 0%, rgba(200,248,16,.2) 40%, transparent 78%);
-      opacity:0;
-      will-change:opacity;
-    }
-    .laptop-lip {
-      position:relative;
-      height:15px;
-      border-radius:3px 3px 20px 20px;
-      background:linear-gradient(180deg, #727b90 0%, #454c5d 34%, #252934 78%, #14171f 100%);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.45),
-        inset 0 -2px 4px rgba(0,0,0,.6),
-        0 18px 40px rgba(0,0,0,.65);
-    }
-    .laptop-notch {
-      position:absolute;
-      top:0; left:50%;
-      transform:translateX(-50%);
-      width:118px; height:6px;
-      border-radius:0 0 8px 8px;
-      background:linear-gradient(180deg, #1b1f29, #313746);
-      box-shadow:inset 0 -1px 1px rgba(255,255,255,.22);
-    }
-    .laptop-shadow {
-      width:96%;
-      height:32px;
-      margin:-6px auto 0;
-      border-radius:50%;
-      background:radial-gradient(ellipse, rgba(0,0,0,.78) 0%, rgba(7,9,13,.38) 46%, transparent 74%);
-      filter:blur(6px);
-      will-change:transform, opacity;
-    }
     .laptop-cue {
       position:absolute;
-      left:50%; bottom:4px;
+      left:50%; bottom:18px;
       transform:translateX(-50%);
       display:inline-flex;
       align-items:center;
       gap:7px;
-      padding:6px 14px;
+      padding:7px 16px;
       border-radius:999px;
-      border:1px solid rgba(200,248,16,.36);
-      background:rgba(7,9,13,.76);
+      border:1px solid rgba(200,248,16,.38);
+      background:rgba(7,9,13,.82);
       backdrop-filter:blur(10px);
       color:var(--lime);
       font-family:var(--mono);
@@ -337,27 +526,37 @@
       letter-spacing:.1em;
       text-transform:uppercase;
       pointer-events:none;
-      z-index:6;
+      z-index:8;
       transition:opacity .3s ease;
     }
 
     .portal-float {
       position:absolute;
-      z-index:5;
+      z-index:7;
       padding:10px 13px;
       border:1px solid rgba(255,255,255,.24);
       border-radius:999px;
       color:#fff;
-      background:rgba(8,9,13,.56);
+      background:rgba(8,9,13,.58);
       backdrop-filter:blur(12px);
       font-size:10px;
       font-weight:800;
-      box-shadow:0 15px 30px rgba(0,0,0,.22);
+      box-shadow:0 15px 30px rgba(0,0,0,.24);
       will-change:transform, opacity;
     }
-    .portal-float.one { left:0; top:30%; }
-    .portal-float.two { right:0; top:14%; color:var(--lime); }
-    .portal-float.three { right:5%; bottom:16%; }
+    .portal-float.one { left:0; top:22%; }
+    .portal-float.two { right:0; top:11%; color:var(--lime); }
+    .portal-float.three { right:4%; bottom:32%; }
+
+    @media (max-width: 720px) {
+      .mbp-mb-dim, .mbp-dock { display:none; }
+      .mbp-notch { width:72px; height:15px; }
+      .mbp-menubar { height:18px; font-size:8px; padding:0 8px; }
+      .mbp-front-wall { height:12px; }
+      .portal-caption { left:10px; bottom:10px; width:205px; padding:10px 11px; }
+      .portal-caption h3 { font-size:16px; }
+      .portal-caption p { display:none; }
+    }
 
     .ticker {
       position:relative;
@@ -1873,43 +2072,80 @@
           </div>
         </div>
 
-        <div class="portal-stage" id="portalStage" aria-label="Vista previa interactiva en laptop de un proyecto de POPUPS">
+        <div class="portal-stage" id="portalStage" aria-label="MacBook Pro 3D interactiva mostrando proyectos POPUPS">
           <div class="portal-ring"></div>
           <span class="portal-float one" id="pfOne">Una solución real</span>
           <span class="portal-float two" id="pfTwo">Diseño con propósito</span>
           <span class="portal-float three" id="pfThree">Hecho para crecer</span>
-          <div class="laptop-rig" id="laptopRig">
-            <a class="laptop-lid" id="laptopLid" href="appi/" aria-label="Explorar caso destacado APPI">
-              <div class="laptop-lid-back" aria-hidden="true">
-                <div class="laptop-back-emblem">
-                  <img src="assets/logo-mark.webp" alt="" />
-                  <span></span>
-                </div>
+
+          <div class="mbp-scene" id="mbpScene">
+            <div class="mbp-floor-shadow" id="mbpShadow" aria-hidden="true"></div>
+
+            <!-- True 3D Anodized Space Black Keyboard Deck + Unibody Chassis -->
+            <div class="mbp-deck-3d" aria-hidden="true">
+              <div class="mbp-deck-surface">
+                <div class="mbp-deck-reflection" id="mbpDeckReflection"></div>
+                <div class="mbp-deck-shade" id="mbpDeckShade"></div>
               </div>
-              <div class="laptop-lid-front">
-                <span class="laptop-camera" aria-hidden="true"></span>
-                <div class="portal-top"><i></i><i></i><i></i><span>popups / showcase / appi</span></div>
-                <div class="portal-screen">
-                  <img src="assets/appi-landing-shot.png" alt="APPI · plataforma de gestión diseñada por POPUPS" />
-                  <div class="laptop-screen-veil" id="laptopVeil" aria-hidden="true"></div>
-                  <div class="laptop-glare" id="laptopGlare" aria-hidden="true"></div>
-                  <div class="portal-caption" id="laptopCaption">
-                    <small>Caso destacado · 01</small>
-                    <h3>APPI pone tu vida y tu negocio en foco.</h3>
-                    <p>Planificación, finanzas, equipo y seguimiento en una PWA instalable con 7 días offline.</p>
-                    <b>Explorar caso ↗</b>
+              <div class="mbp-front-wall"><div class="mbp-front-notch"></div></div>
+              <div class="mbp-side-left"></div>
+              <div class="mbp-side-right"></div>
+            </div>
+
+            <div class="mbp-hinge-barrel" aria-hidden="true"></div>
+
+            <!-- True 3D Hinged 16" Liquid Retina XDR Display Assembly -->
+            <a class="mbp-lid-3d" id="mbpLid" href="appi/" aria-label="Explorar caso destacado APPI en MacBook Pro">
+              <div class="mbp-lid-rim" aria-hidden="true"></div>
+
+              <div class="mbp-lid-back" aria-hidden="true">
+                <div class="mbp-lid-back-sheen" id="mbpBackSheen"></div>
+              </div>
+
+              <div class="mbp-lid-front">
+                <div class="mbp-display">
+                  <div class="mbp-notch" aria-hidden="true">
+                    <span class="mbp-cam-lens"></span>
+                    <span class="mbp-cam-led"></span>
                   </div>
+                  <div class="mbp-menubar" aria-hidden="true">
+                    <div class="mbp-mb-left">
+                      <span></span>
+                      <b>APPI</b>
+                      <span class="mbp-mb-dim">Archivo</span>
+                      <span class="mbp-mb-dim">Edición</span>
+                      <span class="mbp-mb-dim">Vista</span>
+                    </div>
+                    <div class="mbp-mb-right">
+                      <span class="mbp-batt">100% <i></i></span>
+                      <span>10:35</span>
+                    </div>
+                  </div>
+                  <div class="portal-screen">
+                    <img src="assets/appi-landing-shot.png" alt="APPI · plataforma de gestión diseñada por POPUPS" />
+                    <div class="portal-caption" id="mbpCaption">
+                      <small>Caso destacado · 01</small>
+                      <h3>APPI pone tu vida y tu negocio en foco.</h3>
+                      <p>Planificación, finanzas, equipo y seguimiento en una PWA instalable con 7 días offline.</p>
+                      <b>Explorar caso ↗</b>
+                    </div>
+                    <div class="mbp-dock" aria-hidden="true">
+                      <i class="d1">F</i>
+                      <i class="d2 active">A</i>
+                      <i class="d3">S</i>
+                      <i class="d4">T</i>
+                      <i class="d5">P</i>
+                    </div>
+                  </div>
+                  <div class="laptop-glare" id="mbpGlare" aria-hidden="true"></div>
+                  <div class="laptop-screen-veil" id="mbpVeil" aria-hidden="true"></div>
                 </div>
+                <div class="mbp-chin-label" aria-hidden="true">MacBook Pro</div>
               </div>
             </a>
-            <div class="laptop-base" aria-hidden="true">
-              <div class="laptop-hinge"></div>
-              <div class="laptop-deck"><div class="laptop-deck-glow" id="laptopDeckGlow"></div></div>
-              <div class="laptop-lip"><div class="laptop-notch"></div></div>
-              <div class="laptop-shadow" id="laptopShadow"></div>
-            </div>
           </div>
-          <span class="laptop-cue" id="laptopCue" aria-hidden="true">↓ Scrolleá para abrir</span>
+
+          <span class="laptop-cue" id="mbpCue" aria-hidden="true">↓ Scrolleá para abrir la Mac</span>
         </div>
       </div>
     </section>
@@ -2147,101 +2383,125 @@
       document.getElementById('menu').addEventListener('click', () => nav.classList.toggle('open'));
       document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
 
-      // 3D Scroll-Opening Laptop Physics (60fps damped spring + screen wake + deck light spill + pointer tilt)
+      // True 3D MacBook Pro 16" Space Black Scroll-Opening Kinematics (60fps spring lerp)
       const portalStage = document.getElementById('portalStage');
-      const laptopRig = document.getElementById('laptopRig');
-      const laptopLid = document.getElementById('laptopLid');
-      const laptopVeil = document.getElementById('laptopVeil');
-      const laptopGlare = document.getElementById('laptopGlare');
-      const laptopCaption = document.getElementById('laptopCaption');
-      const laptopDeckGlow = document.getElementById('laptopDeckGlow');
-      const laptopShadow = document.getElementById('laptopShadow');
-      const laptopCue = document.getElementById('laptopCue');
+      const mbpScene = document.getElementById('mbpScene');
+      const mbpLid = document.getElementById('mbpLid');
+      const mbpVeil = document.getElementById('mbpVeil');
+      const mbpGlare = document.getElementById('mbpGlare');
+      const mbpBackSheen = document.getElementById('mbpBackSheen');
+      const mbpCaption = document.getElementById('mbpCaption');
+      const mbpDeckReflection = document.getElementById('mbpDeckReflection');
+      const mbpDeckShade = document.getElementById('mbpDeckShade');
+      const mbpShadow = document.getElementById('mbpShadow');
+      const mbpCue = document.getElementById('mbpCue');
       const pfOne = document.getElementById('pfOne');
       const pfTwo = document.getElementById('pfTwo');
       const pfThree = document.getElementById('pfThree');
 
-      if (portalStage && laptopLid && laptopRig) {
+      if (portalStage && mbpScene && mbpLid) {
         let targetOpen = reduced ? 1 : 0;
         let currentOpen = reduced ? 1 : 0;
         let hoverX = 0, hoverY = 0, curHX = 0, curHY = 0;
         let rafActive = false;
 
         const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-        const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+        const easeOutQuart = t => 1 - Math.pow(1 - t, 4);
 
         function computeTarget() {
           if (reduced) { targetOpen = 1; return; }
           const rect = portalStage.getBoundingClientRect();
           const vh = window.innerHeight || 800;
-          // Starts closed/cracked when peeking near bottom (0.86vh), reaches 100% open around 0.22vh
-          const startY = vh * 0.88;
-          const endY = vh * 0.20;
-          const raw = (startY - rect.top) / Math.max(240, startY - endY);
+          // Starts closed when entering bottom of screen (0.90vh), reaches 100% wide open at 0.16vh!
+          const startY = vh * 0.90;
+          const endY = vh * 0.16;
+          const raw = (startY - rect.top) / Math.max(260, startY - endY);
           targetOpen = clamp(raw, 0, 1);
         }
 
-        function applyLaptopState(p) {
-          const e = easeOutCubic(p);
-          // Lid smoothly opens from -85deg (folded forward showing aluminum cover + POPUPS emblem) -> 0deg wide open!
-          const lidAngle = -85 * (1 - e);
-          const rigScale = 0.91 + 0.09 * e;
-          const rigLift = 22 * (1 - e);
-          const tiltAmt = Math.max(0, (e - 0.55) / 0.45);
+        function applyMacBookState(p) {
+          const e = easeOutQuart(p);
+          // Deck is at +76deg forward -> closed lid sits flush at -100deg, opens smoothly to +4deg (104deg real swing!)
+          const lidAngle = -100 + 104 * e;
+          // Whole MacBook gently pitches from slightly overhead closed angle (-12deg) to heroic showcase angle (-2deg)
+          const scenePitch = -12 * (1 - e) - 2 * e;
+          const sceneScale = 0.89 + 0.11 * e;
+          const sceneDrop = 34 * (1 - e);
+          const orbitAmt = clamp((e - 0.50) / 0.50, 0, 1);
 
-          laptopRig.style.transform = `translate3d(0, ${rigLift.toFixed(2)}px, 0) scale(${rigScale.toFixed(4)}) rotateY(${(curHX * 5.5 * tiltAmt).toFixed(2)}deg) rotateX(${(-curHY * 3.2 * tiltAmt).toFixed(2)}deg)`;
-          laptopLid.style.transform = `rotateX(${lidAngle.toFixed(2)}deg)`;
+          mbpScene.style.transform =
+            `translate3d(0, ${sceneDrop.toFixed(2)}px, 0) scale(${sceneScale.toFixed(4)}) ` +
+            `rotateX(${(scenePitch - curHY * 4.0 * orbitAmt).toFixed(2)}deg) ` +
+            `rotateY(${(curHX * 7.5 * orbitAmt).toFixed(2)}deg)`;
 
-          // Display wakes up smoothly as the lid lifts past ~20%
-          if (laptopVeil) {
-            const awake = clamp((e - 0.16) / 0.62, 0, 1);
-            laptopVeil.style.opacity = ((1 - awake) * 0.88).toFixed(3);
+          mbpLid.style.transform = `translate3d(0, -3px, 2px) rotateX(${lidAngle.toFixed(2)}deg)`;
+
+          // Outer aluminum lid catchlight fades naturally as lid lifts past horizontal
+          if (mbpBackSheen) {
+            mbpBackSheen.style.opacity = clamp(0.35 + (1 - e) * 0.65, 0, 1).toFixed(3);
           }
-          // Specular glass glare glides diagonally across display during opening
-          if (laptopGlare) {
-            const gOp = Math.sin(e * Math.PI) * 0.85;
-            const gX = -45 + e * 95;
-            laptopGlare.style.opacity = gOp.toFixed(3);
-            laptopGlare.style.transform = `translateX(${gX.toFixed(1)}%)`;
+
+          // Liquid Retina XDR display wakes smoothly from black sleep as lid opens past 24%
+          if (mbpVeil) {
+            const awake = clamp((e - 0.22) / 0.56, 0, 1);
+            mbpVeil.style.opacity = ((1 - awake) * 0.94).toFixed(3);
           }
-          // Floating APPI card rises gently once lid opens past halfway
-          if (laptopCaption) {
-            const cap = clamp((e - 0.48) / 0.46, 0, 1);
-            laptopCaption.style.opacity = cap.toFixed(3);
-            laptopCaption.style.transform = `translate3d(0, ${((1 - cap) * 26).toFixed(1)}px, 0)`;
+
+          // Diagonal studio glass glare sweeps smoothly across the Liquid Retina XDR screen
+          if (mbpGlare) {
+            const gOp = Math.sin(clamp((e - 0.15) / 0.85, 0, 1) * Math.PI) * 0.85;
+            const gX = -46 + e * 102;
+            mbpGlare.style.opacity = gOp.toFixed(3);
+            mbpGlare.style.transform = `translateX(${gX.toFixed(1)}%)`;
           }
-          // Screen light spill blooms across aluminum keyboard deck
-          if (laptopDeckGlow) {
-            laptopDeckGlow.style.opacity = clamp((e - 0.25) / 0.7, 0, 1).toFixed(3);
+
+          // Keyboard deck brightens & receives live purple/lime screen reflection as lid rises!
+          if (mbpDeckShade) {
+            mbpDeckShade.style.opacity = clamp(0.86 * (1 - e * 1.15), 0, 0.86).toFixed(3);
           }
-          if (laptopShadow) {
-            laptopShadow.style.opacity = (0.55 + 0.45 * e).toFixed(3);
-            laptopShadow.style.transform = `scaleX(${(0.9 + 0.1 * e).toFixed(3)})`;
+          if (mbpDeckReflection) {
+            mbpDeckReflection.style.opacity = clamp((e - 0.28) / 0.65, 0, 0.92).toFixed(3);
           }
-          if (laptopCue) {
-            laptopCue.style.opacity = clamp(1 - e * 3.2, 0, 1).toFixed(3);
+
+          // Floating APPI card rises smoothly inside macOS once MacBook is > 55% open
+          if (mbpCaption) {
+            const cap = clamp((e - 0.52) / 0.44, 0, 1);
+            mbpCaption.style.opacity = cap.toFixed(3);
+            mbpCaption.style.transform = `translate3d(0, ${((1 - cap) * 24).toFixed(1)}px, 0)`;
           }
-          // Parallax drift on the 3 orbit pills as laptop opens
-          const pillOp = clamp((e - 0.30) / 0.55, 0, 1);
-          if (pfOne) { pfOne.style.opacity = pillOp.toFixed(3); pfOne.style.transform = `translate3d(${((1 - pillOp) * -28).toFixed(1)}px, ${((1 - pillOp) * 18).toFixed(1)}px, 0)`; }
+
+          if (mbpShadow) {
+            mbpShadow.style.opacity = (0.68 + 0.32 * e).toFixed(3);
+          }
+
+          if (mbpCue) {
+            mbpCue.style.opacity = clamp(1 - e * 3.0, 0, 1).toFixed(3);
+          }
+
+          // Studio callout pills bloom outward once MacBook opens
+          const pillOp = clamp((e - 0.36) / 0.52, 0, 1);
+          if (pfOne) { pfOne.style.opacity = pillOp.toFixed(3); pfOne.style.transform = `translate3d(${((1 - pillOp) * -28).toFixed(1)}px, ${((1 - pillOp) * 16).toFixed(1)}px, 0)`; }
           if (pfTwo) { pfTwo.style.opacity = pillOp.toFixed(3); pfTwo.style.transform = `translate3d(${((1 - pillOp) * 28).toFixed(1)}px, ${((1 - pillOp) * -14).toFixed(1)}px, 0)`; }
-          if (pfThree) { pfThree.style.opacity = pillOp.toFixed(3); pfThree.style.transform = `translate3d(${((1 - pillOp) * 22).toFixed(1)}px, ${((1 - pillOp) * 22).toFixed(1)}px, 0)`; }
+          if (pfThree) { pfThree.style.opacity = pillOp.toFixed(3); pfThree.style.transform = `translate3d(${((1 - pillOp) * 22).toFixed(1)}px, ${((1 - pillOp) * 20).toFixed(1)}px, 0)`; }
         }
 
         function tick() {
           currentOpen += (targetOpen - currentOpen) * 0.11;
-          curHX += (hoverX - curHX) * 0.1;
-          curHY += (hoverY - curHY) * 0.1;
-          applyLaptopState(currentOpen);
+          curHX += (hoverX - curHX) * 0.09;
+          curHY += (hoverY - curHY) * 0.09;
+          applyMacBookState(currentOpen);
 
-          const settled = Math.abs(targetOpen - currentOpen) < 0.0008 && Math.abs(hoverX - curHX) < 0.002 && Math.abs(hoverY - curHY) < 0.002;
+          const settled =
+            Math.abs(targetOpen - currentOpen) < 0.0007 &&
+            Math.abs(hoverX - curHX) < 0.002 &&
+            Math.abs(hoverY - curHY) < 0.002;
           if (!settled) {
             requestAnimationFrame(tick);
           } else {
             currentOpen = targetOpen;
             curHX = hoverX;
             curHY = hoverY;
-            applyLaptopState(currentOpen);
+            applyMacBookState(currentOpen);
             rafActive = false;
           }
         }
@@ -2272,7 +2532,7 @@
 
         computeTarget();
         currentOpen = targetOpen;
-        applyLaptopState(currentOpen);
+        applyMacBookState(currentOpen);
       }
 
       // Dynamic custom webs renderer (from assets/webs-data.js)
