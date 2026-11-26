@@ -1891,7 +1891,7 @@
       .nav.open .nav-links{position:absolute;top:70px;left:10px;right:10px;display:flex;flex-direction:column;align-items:stretch;gap:0;padding:9px;border:1px solid var(--white-line);border-radius:20px;background:rgba(8,9,13,.96)}
       .nav.open .nav-links a{padding:14px;border-bottom:1px solid rgba(255,255,255,.1)}
       .nav.open .nav-links a:last-child{border:0}
-      .hero{min-height:850px;padding-top:140px}
+      .hero{min-height:850px;padding-top:96px}
       .hero h1{font-size:clamp(52px,9vw,86px)}
       .portal-stage{margin-top:28px;padding:10px 0 28px}
       .intro-grid,.method-grid,.about-grid,.contact-grid{grid-template-columns:1fr;gap:48px}
@@ -1911,7 +1911,7 @@
       .container{width:min(var(--max),calc(100% - 30px))}
       .nav-wrap{padding:0 8px}
       .nav{padding-left:13px}
-      .hero{min-height:760px;padding-top:130px}
+      .hero{min-height:740px;padding-top:76px}
       .hero h1{font-size:clamp(46px,15vw,76px)}
       .hero-lead{font-size:15px}
       .hero-metrics{gap:6px}
@@ -2127,10 +2127,24 @@
       position: absolute; inset: -10%; border-radius: 50%; border: 1.8px solid #c6f811;
       opacity: 0; animation: ppNavSonar 2.6s cubic-bezier(.15,.7,.3,1) infinite;
     }
-    /* Keep original instant navbar logo on mobile / touch devices; keep flight animation exclusively on PC */
+    /* Mobile / touch: hide top navbar cleanly at page top (0 duplicate logo!) & slide in smoothly on scroll via GPU compositor; PC keeps untouched logo flight */
     @media (max-width: 960px), (hover: none) and (pointer: coarse) {
       .nav.is-hero-top .brand { opacity: 1 !important; pointer-events: auto !important; }
       .pp-fly-logo { display: none !important; }
+      .nav-wrap {
+        opacity: 0;
+        transform: translate3d(0, -115%, 0) scale(.96);
+        pointer-events: none;
+        will-change: transform, opacity;
+        transition:
+          transform .48s cubic-bezier(.22, 1, .36, 1),
+          opacity .36s cubic-bezier(.22, 1, .36, 1);
+      }
+      .nav-wrap.is-mob-shown {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        pointer-events: auto;
+      }
     }
 
     /* 4. Giant Ambient Parallax Background Monograms (#proyectos & #contacto) */
@@ -3372,16 +3386,51 @@
         : window.innerWidth > 960;
 
       if (!isDesktopDock) {
-        // Mobile / touch devices: keep original crisp, zero-delay navbar behavior (no flight layer, no scroll lag!)
+        // Mobile / touch devices: navbar starts hidden at page top (zero duplicate logo!)
+        // and glides in smoothly on the GPU compositor as soon as you scroll past the hero logo!
+        var navWrapEl = document.querySelector('.nav-wrap');
         if (nav) nav.classList.remove('is-hero-top');
         if (heroRig) heroRig.style.visibility = '';
+        var mobNavShown = false;
         var mobileTicking = false;
+
+        function syncMobileNav(sy) {
+          var nextShown = mobNavShown ? (sy > 58) : (sy > 92);
+          if (nextShown !== mobNavShown) {
+            mobNavShown = nextShown;
+            if (navWrapEl) navWrapEl.classList.toggle('is-mob-shown', mobNavShown);
+            if (!mobNavShown && nav) nav.classList.remove('open');
+          }
+          if (nav) nav.classList.toggle('is-morphed', mobNavShown && sy > 360);
+        }
+
         function onMobileScroll() {
           mobileTicking = false;
           var sy = window.scrollY || 0;
-          if (nav) nav.classList.toggle('is-morphed', sy > 130);
+          syncMobileNav(sy);
           updateParallax();
         }
+
+        // Instant compositor-driven trigger when hero logo leaves top of screen
+        if ('IntersectionObserver' in window && heroStageEl) {
+          new IntersectionObserver(function (entries) {
+            var e = entries[0];
+            if (!e) return;
+            if (!e.isIntersecting && (window.scrollY || 0) > 40) {
+              if (!mobNavShown) {
+                mobNavShown = true;
+                if (navWrapEl) navWrapEl.classList.add('is-mob-shown');
+              }
+            } else if (e.isIntersecting && (window.scrollY || 0) <= 58) {
+              if (mobNavShown) {
+                mobNavShown = false;
+                if (navWrapEl) navWrapEl.classList.remove('is-mob-shown');
+                if (nav) nav.classList.remove('open');
+              }
+            }
+          }, { threshold: 0.15 }).observe(heroStageEl);
+        }
+
         window.addEventListener('scroll', function () {
           if (!mobileTicking) { mobileTicking = true; requestAnimationFrame(onMobileScroll); }
         }, { passive: true });
