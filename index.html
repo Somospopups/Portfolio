@@ -7,7 +7,10 @@
   <meta name="description" content="Portfolio de POPUPS: aplicaciones a medida, páginas web desde cero, automatización y diseño para hacer aparecer tiempo." />
   <title>POPUPS — Hacemos aparecer tiempo</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
-  <link rel="preload" as="image" href="assets/popups-lid-sticker.webp?v=6" />
+  <link rel="preload" as="image" href="assets/logo-wordmark.webp" />
+  <link rel="preload" as="image" href="assets/logo-mark.webp" />
+  <link rel="preload" as="image" href="assets/popups-lid-sticker.webp?v=7" />
+  <link rel="preload" as="script" href="assets/three.min.js" />
   <style>
     :root {
       --ink: #07090d;
@@ -450,7 +453,8 @@
     .mbp-webgl-stage {
       position:relative;
       width:100vw;
-      height:clamp(540px, min(62vw, calc(100vh - 24px)), 1140px);
+      height:clamp(410px, min(50vw, calc(100vh - 195px)), 760px);
+      height:clamp(410px, min(50vw, calc(100dvh - 195px)), 760px);
       margin:0 auto;
       user-select:none;
       -webkit-user-select:none;
@@ -475,7 +479,7 @@
     .mbp-drag-hint {
       position:relative;
       z-index:7;
-      margin:-78px auto 0;
+      margin:-46px auto 0;
       display:inline-flex;
       align-items:center;
       gap:7px;
@@ -688,8 +692,8 @@
     .laptop-cue:hover { border-color:var(--lime); }
 
     @media (max-width: 640px) {
-      .mbp-webgl-stage { width:100vw; height:clamp(320px, 54vh, 460px); }
-      .mbp-drag-hint { margin-top:-30px; font-size:8.5px; padding:4px 10px; }
+      .mbp-webgl-stage { width:100vw; height:clamp(310px, min(84vw, 48vh), 420px); height:clamp(310px, min(84vw, 48dvh), 420px); }
+      .mbp-drag-hint { margin-top:-24px; font-size:8.5px; padding:4px 10px; }
       .mbp-switcher { border-radius:18px; padding:6px; gap:4px; }
       .mbp-sw-btn { padding:6px 9px; font-size:9px; }
       .mbp-spin-trigger { padding:6px 10px; font-size:9px; }
@@ -1932,8 +1936,13 @@
       *, *::before, *::after { transition-duration:0.01ms !important; }
     }
 
+    /* Offscreen GPU Animation Pausing + Below-the-Fold Content Visibility */
+    .hero.is-offscreen *, .hero.is-offscreen::before { animation-play-state: paused !important; }
+    .ticker.is-offscreen .ticker-track { animation-play-state: paused !important; }
+    .intro, .works, .method, .about, .contact { content-visibility: auto; contain-intrinsic-size: auto 760px; }
+
     /* ==================== POPUPS BRAND MOTION SYSTEM ==================== */
-    /* 1. Cinematic First-Visit Splash Intro (1.2s, click to skip, once/session) */
+    /* 1. Crisp First-Visit Splash Intro (0.82s, click to skip, once/session) */
     .pp-splash {
       position: fixed; inset: 0; z-index: 9999;
       background:
@@ -1941,7 +1950,7 @@
         #07090d;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 20px; cursor: pointer;
-      transition: opacity .52s cubic-bezier(.22,1,.36,1), transform .52s cubic-bezier(.22,1,.36,1);
+      transition: opacity .38s cubic-bezier(.22,1,.36,1), transform .38s cubic-bezier(.22,1,.36,1);
     }
     .pp-splash.is-hidden { opacity: 0; pointer-events: none; transform: scale(1.03); }
     .pp-splash-rig {
@@ -2291,7 +2300,7 @@
           <!-- Depth 5 (IN FRONT): True Solid 3D WebGL MacBook Pro 16" Space Black (drag 360° with finger or mouse!) -->
           <div class="mbp-front-layer">
             <div class="mbp-webgl-stage" id="mbpCanvasHost">
-              <img class="mbp-fallback" id="mbpFallback" src="assets/miamp-real-intro.webp" alt="MI AMP · Plugin de amplificadores y pedales DSP por POPUPS" />
+              <img class="mbp-fallback" id="mbpFallback" src="assets/miamp-real-intro.webp" loading="lazy" decoding="async" alt="MI AMP · Plugin de amplificadores y pedales DSP por POPUPS" />
             </div>
             <div class="mbp-drag-hint" id="mbpDragHint" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>
@@ -2334,7 +2343,7 @@
     <!-- ==================== UNIFIED DARK EDITORIAL GALLERY ==================== -->
     <section class="works" id="proyectos">
       <div class="pp-bg-orb" aria-hidden="true"></div>
-      <div class="pp-bg-giant pp-bg-giant-works" id="ppWmWorks" aria-hidden="true"><img src="assets/logo-mark.webp" alt="" loading="lazy" /></div>
+      <div class="pp-bg-giant pp-bg-giant-works" id="ppWmWorks" aria-hidden="true"><img src="assets/logo-mark.webp" alt="" loading="lazy" decoding="async" /></div>
       <div class="container">
         <div class="works-head">
           <div>
@@ -2358,8 +2367,8 @@
             <a class="w-card-cover-link" href="appi/" aria-label="Ver caso completo de APPI"></a>
             <div class="w-stage stage-appi">
               <span class="w-stage-badge"><i></i>01 · PWA OFFLINE</span>
-              <div class="appi-desk"><img src="appi/assets/home-desktop.webp" alt="Tablero desktop real de APPI" loading="lazy" /></div>
-              <div class="appi-mob"><img src="appi/assets/las-7p-mobile.webp" alt="Vista mobile Las 7 P en APPI" loading="lazy" /></div>
+              <div class="appi-desk"><img src="appi/assets/home-desktop.webp" alt="Tablero desktop real de APPI" loading="lazy" decoding="async" /></div>
+              <div class="appi-mob"><img src="appi/assets/las-7p-mobile.webp" alt="Vista mobile Las 7 P en APPI" loading="lazy" decoding="async" /></div>
             </div>
             <div class="w-body">
               <div>
@@ -2379,9 +2388,9 @@
             <a class="w-card-cover-link" href="bondi/" aria-label="Ver caso completo de Bondi"></a>
             <div class="w-stage stage-bondi">
               <span class="w-stage-badge"><i></i>02 · TIEMPO REAL</span>
-              <img class="bondi-bg" src="bondi/assets/bondi-map-real.webp" alt="Mapa real de Córdoba en Bondi" loading="lazy" />
+              <img class="bondi-bg" src="bondi/assets/bondi-map-real.webp" alt="Mapa real de Córdoba en Bondi" loading="lazy" decoding="async" />
               <div class="bondi-hud">
-                <img src="bondi/assets/bondi-icon.webp" alt="Ícono de Bondi" loading="lazy" />
+                <img src="bondi/assets/bondi-icon.webp" alt="Ícono de Bondi" loading="lazy" decoding="async" />
                 <div><strong>¡Es hora de salir! · Línea 20</strong><span>Av. Colón · 72 líneas y 2.886 paradas</span></div>
                 <span class="bondi-eta">4 min</span>
               </div>
@@ -2403,7 +2412,7 @@
             <a class="w-card-cover-link" href="mis-sellos/" aria-label="Ver caso completo de Mis Sellos"></a>
             <div class="w-stage stage-sellos">
               <span class="w-stage-badge"><i></i>03 · FIDELIZACIÓN 3D</span>
-              <img class="sellos-bg" src="mis-sellos/assets/photo-cafe-hero.webp" alt="Cliente usando Mis Sellos en un café" loading="lazy" />
+              <img class="sellos-bg" src="mis-sellos/assets/photo-cafe-hero.webp" alt="Cliente usando Mis Sellos en un café" loading="lazy" decoding="async" />
               <div class="sellos-card-3d" aria-hidden="true">
                 <div class="sc-top"><span>CAFÉ DE ESPECIALIDAD</span><span>QR 30s</span></div>
                 <div class="sc-title">Tarjeta Coleccionable</div>
@@ -2428,8 +2437,8 @@
             <a class="w-card-cover-link" href="mi-tienda/" aria-label="Ver caso completo y las 6 vidrieras de Mi-Tienda"></a>
             <div class="w-stage stage-tienda">
               <span class="w-stage-badge"><i></i>04 · 6 VIDRIERAS · E-COMMERCE</span>
-              <div class="tienda-back"><img src="assets/tienda-1-catalogo.jpg" alt="Vidriera Boutique Editorial de Mi-Tienda" loading="lazy" /></div>
-              <div class="tienda-front"><img src="assets/tienda-3-panel.jpg" alt="Panel operativo real de Mi-Tienda" loading="lazy" /></div>
+              <div class="tienda-back"><img src="assets/tienda-1-catalogo.jpg" alt="Vidriera Boutique Editorial de Mi-Tienda" loading="lazy" decoding="async" /></div>
+              <div class="tienda-front"><img src="assets/tienda-3-panel.jpg" alt="Panel operativo real de Mi-Tienda" loading="lazy" decoding="async" /></div>
             </div>
             <div class="w-body">
               <div class="w-kicker"><span>04 · Comercio digital</span><small>6 vidrieras · 0 % comisión</small></div>
@@ -2448,9 +2457,9 @@
             <a class="w-card-cover-link" href="mi-entrenador/" aria-label="Ver caso completo de Mi Entrenador"></a>
             <div class="w-stage stage-trainer">
               <span class="w-stage-badge"><i></i>05 · FITNESS &amp; GYMS</span>
-              <img class="tr-bg" src="mi-entrenador/assets/photo-hero-gym.webp" alt="Entrenador y alumna usando Mi Entrenador en el gimnasio" loading="lazy" />
+              <img class="tr-bg" src="mi-entrenador/assets/photo-hero-gym.webp" alt="Entrenador y alumna usando Mi Entrenador en el gimnasio" loading="lazy" decoding="async" />
               <div class="tr-pill"><b>3 NIVELES DE ACCESO</b>Dueño · Profe · Alumno</div>
-              <div class="tr-phone"><img src="mi-entrenador/assets/app-hoy.webp" alt="Mazo diario de ejercicios en Mi Entrenador" loading="lazy" /></div>
+              <div class="tr-phone"><img src="mi-entrenador/assets/app-hoy.webp" alt="Mazo diario de ejercicios en Mi Entrenador" loading="lazy" decoding="async" /></div>
             </div>
             <div class="w-body">
               <div class="w-kicker"><span>05 · Fitness &amp; Entrenamiento</span><small>App 3 roles · RLS</small></div>
@@ -2469,11 +2478,11 @@
             <a class="w-card-cover-link" href="oficina-virtual/" aria-label="Ver caso completo de Oficina Virtual"></a>
             <div class="w-stage stage-office">
               <span class="w-stage-badge"><i></i>06 · MULTIPLAYER 2D</span>
-              <img class="of-bg" src="oficina-virtual/assets/shot_ofi_atardecer.webp" alt="Oficina Virtual pixel art al atardecer" loading="lazy" />
+              <img class="of-bg" src="oficina-virtual/assets/shot_ofi_atardecer.webp" alt="Oficina Virtual pixel art al atardecer" loading="lazy" decoding="async" />
               <div class="of-hud">● 4 online · Cielo real · Radio Lo-Fi</div>
               <div class="of-avs" aria-hidden="true">
-                <img src="oficina-virtual/assets/avatar_01.webp" alt="" loading="lazy" />
-                <img src="oficina-virtual/assets/avatar_02.webp" alt="" loading="lazy" />
+                <img src="oficina-virtual/assets/avatar_01.webp" alt="" loading="lazy" decoding="async" />
+                <img src="oficina-virtual/assets/avatar_02.webp" alt="" loading="lazy" decoding="async" />
               </div>
             </div>
             <div class="w-body">
@@ -2493,11 +2502,11 @@
             <div class="w-stage stage-amp">
               <span class="w-stage-badge"><i></i>07 · AUDIO DSP</span>
               <div class="amp-stack">
-                <img class="amp-head" src="mi-amp/assets/head_gtr_classic.webp" alt="Cabezal Mint Classic de MI AMP" loading="lazy" />
-                <img class="amp-cab" src="mi-amp/assets/cab_gtr_mint.webp" alt="Caja 4x12 Mint de MI AMP" loading="lazy" />
+                <img class="amp-head" src="mi-amp/assets/head_gtr_classic.webp" alt="Cabezal Mint Classic de MI AMP" loading="lazy" decoding="async" />
+                <img class="amp-cab" src="mi-amp/assets/cab_gtr_mint.webp" alt="Caja 4x12 Mint de MI AMP" loading="lazy" decoding="async" />
               </div>
-              <img class="amp-ped left" src="mi-amp/assets/ped_green_drive.webp" alt="" loading="lazy" aria-hidden="true" />
-              <img class="amp-ped right" src="mi-amp/assets/ped_mi_gold.webp" alt="" loading="lazy" aria-hidden="true" />
+              <img class="amp-ped left" src="mi-amp/assets/ped_green_drive.webp" alt="" loading="lazy" decoding="async" aria-hidden="true" />
+              <img class="amp-ped right" src="mi-amp/assets/ped_mi_gold.webp" alt="" loading="lazy" decoding="async" aria-hidden="true" />
             </div>
             <div class="w-body">
               <div class="w-kicker"><span>07 · Audio profesional</span><small>C++20 · JUCE 8</small></div>
@@ -2534,7 +2543,7 @@
 
     <section class="about"><div class="container about-grid"><div><span class="eyebrow">Por qué existe POPUPS</span><h2>Menos ruido.<br /><span class="muted">Más dirección.</span></h2></div><div class="about-copy"><p>POPUPS nace de conocer desde adentro lo que implica sostener una operación, atender clientes, coordinar equipos y cumplir objetivos cuando la información está dispersa y el día nunca alcanza.</p><p>Por eso creamos tecnología útil, humana y visualmente extraordinaria: para que las PyMEs puedan trabajar mejor sin vivir para trabajar.</p><div class="principles"><div class="principle"><b>Personas primero</b><span>La tecnología se adapta a la vida real.</span></div><div class="principle"><b>Simple antes que complejo</b><span>Cada paso tiene que tener un motivo.</span></div><div class="principle"><b>Diseño con propósito</b><span>Lo visual también resuelve.</span></div><div class="principle"><b>Evolución continua</b><span>Una buena app crece con el negocio.</span></div></div></div></div></section>
 
-    <section class="contact" id="contacto"><div class="pp-bg-giant pp-bg-giant-contact" id="ppWmContact" aria-hidden="true"><img src="assets/logo-mark.webp" alt="" loading="lazy" /></div><div class="container"><div class="pp-contact-brand"><div class="pp-close-rig" id="ppCloseRig" title="POPUPS"><div class="pp-ly"><img src="assets/logo-wordmark.webp" alt="popups" loading="lazy" /></div><div class="pp-mg"><div class="pp-ly"><img src="assets/logo-mark.webp" alt="P" loading="lazy" /></div><div class="pp-dw"><div class="pp-dot"></div></div></div><div class="pp-sheen"></div></div></div><div class="contact-grid"><div><span class="eyebrow">Empecemos por una conversación</span><h2>¿Qué tarea te gustaría no repetir <em>mañana?</em></h2></div><div class="contact-aside"><p>Contanos qué proceso está consumiendo tiempo. Podemos ayudarte a encontrar un primer paso concreto, sin tecnicismos ni soluciones sobredimensionadas.</p><a href="mailto:somospopups@gmail.com">somospopups@gmail.com&nbsp; ↗</a></div></div><form class="contact-form" id="contactForm"><div class="field"><label for="name">Tu nombre</label><input id="name" name="name" placeholder="Cómo te llamamos" required /></div><div class="field"><label for="company">Empresa o proyecto</label><input id="company" name="company" placeholder="Tu negocio" /></div><div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="vos@empresa.com" required /></div><div class="field"><label for="phone">Teléfono o WhatsApp</label><input id="phone" name="phone" placeholder="Opcional" /></div><div class="field full"><label for="message">¿Qué proceso te quita tiempo?</label><textarea id="message" name="message" placeholder="Hoy hacemos... y nos gustaría..."></textarea></div><div class="submit-row full"><span class="form-note" id="formNote">Solo lo usamos para responderte.</span><button class="button primary" type="submit">Enviar consulta&nbsp; →</button></div></form></div></section>
+    <section class="contact" id="contacto"><div class="pp-bg-giant pp-bg-giant-contact" id="ppWmContact" aria-hidden="true"><img src="assets/logo-mark.webp" alt="" loading="lazy" decoding="async" /></div><div class="container"><div class="pp-contact-brand"><div class="pp-close-rig" id="ppCloseRig" title="POPUPS"><div class="pp-ly"><img src="assets/logo-wordmark.webp" alt="popups" loading="lazy" decoding="async" /></div><div class="pp-mg"><div class="pp-ly"><img src="assets/logo-mark.webp" alt="P" loading="lazy" decoding="async" /></div><div class="pp-dw"><div class="pp-dot"></div></div></div><div class="pp-sheen"></div></div></div><div class="contact-grid"><div><span class="eyebrow">Empecemos por una conversación</span><h2>¿Qué tarea te gustaría no repetir <em>mañana?</em></h2></div><div class="contact-aside"><p>Contanos qué proceso está consumiendo tiempo. Podemos ayudarte a encontrar un primer paso concreto, sin tecnicismos ni soluciones sobredimensionadas.</p><a href="mailto:somospopups@gmail.com">somospopups@gmail.com&nbsp; ↗</a></div></div><form class="contact-form" id="contactForm"><div class="field"><label for="name">Tu nombre</label><input id="name" name="name" placeholder="Cómo te llamamos" required /></div><div class="field"><label for="company">Empresa o proyecto</label><input id="company" name="company" placeholder="Tu negocio" /></div><div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="vos@empresa.com" required /></div><div class="field"><label for="phone">Teléfono o WhatsApp</label><input id="phone" name="phone" placeholder="Opcional" /></div><div class="field full"><label for="message">¿Qué proceso te quita tiempo?</label><textarea id="message" name="message" placeholder="Hoy hacemos... y nos gustaría..."></textarea></div><div class="submit-row full"><span class="form-note" id="formNote">Solo lo usamos para responderte.</span><button class="button primary" type="submit">Enviar consulta&nbsp; →</button></div></form></div></section>
   </main>
 
   <footer><div class="container footer-inner"><span><strong>POPUPS</strong> · Tecnología que te devuelve tiempo.</span><span>© 2026 POPUPS · Córdoba, Argentina</span></div></footer>
@@ -2676,7 +2685,36 @@
           return 1 - inv * inv * inv * inv;
         }
 
+        let slotRaf = 0;
+        let idleTimerId = 0;
+
+        function kickSlotRaf() {
+          if (!slotRaf && activeAnim) {
+            lastFrame = performance.now();
+            slotRaf = requestAnimationFrame(loopSlot);
+          }
+        }
+
+        function scheduleNextIdleTick() {
+          if (idleTimerId) { clearTimeout(idleTimerId); idleTimerId = 0; }
+          if (!inHero || reduced || document.hidden || activeAnim) return;
+          idleTimerId = setTimeout(() => {
+            idleTimerId = 0;
+            if (!inHero || reduced || document.hidden || activeAnim) return;
+            ticksSinceBurst++;
+            if (ticksSinceBurst >= 5) {
+              ticksSinceBurst = 0;
+              const boost = 14 + Math.floor(Math.random() * 19);
+              launchCasinoSpin(boost, 1450);
+            } else {
+              rollPlusOne();
+            }
+            kickSlotRaf();
+          }, 920);
+        }
+
         function loopSlot(now) {
+          slotRaf = 0;
           const dt = Math.min(0.05, Math.max(0.001, (now - lastFrame) / 1000));
           lastFrame = now;
 
@@ -2698,23 +2736,11 @@
               activeAnim = null;
               renderReels(null);
               if (wasBurst) flashJackpot();
-              idleTimer = 0;
-            }
-          } else if (inHero && !reduced) {
-            idleTimer += dt;
-            if (idleTimer >= 0.92) {
-              idleTimer = 0;
-              ticksSinceBurst++;
-              if (ticksSinceBurst >= 5) {
-                ticksSinceBurst = 0;
-                const boost = 14 + Math.floor(Math.random() * 19);
-                launchCasinoSpin(boost, 1450);
-              } else {
-                rollPlusOne();
-              }
+              scheduleNextIdleTick();
+            } else {
+              slotRaf = requestAnimationFrame(loopSlot);
             }
           }
-          requestAnimationFrame(loopSlot);
         }
 
         if (reduced) {
@@ -2723,23 +2749,32 @@
           setStatic(7);
           const splashEl = document.getElementById('ppSplash');
           let splashSeen = false;
-          try { splashSeen = !!sessionStorage.getItem('pp_splash_seen'); } catch (_) {}
-          const startDelay = (splashEl && !splashSeen) ? 1250 : 320;
+          try { splashSeen = sessionStorage.getItem('popups_intro_seen') === '1'; } catch (_) {}
+          const startDelay = (splashEl && !splashSeen) ? 840 : 180;
           setTimeout(() => {
-            launchCasinoSpin(121, 2150); // 007 -> 128 dramatic casino opening roll!
+            launchCasinoSpin(121, 1950); // 007 -> 128 dramatic casino opening roll!
+            kickSlotRaf();
           }, startDelay);
-          requestAnimationFrame(loopSlot);
 
           if ('IntersectionObserver' in window) {
             new IntersectionObserver(entries => {
               inHero = entries[0] ? entries[0].isIntersecting : true;
+              if (inHero) scheduleNextIdleTick();
+              else if (idleTimerId) { clearTimeout(idleTimerId); idleTimerId = 0; }
             }, { threshold: 0.1 }).observe(slotMetric);
           }
 
+          document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && inHero) scheduleNextIdleTick();
+            else if (idleTimerId) { clearTimeout(idleTimerId); idleTimerId = 0; }
+          });
+
           const triggerManualSpin = () => {
+            if (idleTimerId) { clearTimeout(idleTimerId); idleTimerId = 0; }
             ticksSinceBurst = 0;
             const boost = 27 + Math.floor(Math.random() * 36);
             launchCasinoSpin(boost, 1650);
+            kickSlotRaf();
           };
           slotMetric.addEventListener('click', triggerManualSpin);
           slotMetric.addEventListener('keydown', e => {
@@ -2782,9 +2817,9 @@
                   '<span>Masa madre · 0% comisión</span>' +
                 '</div>' +
                 '<div class="cw-anton-pizza-wrap">' +
-                  '<img class="cw-anton-ing i1" src="anton/assets/ing-albahaca.webp" alt="" loading="lazy" aria-hidden="true" />' +
-                  '<img class="cw-anton-pizza" src="anton/assets/pizza-anton.webp" alt="Pizza Antón de masa madre con mozzarella y pesto" loading="lazy" />' +
-                  '<img class="cw-anton-ing i2" src="anton/assets/ing-tomate.webp" alt="" loading="lazy" aria-hidden="true" />' +
+                  '<img class="cw-anton-ing i1" src="anton/assets/ing-albahaca.webp" alt="" loading="lazy" decoding="async" aria-hidden="true" />' +
+                  '<img class="cw-anton-pizza" src="anton/assets/pizza-anton.webp" alt="Pizza Antón de masa madre con mozzarella y pesto" loading="lazy" decoding="async" />' +
+                  '<img class="cw-anton-ing i2" src="anton/assets/ing-tomate.webp" alt="" loading="lazy" decoding="async" aria-hidden="true" />' +
                 '</div>' +
               '</a>'
             )
@@ -2797,9 +2832,9 @@
                   '<span>Catálogo vivo + panel propio</span>' +
                 '</div>' +
                 '<div class="cw-luma-visual">' +
-                  '<div class="cw-luma-arch"><img src="assets/luma-lampara.webp" alt="Lámpara Aura de LUMA" loading="lazy" /></div>' +
-                  '<div class="cw-luma-mini m1"><img src="assets/luma-vela.webp" alt="Vela Bosque de LUMA" loading="lazy" /></div>' +
-                  '<div class="cw-luma-mini m2"><img src="assets/luma-bolso.webp" alt="Bolso Siena de LUMA" loading="lazy" /></div>' +
+                  '<div class="cw-luma-arch"><img src="assets/luma-lampara.webp" alt="Lámpara Aura de LUMA" loading="lazy" decoding="async" /></div>' +
+                  '<div class="cw-luma-mini m1"><img src="assets/luma-vela.webp" alt="Vela Bosque de LUMA" loading="lazy" decoding="async" /></div>' +
+                  '<div class="cw-luma-mini m2"><img src="assets/luma-bolso.webp" alt="Bolso Siena de LUMA" loading="lazy" decoding="async" /></div>' +
                 '</div>' +
               '</a>'
             )
@@ -2813,15 +2848,15 @@
                 '</div>' +
                 '<div class="cw-eze-visual">' +
                   '<span class="cw-eze-disc" aria-hidden="true"></span>' +
-                  '<img class="cw-eze-gpu" src="assets/eze-gpu.webp" alt="" loading="lazy" aria-hidden="true" />' +
-                  '<img class="cw-eze-phone" src="assets/eze-phone.webp" alt="Celular en tienda Eze-Pece" loading="lazy" />' +
-                  '<img class="cw-eze-bud" src="assets/eze-earbuds.webp" alt="" loading="lazy" aria-hidden="true" />' +
+                  '<img class="cw-eze-gpu" src="assets/eze-gpu.webp" alt="" loading="lazy" decoding="async" aria-hidden="true" />' +
+                  '<img class="cw-eze-phone" src="assets/eze-phone.webp" alt="Celular en tienda Eze-Pece" loading="lazy" decoding="async" />' +
+                  '<img class="cw-eze-bud" src="assets/eze-earbuds.webp" alt="" loading="lazy" decoding="async" aria-hidden="true" />' +
                 '</div>' +
               '</a>'
             )
             : (
               '<a class="cw-shot" href="' + esc(w.url) + '" target="_blank" rel="noopener" aria-label="Abrir ' + esc(w.name) + '">' +
-                '<img src="' + esc(w.image) + '" alt="Vista real de ' + esc(w.name) + '" loading="lazy" />' +
+                '<img src="' + esc(w.image) + '" alt="Vista real de ' + esc(w.name) + '" loading="lazy" decoding="async" />' +
               '</a>'
             );
 
@@ -2946,10 +2981,10 @@
             if (!splash || splash.classList.contains('is-hidden')) return;
             splash.classList.add('is-hidden');
             try { sessionStorage.setItem('popups_intro_seen', '1'); } catch (_) {}
-            setTimeout(function () { if (splash && splash.parentNode) splash.parentNode.removeChild(splash); }, 560);
+            setTimeout(function () { if (splash && splash.parentNode) splash.parentNode.removeChild(splash); }, 400);
           };
           splash.addEventListener('click', dismissSplash);
-          setTimeout(dismissSplash, 1280);
+          setTimeout(dismissSplash, 820);
         }
       }
 
@@ -3401,6 +3436,19 @@
         checkDockTrigger();
       }, { passive: true });
 
+      // 5. Auto-Pause Heavy Ambient Animations When Scrolled Off-Screen (Massive GPU/Battery Win!)
+      if ('IntersectionObserver' in window) {
+        var heroPauseEl = document.getElementById('inicio');
+        var tickerPauseEl = document.querySelector('.ticker');
+        var animIO = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            entry.target.classList.toggle('is-offscreen', !entry.isIntersecting);
+          });
+        }, { rootMargin: '120px 0px' });
+        if (heroPauseEl) animIO.observe(heroPauseEl);
+        if (tickerPauseEl) animIO.observe(tickerPauseEl);
+      }
+
       // 4. Contact Closing Sticker Peel & LED Neon Charge on scroll reveal (Option 05)
       var closeRig = document.getElementById('ppCloseRig');
       if (closeRig) {
@@ -3423,6 +3471,6 @@
   </script>
 
   <script defer src="assets/three.min.js"></script>
-  <script defer src="assets/macbook3d.js?v=6"></script>
+  <script defer src="assets/macbook3d.js?v=7"></script>
 </body>
 </html>

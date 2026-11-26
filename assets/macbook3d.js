@@ -109,7 +109,8 @@
       return;
     }
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    var isMobileViewport = window.innerWidth <= 640;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobileViewport ? 1.75 : 2));
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.12;
@@ -121,9 +122,10 @@
     var TAN_HALF_FOV = Math.tan((FOV_DEG * Math.PI) / 360);
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(FOV_DEG, 16 / 10, 1.0, 90);
-    var baseCamZ = 10.6;
-    var curCamZ = 10.6;
-    var spinDollyAmt = 2.0;
+    var baseCamZ = 13.4;
+    var curCamZ = 13.4;
+    var spinDollyAmt = 1.6;
+    var dragDollyAmt = 3.2;
     var OPEN_CAM_Y = 0.80;
     var OPEN_LOOK_Y = 0.36;
     var curLookY = OPEN_LOOK_Y;
@@ -510,14 +512,14 @@
     }
 
     // -------------------------------------------------------------------------
-    // High-Speed GPU Screen Canvas Texture (1280 x 802 = Exact 16:10 Full-Bleed!)
-    // Zero mipmap regen + smart dirty flag -> locked 60/120fps fluidity!
+    // High-Speed GPU Screen Canvas Texture (Adaptive 16:10 Full-Bleed!)
+    // Zero mipmap regen + smart dirty flag + adaptive mobile res -> locked 60/120fps!
     // -------------------------------------------------------------------------
     var screenCanvas = document.createElement('canvas');
-    screenCanvas.width = 1280;
-    screenCanvas.height = 802;
+    screenCanvas.width = isMobileViewport ? 1024 : 1280;
+    screenCanvas.height = isMobileViewport ? 642 : 802;
     var sctx = screenCanvas.getContext('2d', { alpha: true });
-    sctx.clearRect(0, 0, 1280, 802);
+    sctx.clearRect(0, 0, screenCanvas.width, screenCanvas.height);
 
     var screenTex = new THREE.CanvasTexture(screenCanvas);
     screenTex.encoding = THREE.sRGBEncoding;
@@ -540,11 +542,11 @@
     imgs.appi.onload = function () { screenDirty = true; };
     imgs.webs.onload = function () { screenDirty = true; };
     // Load the POPUPS lid sticker FIRST (priority #1 so closed Mac ALWAYS shows crisp sticker!)
-    imgs.sticker.src = 'assets/popups-lid-sticker.webp?v=6';
+    imgs.sticker.src = 'assets/popups-lid-sticker.webp?v=7';
     imgs.mark.src = 'assets/logo-mark.webp';
-    imgs.miamp.src = 'assets/miamp-real-intro.webp?v=6';
-    imgs.appi.src = 'assets/appi-screen-full.webp?v=6';
-    imgs.webs.src = 'assets/webs-medida-scroll.webp?v=6';
+    imgs.miamp.src = 'assets/miamp-real-intro.webp?v=7';
+    imgs.appi.src = 'assets/appi-screen-full.webp?v=7';
+    imgs.webs.src = 'assets/webs-medida-scroll.webp?v=7';
     if (imgs.sticker.complete && imgs.sticker.naturalWidth > 0) drawPopupsStickerFromFull(imgs.sticker);
     else if (imgs.mark.complete && imgs.mark.naturalWidth > 0) drawPopupsStickerFromMark(imgs.mark);
 
@@ -771,7 +773,9 @@
     var easeInOutQuint = function (t) { return t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2; };
     var easeInOutSine = function (t) { return -(Math.cos(Math.PI * t) - 1) / 2; };
 
-    function paintScreen(now, openAmt) {
+    function paintScreen(now, openAmt, facingFront) {
+      // Skip invisible GPU texture uploads when lid is closed or screen faces away during 360° spin!
+      if (!screenDirty && (openAmt < 0.08 || !facingFront)) return;
       var item = SHOWCASE[activeIdx];
       var elapsed = (now - slideStartTs) / 1000;
       var awake = clamp((openAmt - 0.16) / 0.50, 0, 1);
@@ -1036,7 +1040,7 @@
       var dRotX = dy * 0.0044;
       if (Math.abs(dx) > 0.5) manualDragDir = dx > 0 ? 1 : -1;
       rotY += dRotY;
-      rotX = clamp(rotX + dRotX, -0.22, 0.40);
+      rotX = clamp(rotX + dRotX, -0.20, 0.34);
       velY = clamp(velY * 0.55 + (dRotY / dtDrag) * 0.45, -14, 14);
       velX = clamp(velX * 0.55 + (dRotX / dtDrag) * 0.35, -4, 4);
       dwellElapsed = 0;
@@ -1143,7 +1147,7 @@
 
     if (mbpCue) {
       mbpCue.addEventListener('click', function () {
-        var top = portalStage.getBoundingClientRect().top + window.scrollY - 76;
+        var top = portalStage.getBoundingClientRect().top + window.scrollY - 88;
         window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
       });
     }
@@ -1167,92 +1171,128 @@
       var asp = w / h;
       camera.aspect = asp;
 
-      // Exact Apple-Keynote 16.5° telephoto bounding-box solver!
-      // Projects the true 3D corners of the open MacBook (top bezel + front keyboard lip)
-      // so the lateral edges reach as close as possible to both viewport edges on PC AND mobile
-      // while NEVER clipping the top bezel or during full 360° spins!
-      var openYOff = -0.76;
-      var openRx = 0.05;
+      // Guaranteed Zero-Clip 16.5° Telephoto Bounding-Box Solver!
+      // Projects ALL 16 3D corners of chassis + lid across EVERY lid-open state (0..1),
+      // EVERY 360° rotation angle, AND full manual drag pitch [-0.20..+0.34] + float lift.
+      // Guarantees the MacBook NEVER clips on top, bottom, or sides on ANY PC or mobile screen!
+      var closedLidA = Math.PI / 2 - 0.032;
       var openLidA = -0.18;
       var hingeY = BH - 0.004;
       var hingeZ = -D / 2 + Z_OFF;
 
-      function xformCorner(lx, ly, lz, ry) {
-        var y1 = ly * Math.cos(openRx) - lz * Math.sin(openRx);
-        var z1 = ly * Math.sin(openRx) + lz * Math.cos(openRx);
-        var x2 = lx * Math.cos(ry) + z1 * Math.sin(ry);
-        var z2 = -lx * Math.sin(ry) + z1 * Math.cos(ry);
-        return [x2, y1 + openYOff, z2];
-      }
-      function lidCorner(lx, ly, ry) {
-        var yh = hingeY + ly * Math.cos(openLidA);
-        var zh = hingeZ + ly * Math.sin(openLidA);
-        return xformCorner(lx, yh, zh, ry);
-      }
-      function kbdCorner(lx, lz, ry) {
-        return xformCorner(lx, BH, lz + Z_OFF, ry);
-      }
-      function projNDC(pt, camZ) {
-        var fy = OPEN_LOOK_Y - OPEN_CAM_Y;
-        var fz = -camZ;
-        var fl = Math.hypot(fy, fz);
-        fy /= fl; fz /= fl;
-        var uy = -fz, uz = fy;
-        var dy = pt[1] - OPEN_CAM_Y;
-        var dz = pt[2] - camZ;
-        var depth = dy * fy + dz * fz;
-        var py = dy * uy + dz * uz;
-        return [
-          pt[0] / (depth * TAN_HALF_FOV * asp),
-          py / (depth * TAN_HALF_FOV)
-        ];
+      function rootYForOpen(eVal) {
+        var rem = 1 - eVal;
+        return -0.74 + rem * rem * 0.86;
       }
 
-      var targetMaxW = w <= 640 ? 0.965 : (w <= 1080 ? 0.955 : 0.95);
-      var tlOpen = lidCorner(-W / 2, D, 0);
-      var kfOpen = kbdCorner(W / 2, D / 2, 0);
+      function allWorldCorners(eVal, ry, rxBase, liftY) {
+        var lidA = closedLidA + (openLidA - closedLidA) * eVal;
+        var rx = rxBase + 0.46 * (1 - eVal);
+        var cosX = Math.cos(rx), sinX = Math.sin(rx);
+        var cosY = Math.cos(ry), sinY = Math.sin(ry);
+        var cosL = Math.cos(lidA), sinL = Math.sin(lidA);
+        var rY = rootYForOpen(eVal) + liftY;
+        var pts = [];
 
-      var lo = 5.0, hi = 28.0;
-      for (var it = 0; it < 26; it++) {
-        var mid = (lo + hi) * 0.5;
-        var pTL = projNDC(tlOpen, mid);
-        var pKF = projNDC(kfOpen, mid);
-        if (Math.abs(pKF[0]) <= targetMaxW && pTL[1] <= 0.94 && pKF[1] >= -0.96) {
-          hi = mid;
-        } else {
-          lo = mid;
+        function pushPt(lx, ly, lz) {
+          var y1 = ly * cosX - lz * sinX;
+          var z1 = ly * sinX + lz * cosX;
+          pts.push([lx * cosY + z1 * sinY, y1 + rY, -lx * sinY + z1 * cosY]);
         }
-      }
-      baseCamZ = hi;
 
-      // Exact 360° spin dolly pull-back so no rotating corner ever clips on any aspect ratio!
-      var slo = 0.0, shi = 14.0;
-      for (var sit = 0; sit < 18; sit++) {
-        var sm = (slo + shi) * 0.5;
-        var ok = true;
-        for (var deg = 0; deg < 360; deg += 20) {
-          var rRad = (deg * Math.PI) / 180;
-          var corners = [
-            lidCorner(-W / 2, D, rRad), lidCorner(W / 2, D, rRad),
-            kbdCorner(-W / 2, D / 2, rRad), kbdCorner(W / 2, D / 2, rRad),
-            kbdCorner(-W / 2, -D / 2, rRad), kbdCorner(W / 2, -D / 2, rRad)
-          ];
-          for (var c = 0; c < corners.length; c++) {
-            var sp = projNDC(corners[c], baseCamZ + sm);
-            if (Math.abs(sp[0]) > 0.96 || Math.abs(sp[1]) > 0.96) {
+        var xs = [-W / 2, W / 2];
+        var ysB = [-0.022, BH];
+        var zsB = [-D / 2 + Z_OFF, D / 2 + Z_OFF];
+        for (var ix = 0; ix < 2; ix++) {
+          for (var iy = 0; iy < 2; iy++) {
+            for (var iz = 0; iz < 2; iz++) {
+              pushPt(xs[ix], ysB[iy], zsB[iz]);
+            }
+          }
+        }
+        var ysL = [0, D];
+        var zsL = [-LH / 2 - 0.015, LH / 2 + 0.01];
+        for (var jx = 0; jx < 2; jx++) {
+          for (var jy = 0; jy < 2; jy++) {
+            for (var jz = 0; jz < 2; jz++) {
+              var hy = hingeY + ysL[jy] * cosL - zsL[jz] * sinL;
+              var hz = hingeZ + ysL[jy] * sinL + zsL[jz] * cosL;
+              pushPt(xs[jx], hy, hz);
+            }
+          }
+        }
+        return pts;
+      }
+
+      function minSafeCamZ(eVal, ry, rxBase, liftY, limX, limYTop, limYBot) {
+        var camY = OPEN_CAM_Y + 0.14 * (1 - eVal);
+        var lookY = OPEN_LOOK_Y + 0.08 * (1 - eVal);
+        var pts = allWorldCorners(eVal, ry, rxBase, liftY);
+        var lo = 6.0, hi = 36.0;
+        for (var it = 0; it < 20; it++) {
+          var mid = (lo + hi) * 0.5;
+          var fy = lookY - camY, fz = -mid;
+          var fl = Math.hypot(fy, fz);
+          var fnY = fy / fl, fnZ = fz / fl;
+          var uY = -fnZ, uZ = fnY;
+          var ok = true;
+          for (var p = 0; p < pts.length; p++) {
+            var dy = pts[p][1] - camY;
+            var dz = pts[p][2] - mid;
+            var depth = dy * fnY + dz * fnZ;
+            var nx = pts[p][0] / (depth * TAN_HALF_FOV * asp);
+            var ny = (dy * uY + dz * uZ) / (depth * TAN_HALF_FOV);
+            if (Math.abs(nx) > limX || ny > limYTop || ny < -limYBot) {
               ok = false;
               break;
             }
           }
-          if (!ok) break;
+          if (ok) hi = mid; else lo = mid;
         }
-        if (ok) shi = sm; else slo = sm;
+        return hi;
       }
-      spinDollyAmt = shi;
+
+      // 1) Base resting camZ across full open 0..1 with guaranteed headroom on ALL 4 sides
+      var solvedBase = 8.0;
+      var openSamples = [0, 0.25, 0.5, 0.75, 1.0];
+      var restRx = [0.01, 0.05, 0.09];
+      for (var oi = 0; oi < openSamples.length; oi++) {
+        for (var ri = 0; ri < restRx.length; ri++) {
+          solvedBase = Math.max(solvedBase, minSafeCamZ(openSamples[oi], 0, restRx[ri], 0.024, 0.90, 0.87, 0.88));
+        }
+      }
+      baseCamZ = solvedBase;
+
+      // 2) Exact 360° spin dolly pull-back (keeps every diagonal corner cleanly inside!)
+      var maxSpinZ = baseCamZ;
+      var spinOpens = [0, 0.5, 1.0];
+      for (var so = 0; so < spinOpens.length; so++) {
+        for (var deg = 0; deg < 360; deg += 15) {
+          maxSpinZ = Math.max(maxSpinZ, minSafeCamZ(spinOpens[so], (deg * Math.PI) / 180, 0.05, 0.085, 0.90, 0.88, 0.89));
+        }
+      }
+      spinDollyAmt = Math.max(0, maxSpinZ - baseCamZ);
+
+      // 3) Exact interactive drag/tilt dolly pull-back (never clips even at extreme vertical pitch!)
+      var maxDragZ = maxSpinZ;
+      var dragRx = [-0.20, 0.34];
+      for (var dgi = 0; dgi < spinOpens.length; dgi++) {
+        for (var ddeg = 0; ddeg < 360; ddeg += 30) {
+          for (var drx = 0; drx < dragRx.length; drx++) {
+            maxDragZ = Math.max(maxDragZ, minSafeCamZ(spinOpens[dgi], (ddeg * Math.PI) / 180, dragRx[drx], 0.05, 0.90, 0.88, 0.89));
+          }
+        }
+      }
+      dragDollyAmt = Math.max(spinDollyAmt, maxDragZ - baseCamZ);
       if (curCamZ < 1 || Math.abs(curCamZ - baseCamZ) > 6) curCamZ = baseCamZ;
 
       camera.updateProjectionMatrix();
     }
+
+    var pageVisible = !document.hidden;
+    document.addEventListener('visibilitychange', function () {
+      pageVisible = !document.hidden;
+    });
 
     window.addEventListener('scroll', computeTarget, { passive: true });
     window.addEventListener('resize', function () { computeTarget(); resizeRenderer(); }, { passive: true });
@@ -1278,9 +1318,15 @@
     // Main Silky 60/120fps Delta-Time-Damped 3D Loop
     // -------------------------------------------------------------------------
     var lastTs = 0;
+    function turnEnv(ry) {
+      var s = Math.abs(Math.sin(ry));
+      var b = Math.max(0, (1 - Math.cos(ry)) * 0.5);
+      return clamp(Math.pow(s, 0.36) * 1.18 + b * 0.5, 0, 1);
+    }
+
     function animate(now) {
       requestAnimationFrame(animate);
-      if (!inView && !spinActive && !isDragging) {
+      if (!pageVisible || (!inView && !spinActive && !isDragging)) {
         lastTs = now;
         return;
       }
@@ -1327,7 +1373,7 @@
         rotY = spinStartY + (spinEndY - spinStartY) * easedT;
         var arc = Math.sin(rawT * Math.PI);
         floatLift = 0.08 * arc;
-        wantDolly = spinDollyAmt * arc; // silky camera pull-back during spin so giant corners NEVER clip!
+        wantDolly = spinDollyAmt * Math.max(turnEnv(rotY), arc); // zero-clip diagonal pull-back!
         rotX = damp(rotX, 0.05, 5.0, dtSec);
 
         if (rawT >= 0.26 && !spinPillsDimmed) {
@@ -1349,7 +1395,8 @@
           if (mbpSpinBtn) mbpSpinBtn.classList.remove('is-spinning');
         }
       } else if (isDragging) {
-        wantDolly = spinDollyAmt * 0.92;
+        var dragTiltAmt = clamp(Math.abs(rotX - 0.05) / 0.22, 0, 1);
+        wantDolly = Math.max(spinDollyAmt * turnEnv(rotY), dragDollyAmt * Math.max(dragTiltAmt, 0.72));
         var facingBack = Math.cos(rotY) < -0.68;
         if (facingBack && !manualBackCrossed && currentOpen > 0.65) {
           manualBackCrossed = true;
@@ -1362,10 +1409,11 @@
         // Silky frame-rate-independent rotational inertia after finger/mouse flick!
         if (Math.abs(velY) > 0.025 || Math.abs(velX) > 0.02) {
           rotY += velY * dtSec;
-          rotX = clamp(rotX + velX * dtSec, -0.22, 0.40);
+          rotX = clamp(rotX + velX * dtSec, -0.20, 0.34);
           velY *= Math.pow(0.052, dtSec);
           velX *= Math.pow(0.018, dtSec);
-          wantDolly = spinDollyAmt * clamp(Math.abs(Math.sin(rotY)) + (Math.cos(rotY) < 0 ? 1 : 0), 0, 1);
+          var flickTilt = clamp(Math.abs(rotX - 0.05) / 0.22, 0, 1);
+          wantDolly = Math.max(spinDollyAmt * turnEnv(rotY), dragDollyAmt * flickTilt);
 
           var inertiaBack = Math.cos(rotY) < -0.68;
           if (inertiaBack && !manualBackCrossed && currentOpen > 0.65) {
@@ -1378,9 +1426,9 @@
         } else {
           velY = 0; velX = 0;
           rotX = damp(rotX, 0.05, 4.2, dtSec);
-          // Also keep safe dolly zoom if user left the laptop parked sideways/backwards!
-          var turnedFactor = clamp(1 - Math.cos(rotY), 0, 1);
-          wantDolly = spinDollyAmt * turnedFactor * 0.85;
+          // Keep safe zero-clip dolly if user left the laptop parked sideways/backwards or tilted!
+          var parkedTilt = clamp(Math.abs(rotX - 0.05) / 0.22, 0, 1);
+          wantDolly = Math.max(spinDollyAmt * turnEnv(rotY), dragDollyAmt * parkedTilt);
 
           if (!reduced && inView && currentOpen > 0.84 && !isHoverSwitcher) {
             var dwellMs = SHOWCASE[activeIdx].dwell;
@@ -1395,24 +1443,25 @@
         }
       }
 
-      // Smoothly damp camera studio dolly & viewing height (Apple-Keynote 16.5° telephoto framing!)
-      curCamZ = damp(curCamZ, baseCamZ + wantDolly, 5.8, dtSec);
+      // Snappy zero-clip studio dolly & viewing height (pulls back fast before corners approach edge!)
+      curCamZ = damp(curCamZ, baseCamZ + wantDolly, 11.5, dtSec);
       var targetLookY = OPEN_LOOK_Y + 0.08 * (1 - e);
-      curLookY = damp(curLookY, targetLookY, 5.5, dtSec);
+      curLookY = damp(curLookY, targetLookY, 7.5, dtSec);
       camera.position.set(0, OPEN_CAM_Y + 0.14 * (1 - e), curCamZ);
       camera.lookAt(0, curLookY, 0);
 
       var orbitAmt = clamp((e - 0.65) / 0.35, 0, 1);
-      var idleBob = reduced ? 0 : Math.sin(now * 0.0016) * 0.022 * orbitAmt;
-      laptopRoot.rotation.y = rotY + (isDragging ? 0 : curHX * 0.075 * orbitAmt);
-      laptopRoot.rotation.x = rotX + closedPitchOffset + (isDragging ? 0 : -curHY * 0.04 * orbitAmt);
-      laptopRoot.position.y = -0.76 + (1 - e) * 1.18 + floatLift + idleBob;
+      var idleBob = reduced ? 0 : Math.sin(now * 0.0016) * 0.020 * orbitAmt;
+      laptopRoot.rotation.y = rotY + (isDragging ? 0 : curHX * 0.070 * orbitAmt);
+      laptopRoot.rotation.x = rotX + closedPitchOffset + (isDragging ? 0 : -curHY * 0.036 * orbitAmt);
+      var remOpen = 1 - e;
+      laptopRoot.position.y = -0.74 + remOpen * remOpen * 0.86 + floatLift + idleBob;
 
       shadowPlane.material.opacity = clamp((0.52 + 0.24 * e) - floatLift * 1.4, 0.30, 0.80);
       var shScale = 1 - floatLift * 0.45;
       shadowPlane.scale.set(shScale, shScale, 1);
 
-      paintScreen(now, e);
+      paintScreen(now, e, Math.cos(rotY) > -0.38);
 
       var uiRise = clamp((e - 0.42) / 0.50, 0, 1);
       if (mbpDragHint) {
