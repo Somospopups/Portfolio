@@ -1,0 +1,2012 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi-Tienda · 6 vidrieras reales, un solo panel — POPUPS</title>
+  <meta name="description" content="Tienda online con 6 vidrieras reales (Tech, Boutique, Actitud, Ofertas, Gamer y Libre) y un solo panel en tiempo real: stock, mayorista, lista de precios PDF, Mercado Pago directo (0% comisión) y Uber Direct.">
+  <meta name="theme-color" content="#141512">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mi-Tienda · 6 vidrieras reales, un solo panel — POPUPS">
+  <meta property="og:description" content="Elegís la estética que mejor vende tu rubro y operás todo desde un mismo panel con Mercado Pago directo (0% comisión POPUPS) y Uber Direct.">
+  <meta property="og:image" content="assets/og-preview.jpg">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <style>
+    /* ============== 100% SELF-HOSTED LOCAL FONTS ============== */
+    @font-face {
+      font-family: 'Fraunces';
+      src: url('assets/fraunces600.woff2') format('woff2');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Fraunces';
+      src: url('assets/fraunces600i.woff2') format('woff2');
+      font-weight: 600; font-style: italic; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Fraunces';
+      src: url('assets/fraunces700.woff2') format('woff2');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Space Grotesk';
+      src: url('assets/spacegrotesk.woff2') format('woff2');
+      font-weight: 400 700; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('assets/dmsans.woff2') format('woff2');
+      font-weight: 400 700; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Space Mono';
+      src: url('assets/spacemono400.woff2') format('woff2');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Space Mono';
+      src: url('assets/spacemono700.woff2') format('woff2');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'ActSink';
+      src: url('assets/sink.ttf') format('truetype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'ActDodger';
+      src: url('assets/dodger.ttf') format('truetype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+
+    /* ============== DESIGN TOKENS ============== */
+    :root {
+      --paper: #f7f3ec;
+      --paper-2: #efe9de;
+      --white: #fcfaf6;
+      --ink: #171815;
+      --ink-soft: #595b54;
+      --line: rgba(23, 24, 21, 0.12);
+      --dark: #0e100f;
+      --dark-2: #151816;
+      --dark-card: #1a1e1c;
+      --dark-line: rgba(255, 255, 255, 0.11);
+      --dark-ink: #f5f2eb;
+      --dark-muted: rgba(245, 242, 235, 0.68);
+      --coral: #d9633c;
+      --coral-hi: #eb764f;
+      --coral-soft: rgba(217, 99, 60, 0.12);
+      --emerald: #1f8a57;
+      --emerald-hi: #34d399;
+      --emerald-soft: rgba(52, 211, 153, 0.14);
+      --radius-lg: 26px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --font-serif: 'Fraunces', Georgia, serif;
+      --font-display: 'Space Grotesk', 'DM Sans', sans-serif;
+      --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Space Mono', ui-monospace, monospace;
+      --ease: cubic-bezier(.22, 1, .36, 1);
+      --max: 1240px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+    .wrap { width: min(var(--max), 92vw); margin-inline: auto; }
+
+    /* ============== STICKY TOP BAR ============== */
+    .topbar {
+      position: sticky; top: 0; z-index: 60;
+      background: rgba(247, 243, 236, 0.86);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; min-height: 68px; padding: 10px 0;
+    }
+    .brand-crumbs {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      font-size: 13px;
+    }
+    .back-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 13px; border-radius: 999px;
+      border: 1px solid var(--line); background: var(--white);
+      font-weight: 600; transition: transform .2s var(--ease), border-color .2s;
+    }
+    .back-pill:hover { transform: translateX(-2px); border-color: var(--ink); }
+    .case-badge {
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: .09em;
+      text-transform: uppercase; color: var(--coral); font-weight: 700;
+      padding: 6px 10px; border-radius: 999px; background: var(--coral-soft);
+    }
+    .top-nav {
+      display: flex; align-items: center; gap: 22px;
+      font-size: 14px; font-weight: 500; color: var(--ink-soft);
+    }
+    .top-nav a { transition: color .2s; }
+    .top-nav a:hover { color: var(--ink); }
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+
+    /* ============== BUTTONS ============== */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 20px; border-radius: 999px;
+      font-size: 14px; font-weight: 700; letter-spacing: -.01em;
+      transition: transform .22s var(--ease), background .22s, box-shadow .22s, border-color .22s;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-coral {
+      background: var(--coral); color: #fff;
+      box-shadow: 0 10px 26px rgba(217, 99, 60, 0.28);
+    }
+    .btn-coral:hover { background: var(--coral-hi); box-shadow: 0 14px 32px rgba(217, 99, 60, 0.38); }
+    .btn-dark { background: var(--ink); color: var(--white); }
+    .btn-dark:hover { background: #2c2e28; }
+    .btn-ghost {
+      border: 1px solid var(--line); background: var(--white); color: var(--ink);
+    }
+    .btn-ghost:hover { border-color: var(--ink); }
+    .btn-light { background: var(--white); color: var(--ink); }
+    .btn-light:hover { background: #fff; }
+    .btn-outline-dark {
+      border: 1px solid rgba(255,255,255,.22); color: var(--dark-ink);
+      background: rgba(255,255,255,.04);
+    }
+    .btn-outline-dark:hover { border-color: rgba(255,255,255,.55); background: rgba(255,255,255,.1); }
+    .btn-sm { padding: 9px 15px; font-size: 13px; }
+
+    /* ============== HERO ============== */
+    .hero {
+      padding: clamp(46px, 6.5vw, 88px) 0 clamp(44px, 5vw, 72px);
+      position: relative;
+      background:
+        radial-gradient(640px 420px at 90% 8%, rgba(217, 99, 60, 0.13), transparent 70%),
+        radial-gradient(520px 360px at 8% 85%, rgba(31, 138, 87, 0.09), transparent 70%),
+        var(--paper);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+      gap: clamp(28px, 4.5vw, 60px);
+      align-items: center;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 7px 14px; border-radius: 999px;
+      background: var(--white); border: 1px solid var(--line);
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--ink); font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .eyebrow .dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--emerald);
+      box-shadow: 0 0 0 4px rgba(31, 138, 87, 0.2);
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 5.2vw, 64px);
+      line-height: 1.03; letter-spacing: -.035em; font-weight: 700;
+      color: var(--ink); margin-bottom: 20px;
+    }
+    .hero h1 em {
+      font-family: var(--font-serif); font-style: italic; font-weight: 600;
+      color: var(--coral); letter-spacing: -.02em;
+    }
+    .hero-lead {
+      font-size: clamp(16px, 1.6vw, 19px); color: var(--ink-soft);
+      max-width: 56ch; margin-bottom: 28px;
+    }
+    .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+    .hero-swatches {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+      font-size: 12px; color: var(--ink-soft);
+    }
+    .hero-swatches > span {
+      font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+      letter-spacing: .06em; margin-right: 4px;
+    }
+    .swatch-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 11px; border-radius: 999px;
+      background: var(--white); border: 1px solid var(--line);
+      font-size: 12px; font-weight: 600; color: var(--ink);
+      transition: transform .2s var(--ease), border-color .2s;
+    }
+    .swatch-chip:hover { transform: translateY(-2px); border-color: var(--coral); }
+    .swatch-chip i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+    /* Hero Layered Stage */
+    .hero-stage {
+      position: relative;
+      background: var(--dark);
+      border-radius: 28px;
+      padding: 20px 20px 26px;
+      box-shadow: 0 32px 76px rgba(23, 24, 21, 0.22);
+      border: 1px solid rgba(255,255,255,.08);
+      overflow: hidden;
+    }
+    .hero-stage::before {
+      content: ""; position: absolute; inset: -40% -20% auto auto;
+      width: 340px; height: 340px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(217,99,60,.34), transparent 70%);
+      pointer-events: none;
+    }
+    .hero-stage-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; margin-bottom: 14px; position: relative; z-index: 2;
+    }
+    .win-dots { display: flex; gap: 6px; }
+    .win-dots i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.22); }
+    .win-dots i:first-child { background: #ef6c57; }
+    .win-dots i:nth-child(2) { background: #eab308; }
+    .win-dots i:nth-child(3) { background: #34d399; }
+    .stage-pill {
+      font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,.8);
+      padding: 5px 11px; border-radius: 999px;
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+    }
+    .hero-shots {
+      position: relative; min-height: 360px; z-index: 2;
+    }
+    .hero-shot-main {
+      width: 86%; border-radius: 16px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 22px 50px rgba(0,0,0,.45);
+    }
+    .hero-shot-panel {
+      position: absolute; right: 0; bottom: -4px; width: 66%;
+      border-radius: 14px; overflow: hidden;
+      border: 2px solid rgba(247, 243, 236, 0.9);
+      box-shadow: 0 24px 54px rgba(0,0,0,.55);
+      transition: transform .4s var(--ease);
+    }
+    .hero-stage:hover .hero-shot-panel { transform: translate(-4px, -6px); }
+    .hero-float-badge {
+      position: absolute; left: 10px; bottom: 12px; z-index: 4;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 14px; border-radius: 14px;
+      background: rgba(20, 22, 20, 0.92); backdrop-filter: blur(12px);
+      border: 1px solid rgba(52, 211, 153, 0.35); color: #fff;
+      font-size: 12px; font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0,0,0,.4);
+    }
+    .hero-float-badge b { color: var(--emerald-hi); }
+
+    /* Hero KPI Strip */
+    .kpi-strip {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px; margin-top: clamp(32px, 4vw, 48px);
+    }
+    .kpi-card {
+      background: var(--white); border: 1px solid var(--line);
+      border-radius: var(--radius-md); padding: 18px 20px;
+    }
+    .kpi-val {
+      font-family: var(--font-display); font-size: clamp(24px, 2.8vw, 34px);
+      font-weight: 700; letter-spacing: -.03em; line-height: 1.05;
+      color: var(--ink); margin-bottom: 4px;
+    }
+    .kpi-val.accent { color: var(--coral); }
+    .kpi-val.green { color: var(--emerald); }
+    .kpi-lbl { font-size: 13px; color: var(--ink-soft); }
+
+    /* ============== SECTION HEADERS ============== */
+    .sec-head {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 24px; flex-wrap: wrap; margin-bottom: clamp(28px, 3.6vw, 44px);
+    }
+    .sec-kicker {
+      display: inline-block; font-family: var(--font-mono);
+      font-size: 11px; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--coral); margin-bottom: 10px;
+    }
+    .sec-title {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.06; letter-spacing: -.03em; font-weight: 700;
+      max-width: 20ch;
+    }
+    .sec-title em {
+      font-family: var(--font-serif); font-style: italic; font-weight: 600;
+      color: var(--coral);
+    }
+    .sec-sub {
+      max-width: 48ch; font-size: 16px; color: var(--ink-soft);
+    }
+
+    /* ============== DARK INTERACTIVE 6-STOREFRONT SHOWROOM ============== */
+    .showroom-sec {
+      background:
+        radial-gradient(760px 500px at 14% 0%, rgba(217, 99, 60, 0.14), transparent 70%),
+        radial-gradient(640px 460px at 88% 95%, rgba(52, 211, 153, 0.10), transparent 70%),
+        var(--dark);
+      color: var(--dark-ink);
+      padding: clamp(64px, 7.5vw, 108px) 0;
+      border-top: 1px solid rgba(255,255,255,.06);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .showroom-sec .sec-sub { color: var(--dark-muted); }
+
+    /* 6 Storefront Tabs */
+    .front-tabs {
+      display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px; margin-bottom: 26px;
+    }
+    .front-tab {
+      text-align: left; padding: 14px 14px 13px; border-radius: 16px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--dark-line);
+      transition: transform .22s var(--ease), border-color .22s, background .22s, box-shadow .22s;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .front-tab:hover {
+      background: rgba(255,255,255,.08); transform: translateY(-2px);
+      border-color: rgba(255,255,255,.26);
+    }
+    .front-tab.is-active {
+      background: rgba(255,255,255,.11);
+      border-color: var(--tab-accent, var(--coral));
+      box-shadow: 0 0 0 1px var(--tab-accent, var(--coral)), 0 14px 34px rgba(0,0,0,.35);
+    }
+    .ft-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .ft-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.4); flex-shrink: 0;
+    }
+    .ft-num {
+      font-family: var(--font-mono); font-size: 10px; color: var(--dark-muted);
+    }
+    .ft-name {
+      font-family: var(--font-display); font-size: 16px; font-weight: 700;
+      color: var(--dark-ink); line-height: 1.15;
+    }
+    .ft-tag { font-size: 12px; color: var(--dark-muted); line-height: 1.25; }
+
+    /* Main Showroom Stage Grid */
+    .showroom-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.48fr) minmax(0, 0.82fr);
+      gap: 24px; align-items: stretch;
+    }
+
+    /* Interactive Browser Frame */
+    .browser-shell {
+      background: #171a1c;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 24px; overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 28px 70px rgba(0,0,0,.45);
+    }
+    .browser-chrome {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 12px 16px;
+      background: #111315; border-bottom: 1px solid rgba(255,255,255,.09);
+      flex-wrap: wrap;
+    }
+    .browser-url {
+      flex: 1; min-width: 190px;
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border-radius: 999px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08);
+      font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,.82);
+      overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+    }
+    .browser-url .lock { color: var(--emerald-hi); }
+    .vp-toggle {
+      display: inline-flex; padding: 3px; border-radius: 999px;
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+      gap: 2px;
+    }
+    .vp-btn {
+      padding: 5px 11px; border-radius: 999px;
+      font-family: var(--font-mono); font-size: 11px; color: var(--dark-muted);
+      transition: background .2s, color .2s;
+    }
+    .vp-btn.is-active { background: var(--white); color: var(--ink); font-weight: 700; }
+
+    .browser-canvas-wrap {
+      flex: 1; padding: 18px;
+      background: radial-gradient(circle at 50% 0%, rgba(255,255,255,.05), transparent 65%), #0c0e10;
+      display: flex; align-items: stretch; justify-content: center;
+      min-height: 490px;
+    }
+    .browser-viewport {
+      width: 100%; border-radius: 16px; overflow: hidden;
+      transition: max-width .38s var(--ease), border-radius .38s var(--ease);
+      box-shadow: 0 20px 50px rgba(0,0,0,.45);
+      border: 1px solid rgba(255,255,255,.1);
+      position: relative;
+    }
+    .browser-viewport.is-mobile {
+      max-width: 344px; border-radius: 30px;
+      border: 6px solid #26292c;
+    }
+
+    /* Individual Storefront Mockup Panels */
+    .sf-panel { display: none; min-height: 454px; height: 100%; }
+    .sf-panel.is-active { display: flex; flex-direction: column; animation: fadeRise .34s var(--ease); }
+    @keyframes fadeRise {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- 1. TECH STOREFRONT (#B2DBF1 celeste moderno) --- */
+    .sf-tech {
+      background: #B2DBF1; color: #333333; font-family: var(--font-sans);
+    }
+    .sf-tech-head {
+      background: rgba(178, 219, 241, 0.94); border-bottom: 1px solid rgba(51,51,51,.14);
+      padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .sf-tech-brand {
+      display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14px;
+      letter-spacing: -.02em;
+    }
+    .sf-tech-brand span {
+      width: 22px; height: 28px; border-radius: 6px; border: 2.5px solid #333;
+      display: inline-block; position: relative;
+    }
+    .sf-tech-cats {
+      display: flex; gap: 6px; padding: 10px 18px; overflow-x: auto;
+      border-bottom: 1px solid rgba(51,51,51,.1);
+    }
+    .sf-tech-cat {
+      padding: 6px 12px; border-radius: 10px; background: rgba(255,255,255,.62);
+      font-size: 11px; font-weight: 700; white-space: nowrap; color: #333;
+    }
+    .sf-tech-cat.on { background: #333; color: #fff; }
+    .sf-tech-hero {
+      padding: 18px; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 14px;
+      align-items: center; flex: 1;
+    }
+    .browser-viewport.is-mobile .sf-tech-hero { grid-template-columns: 1fr; }
+    .sf-tech-card {
+      background: rgba(255,255,255,.78); border-radius: 16px; padding: 18px;
+      border: 1px solid rgba(51,51,51,.1);
+    }
+    .sf-tech-card small {
+      font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+      letter-spacing: .1em; color: #52626d; display: block; margin-bottom: 6px;
+    }
+    .sf-tech-card h4 { font-family: var(--font-display); font-size: 24px; line-height: 1.08; margin-bottom: 8px; }
+    .sf-tech-card p { font-size: 12.5px; color: #4c5a63; margin-bottom: 14px; }
+    .sf-tech-btn {
+      display: inline-flex; padding: 8px 14px; border-radius: 999px;
+      background: #333; color: #fff; font-size: 11.5px; font-weight: 700;
+    }
+    .sf-tech-prods {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+    }
+    .sf-tech-prod {
+      background: #fff; border-radius: 14px; padding: 12px;
+      border: 1px solid rgba(51,51,51,.09); display: flex; flex-direction: column; gap: 8px;
+    }
+    .sf-tech-prod img { height: 78px; object-fit: contain; margin-inline: auto; }
+    .sf-tech-prod b { font-size: 12px; line-height: 1.2; }
+    .sf-tech-prod span { font-family: var(--font-mono); font-size: 11px; color: #1d8a55; font-weight: 700; }
+    .sf-tech-foot {
+      background: #333; color: #fff; padding: 10px 18px;
+      display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+      font-size: 11px; font-family: var(--font-mono);
+    }
+
+    /* --- 2. LUMA STOREFRONT (Boutique Editorial — real screenshot + live overlay) --- */
+    .sf-luma { background: #f4efe6; color: #20221e; }
+    .sf-luma-shot {
+      position: relative; flex: 1; display: flex; flex-direction: column; justify-content: space-between;
+      padding: 16px;
+    }
+    .sf-luma-img {
+      border-radius: 14px; overflow: hidden; border: 1px solid rgba(32,34,30,.12);
+      box-shadow: 0 14px 36px rgba(32,34,30,.12);
+    }
+    .sf-luma-strip {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px;
+    }
+    .browser-viewport.is-mobile .sf-luma-strip { grid-template-columns: 1fr; }
+    .sf-luma-pill {
+      background: #fcfaf6; border: 1px solid rgba(32,34,30,.12);
+      border-radius: 12px; padding: 10px 12px;
+    }
+    .sf-luma-pill small { display: block; font-size: 10px; color: #d9633c; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+    .sf-luma-pill b { font-family: var(--font-serif); font-size: 14px; }
+
+    /* --- 3. ACTITUD STOREFRONT (Coral #e3a898 + Sink/DodgerInky + real product webps) --- */
+    .sf-actitud { background: #e3a898; color: #2d2a26; }
+    .sf-act-ticker {
+      background: #2d2a26; color: #efc415; padding: 7px 14px;
+      font-family: 'ActSink', var(--font-display); font-size: 11px; letter-spacing: .08em;
+      white-space: nowrap; overflow: hidden; text-align: center;
+    }
+    .sf-act-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 18px; border-bottom: 2px solid #2d2a26;
+    }
+    .sf-act-logo {
+      font-family: 'ActSink', var(--font-display); font-size: 19px; letter-spacing: .02em;
+    }
+    .sf-act-badge {
+      background: #efc415; color: #2d2a26; padding: 4px 10px; border-radius: 999px;
+      font-weight: 800; font-size: 11px; border: 1.5px solid #2d2a26;
+    }
+    .sf-act-body { padding: 16px 18px; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+    .sf-act-hero {
+      background: #f4f0eb; border: 2px solid #2d2a26; border-radius: 12px;
+      padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      box-shadow: 4px 4px 0 #2d2a26;
+    }
+    .sf-act-hero h4 {
+      font-family: 'ActSink', var(--font-display); font-size: 24px; line-height: 1.02; color: #2d2a26;
+    }
+    .sf-act-hero span {
+      font-family: 'ActDodger', var(--font-sans); font-size: 13px; color: #d32929; display: block; margin-bottom: 2px;
+    }
+    .sf-act-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; flex: 1;
+    }
+    .browser-viewport.is-mobile .sf-act-grid { grid-template-columns: repeat(2, 1fr); }
+    .sf-act-card {
+      background: #f4f0eb; border: 2px solid #2d2a26; border-radius: 10px;
+      padding: 10px 8px; display: flex; flex-direction: column; justify-content: space-between;
+      box-shadow: 3px 3px 0 #2d2a26;
+    }
+    .sf-act-card img { height: 64px; object-fit: contain; margin-inline: auto; margin-bottom: 6px; }
+    .sf-act-card b { font-size: 11px; line-height: 1.15; display: block; }
+    .sf-act-card small {
+      display: inline-block; margin-top: 4px; background: #efc415;
+      padding: 2px 6px; border-radius: 4px; font-weight: 800; font-size: 10.5px;
+    }
+    .sf-act-more {
+      background: #2d2a26; color: #f4f0eb; text-align: center; padding: 9px;
+      border-radius: 10px; font-family: 'ActSink', var(--font-display); font-size: 12px; letter-spacing: .06em;
+    }
+
+    /* --- 4. OFERTAS STOREFRONT (Navy #161a2e -> #2e3766 + Terracotta promos) --- */
+    .sf-ofertas { background: #f3f5fa; color: #161a2e; }
+    .sf-ofr-hero {
+      margin: 14px 16px 10px; border-radius: 18px; padding: 20px 22px; color: #fff;
+      background: linear-gradient(120deg, #161a2e 0%, #232a4d 55%, #2e3766 100%);
+      position: relative; overflow: hidden;
+    }
+    .sf-ofr-hero::after {
+      content: ""; position: absolute; right: -40px; bottom: -60px; width: 190px; height: 190px;
+      border-radius: 50%; background: radial-gradient(circle, rgba(217,99,60,.52), transparent 70%);
+    }
+    .sf-ofr-flag {
+      display: inline-block; background: #d9633c; color: #fff; font-size: 10px;
+      font-weight: 800; letter-spacing: .12em; padding: 5px 11px; border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .sf-ofr-hero h4 { font-family: var(--font-display); font-size: 25px; line-height: 1.08; margin-bottom: 6px; position: relative; z-index: 2; }
+    .sf-ofr-hero p { font-size: 12.5px; color: rgba(255,255,255,.8); max-width: 44ch; position: relative; z-index: 2; }
+    .sf-ofr-benefits {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 16px 10px;
+    }
+    .browser-viewport.is-mobile .sf-ofr-benefits { grid-template-columns: 1fr; }
+    .sf-ofr-ben {
+      background: #fff; border: 1px solid rgba(22,26,46,.1); border-radius: 11px;
+      padding: 9px 11px; font-size: 11px;
+    }
+    .sf-ofr-ben b { display: block; color: #161a2e; }
+    .sf-ofr-ben span { color: #5b627a; }
+    .sf-ofr-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 16px 16px; flex: 1;
+    }
+    .browser-viewport.is-mobile .sf-ofr-grid { grid-template-columns: 1fr; }
+    .sf-ofr-card {
+      background: #fff; border-radius: 13px; padding: 12px; border: 1px solid rgba(22,26,46,.1);
+      position: relative; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .sf-ofr-off {
+      position: absolute; top: 9px; right: 9px; background: #1f8a57; color: #fff;
+      font-size: 10px; font-weight: 800; padding: 3px 7px; border-radius: 6px;
+    }
+    .sf-ofr-card img { height: 70px; object-fit: contain; margin: 4px auto 8px; }
+    .sf-ofr-card b { font-size: 12px; display: block; }
+    .sf-ofr-card s { font-size: 10.5px; color: #8c93a8; margin-right: 6px; }
+    .sf-ofr-card strong { color: #d9633c; font-family: var(--font-mono); font-size: 12px; }
+
+    /* --- 5. GAMER STOREFRONT (Dark #0b0e14 hardware) --- */
+    .sf-gamer { background: #0b0e14; color: #eef2f9; }
+    .sf-gmr-bar {
+      background: linear-gradient(90deg, #a64026, #d9633c);
+      padding: 6px 14px; font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: .1em; text-align: center; font-weight: 700;
+    }
+    .sf-gmr-hero {
+      margin: 14px 16px 10px; padding: 20px; border-radius: 16px;
+      background: radial-gradient(circle at 88% 20%, rgba(217,99,60,.28), transparent 55%), #131926;
+      border: 1px solid rgba(148,163,184,.18);
+    }
+    .sf-gmr-flag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--font-mono); font-size: 10px; color: #ff8c66;
+      letter-spacing: .14em; margin-bottom: 8px;
+    }
+    .sf-gmr-flag i { width: 7px; height: 7px; border-radius: 50%; background: #ff8c66; }
+    .sf-gmr-hero h4 { font-family: var(--font-display); font-size: 27px; letter-spacing: -.02em; margin-bottom: 6px; }
+    .sf-gmr-hero p { font-size: 12.5px; color: #94a1b8; max-width: 44ch; }
+    .sf-gmr-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 16px 16px; flex: 1;
+    }
+    .browser-viewport.is-mobile .sf-gmr-grid { grid-template-columns: 1fr; }
+    .sf-gmr-card {
+      background: #131926; border: 1px solid rgba(148,163,184,.18); border-radius: 14px;
+      padding: 13px; display: flex; align-items: center; gap: 12px;
+    }
+    .sf-gmr-card img { width: 92px; height: 68px; object-fit: contain; flex-shrink: 0; }
+    .sf-gmr-card small { font-family: var(--font-mono); font-size: 10px; color: #34d399; display: block; }
+    .sf-gmr-card b { font-size: 13px; display: block; margin: 2px 0 4px; }
+    .sf-gmr-card span { font-family: var(--font-mono); font-size: 12px; color: #ff8c66; font-weight: 700; }
+
+    /* --- 6. LIBRE STOREFRONT (Constructor modular estilo Google Sites) --- */
+    .sf-libre { background: #faf8f4; color: #1b1d19; }
+    .sf-lib-bar {
+      background: #1b1d19; color: #fff; padding: 10px 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      font-size: 11px; font-family: var(--font-mono);
+    }
+    .sf-lib-pill {
+      background: #34d399; color: #0b1912; padding: 3px 9px; border-radius: 999px; font-weight: 700;
+    }
+    .sf-lib-canvas { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+    .sf-lib-block {
+      border: 1.5px dashed rgba(31, 138, 87, 0.5); border-radius: 14px;
+      background: #fff; padding: 14px 16px; position: relative;
+    }
+    .sf-lib-tag {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      margin-bottom: 8px; font-family: var(--font-mono); font-size: 10px; color: #1f8a57;
+    }
+    .sf-lib-tools { display: flex; gap: 5px; }
+    .sf-lib-tools span {
+      padding: 2px 7px; border-radius: 6px; background: rgba(31,138,87,.12);
+      color: #15623d; font-weight: 700;
+    }
+    .sf-lib-hero-in {
+      background: linear-gradient(125deg, #20221e, #363a31); color: #fcfaf6;
+      border-radius: 10px; padding: 16px;
+    }
+    .sf-lib-hero-in h4 { font-family: var(--font-serif); font-size: 21px; margin-bottom: 4px; }
+    .sf-lib-hero-in p { font-size: 12px; color: rgba(252,250,246,.76); }
+    .sf-lib-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .browser-viewport.is-mobile .sf-lib-cols { grid-template-columns: 1fr; }
+    .sf-lib-mini {
+      background: #f4efe6; border-radius: 9px; padding: 10px; font-size: 11.5px;
+    }
+    .sf-lib-mini b { display: block; margin-bottom: 2px; }
+    .sf-lib-add {
+      border: 1.5px dashed rgba(23,24,21,.22); border-radius: 12px;
+      padding: 10px; text-align: center; font-family: var(--font-mono);
+      font-size: 11px; color: #595b54;
+    }
+
+    /* Spec Card (Right Side of Showroom) */
+    .spec-card {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-line);
+      border-radius: 24px; padding: 26px;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 20px;
+    }
+    .spec-kicker {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--coral-hi); margin-bottom: 8px;
+    }
+    .spec-title {
+      font-family: var(--font-display); font-size: 28px; line-height: 1.1;
+      font-weight: 700; margin-bottom: 10px;
+    }
+    .spec-desc { font-size: 14.5px; color: var(--dark-muted); margin-bottom: 16px; }
+    .spec-ideal {
+      background: rgba(255,255,255,.04); border: 1px solid var(--dark-line);
+      border-radius: 14px; padding: 13px 15px; margin-bottom: 16px;
+    }
+    .spec-ideal small {
+      display: block; font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: .1em; text-transform: uppercase; color: var(--emerald-hi); margin-bottom: 4px;
+    }
+    .spec-ideal p { font-size: 13.5px; color: var(--dark-ink); font-weight: 500; }
+    .spec-list { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 16px; }
+    .spec-list li {
+      display: flex; align-items: flex-start; gap: 9px;
+      font-size: 13.5px; color: rgba(245,242,235,.86);
+    }
+    .spec-list li::before {
+      content: "✓"; color: var(--emerald-hi); font-weight: 800; flex-shrink: 0;
+    }
+    .spec-palette {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .spec-palette span {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 10px; border-radius: 999px;
+      background: rgba(255,255,255,.06); border: 1px solid var(--dark-line);
+      font-family: var(--font-mono); font-size: 11px; color: var(--dark-muted);
+    }
+    .spec-palette i { width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(255,255,255,.35); }
+    .spec-actions { display: flex; flex-direction: column; gap: 10px; }
+    .spec-actions .btn { width: 100%; }
+
+    /* Quick 6-Card Comparison Strip below Showroom */
+    .compare-strip {
+      margin-top: 28px;
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .cmp-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--dark-line);
+      border-radius: 18px; padding: 16px 18px;
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      transition: transform .22s var(--ease), border-color .22s, background .22s;
+      text-align: left;
+    }
+    .cmp-card:hover {
+      transform: translateY(-2px); background: rgba(255,255,255,.07);
+      border-color: rgba(255,255,255,.28);
+    }
+    .cmp-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .cmp-swatch {
+      width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,.2);
+    }
+    .cmp-card h4 { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--dark-ink); }
+    .cmp-card p { font-size: 12.5px; color: var(--dark-muted); }
+    .cmp-link {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      color: var(--coral-hi); white-space: nowrap;
+      padding: 6px 10px; border-radius: 999px; background: rgba(217,99,60,.14);
+    }
+
+    /* ============== REAL ADMIN PANEL TOUR ============== */
+    .panel-sec {
+      padding: clamp(64px, 7.5vw, 108px) 0;
+      background: var(--paper);
+    }
+    .panel-tabs {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px;
+    }
+    .panel-tab {
+      padding: 11px 18px; border-radius: 999px;
+      background: var(--white); border: 1px solid var(--line);
+      font-size: 14px; font-weight: 600; color: var(--ink-soft);
+      transition: all .22s var(--ease);
+    }
+    .panel-tab:hover { border-color: var(--ink); color: var(--ink); }
+    .panel-tab.is-active {
+      background: var(--ink); color: var(--white); border-color: var(--ink);
+    }
+    .panel-showcase {
+      display: grid; grid-template-columns: minmax(0, 1.38fr) minmax(0, 0.72fr);
+      gap: 24px; align-items: center;
+      background: var(--white); border: 1px solid var(--line);
+      border-radius: 26px; padding: clamp(18px, 2.5vw, 28px);
+      box-shadow: 0 22px 54px rgba(23, 24, 21, 0.08);
+    }
+    .panel-frame {
+      border-radius: 16px; overflow: hidden;
+      border: 1px solid var(--line); background: #1a1b18;
+      box-shadow: 0 18px 40px rgba(23, 24, 21, 0.14);
+    }
+    .panel-frame img { width: 100%; height: auto; }
+    .panel-info { padding: 8px 6px; }
+    .panel-info .sec-kicker { margin-bottom: 8px; }
+    .panel-info h3 {
+      font-family: var(--font-display); font-size: clamp(24px, 2.6vw, 32px);
+      line-height: 1.1; letter-spacing: -.025em; margin-bottom: 12px;
+    }
+    .panel-info p { font-size: 15px; color: var(--ink-soft); margin-bottom: 18px; }
+    .panel-bullets { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .panel-bullets li {
+      display: flex; gap: 10px; font-size: 14px; color: var(--ink);
+      padding: 10px 12px; border-radius: 12px; background: var(--paper);
+      border: 1px solid var(--line);
+    }
+    .panel-bullets li b { color: var(--emerald); }
+
+    /* ============== OPERATIONS & INTEGRATIONS BENTO ============== */
+    .ops-sec {
+      padding: clamp(56px, 6.5vw, 96px) 0;
+      background: var(--paper-2);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .ops-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .ops-card {
+      background: var(--white); border: 1px solid var(--line);
+      border-radius: 22px; padding: 24px;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 14px;
+    }
+    .ops-card.featured {
+      background: var(--dark); color: var(--dark-ink); border-color: rgba(255,255,255,.1);
+    }
+    .ops-card.featured p { color: var(--dark-muted); }
+    .ops-icon {
+      width: 44px; height: 44px; border-radius: 13px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono); font-size: 14px; font-weight: 700;
+      background: var(--coral-soft); color: var(--coral);
+    }
+    .ops-card.featured .ops-icon { background: rgba(52,211,153,.16); color: var(--emerald-hi); }
+    .ops-card h3 {
+      font-family: var(--font-display); font-size: 20px; line-height: 1.2;
+      letter-spacing: -.02em;
+    }
+    .ops-card p { font-size: 14.5px; color: var(--ink-soft); }
+    .ops-tag {
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--emerald); font-weight: 700;
+    }
+    .ops-card.featured .ops-tag { color: var(--emerald-hi); }
+
+    /* ============== PLANS & COMMERCIAL CONFIGURATOR ============== */
+    .plans-sec {
+      padding: clamp(64px, 7.5vw, 108px) 0;
+      background: var(--paper);
+    }
+    .plans-grid {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px; margin-bottom: 40px;
+    }
+    .plan-card {
+      background: var(--white); border: 1px solid var(--line);
+      border-radius: 22px; padding: 24px 20px;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 16px;
+      transition: transform .22s var(--ease), border-color .22s;
+    }
+    .plan-card:hover { transform: translateY(-3px); border-color: var(--ink); }
+    .plan-card.popular {
+      background: var(--dark); color: var(--dark-ink);
+      border-color: var(--coral);
+      box-shadow: 0 22px 50px rgba(23, 24, 21, 0.22);
+    }
+    .plan-pill {
+      display: inline-block; font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: .1em; text-transform: uppercase; font-weight: 700;
+      padding: 5px 10px; border-radius: 999px;
+      background: var(--paper-2); color: var(--ink-soft); margin-bottom: 10px;
+    }
+    .plan-card.popular .plan-pill { background: var(--coral); color: #fff; }
+    .plan-card h3 { font-family: var(--font-display); font-size: 22px; margin-bottom: 6px; }
+    .plan-cap { font-size: 13.5px; color: var(--ink-soft); margin-bottom: 14px; }
+    .plan-card.popular .plan-cap { color: var(--dark-muted); }
+    .plan-price {
+      font-family: var(--font-display); font-size: 28px; font-weight: 700;
+      letter-spacing: -.03em; margin-bottom: 12px;
+    }
+    .plan-price small { font-size: 13px; font-weight: 500; opacity: .7; }
+    .plan-feats { list-style: none; display: flex; flex-direction: column; gap: 7px; font-size: 13px; }
+    .plan-feats li::before { content: "· "; color: var(--coral); font-weight: 800; }
+
+    /* Interactive Quote Box */
+    .quote-box {
+      background: var(--dark); color: var(--dark-ink);
+      border-radius: 28px; padding: clamp(26px, 4vw, 44px);
+      display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: clamp(24px, 4vw, 48px); align-items: center;
+      border: 1px solid rgba(255,255,255,.1);
+      background-image: radial-gradient(500px 360px at 95% 5%, rgba(217,99,60,.22), transparent 70%);
+    }
+    .quote-box h2 {
+      font-family: var(--font-display); font-size: clamp(28px, 3.6vw, 42px);
+      line-height: 1.08; letter-spacing: -.03em; margin-bottom: 12px;
+    }
+    .quote-box h2 em { font-family: var(--font-serif); font-style: italic; color: var(--coral-hi); }
+    .quote-box p { color: var(--dark-muted); font-size: 15.5px; margin-bottom: 18px; }
+    .quote-form {
+      background: rgba(255,255,255,.05); border: 1px solid var(--dark-line);
+      border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 14px;
+    }
+    .q-field label {
+      display: block; font-family: var(--font-mono); font-size: 11px;
+      letter-spacing: .08em; text-transform: uppercase; color: var(--dark-muted);
+      margin-bottom: 6px;
+    }
+    .q-field select, .q-field input {
+      width: 100%; padding: 11px 14px; border-radius: 12px;
+      background: #101211; border: 1px solid rgba(255,255,255,.18);
+      color: var(--dark-ink); font-family: inherit; font-size: 14px;
+    }
+    .q-field select:focus, .q-field input:focus {
+      outline: none; border-color: var(--coral-hi);
+    }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+    .q-actions .btn { flex: 1; min-width: 190px; }
+
+    /* ============== ARCHITECTURE & CIRCULAR FOOTER ============== */
+    .arch-sec {
+      padding: 52px 0;
+      background: var(--paper-2); border-top: 1px solid var(--line);
+    }
+    .arch-grid {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .arch-item {
+      background: var(--white); border: 1px solid var(--line);
+      border-radius: 16px; padding: 16px 18px;
+    }
+    .arch-item small {
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--coral); display: block; margin-bottom: 5px;
+    }
+    .arch-item b { display: block; font-size: 14.5px; margin-bottom: 4px; }
+    .arch-item p { font-size: 13px; color: var(--ink-soft); }
+
+    .next-case {
+      background: var(--dark); color: var(--dark-ink);
+      padding: 40px 0 46px; border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .next-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 18px; flex-wrap: wrap;
+    }
+    .next-prev {
+      font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em;
+      color: var(--dark-muted); padding: 10px 16px; border-radius: 999px;
+      border: 1px solid var(--dark-line); transition: all .2s;
+    }
+    .next-prev:hover { color: #fff; border-color: rgba(255,255,255,.4); }
+    .next-forward {
+      display: inline-flex; align-items: center; gap: 14px;
+      padding: 14px 22px; border-radius: 18px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.15);
+      transition: transform .22s var(--ease), border-color .22s;
+    }
+    .next-forward:hover { transform: translateX(4px); border-color: #b6ff1a; }
+    .next-forward small {
+      display: block; font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: .1em; color: #b6ff1a;
+    }
+    .next-forward b { font-family: var(--font-display); font-size: 17px; }
+
+    /* ============== RESPONSIVE ============== */
+    @media (max-width: 1080px) {
+      .hero-grid, .showroom-grid, .panel-showcase, .quote-box { grid-template-columns: 1fr; }
+      .front-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .plans-grid, .arch-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .compare-strip, .ops-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 720px) {
+      .top-nav { display: none; }
+      .kpi-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .front-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .compare-strip, .ops-grid, .plans-grid, .arch-grid { grid-template-columns: 1fr; }
+      .hero-shots { min-height: 270px; }
+      .hero-shot-main { width: 92%; }
+      .hero-shot-panel { width: 72%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============== STICKY TOP BAR ============== -->
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand-crumbs">
+        <a class="back-pill" href="../index.html#proyectos">← Portfolio POPUPS</a>
+        <span class="case-badge">Caso 04 · Mi-Tienda</span>
+      </div>
+      <nav class="top-nav" aria-label="Secciones de Mi-Tienda">
+        <a href="#vidrieras">Las 6 vidrieras</a>
+        <a href="#panel">Panel real</a>
+        <a href="#operacion">Cobros & Envíos</a>
+        <a href="#planes">Planes</a>
+      </nav>
+      <div class="top-actions">
+        <a class="btn btn-ghost btn-sm" href="https://somospopups.github.io/Mi-Tienda/" target="_blank" rel="noopener">Abrir demo ↗</a>
+        <a class="btn btn-coral btn-sm" href="#contacto">Quiero mi tienda</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============== HERO ============== -->
+  <section class="hero" id="inicio">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow"><span class="dot"></span> Comercio digital · 0 % comisión por venta</span>
+          <h1>Tu tienda online. <em>Seis vidrieras reales.</em> Un solo panel.</h1>
+          <p class="hero-lead">
+            Elegís el estilo que mejor vende tu rubro —<strong>Tech, Boutique, Actitud, Ofertas, Gamer o Constructor Libre</strong>— y manejás catálogo, stock, precios mayoristas, lista PDF, Mercado Pago directo y Uber Direct desde un único panel en tiempo real.
+          </p>
+          <div class="hero-ctas">
+            <a class="btn btn-coral" href="#vidrieras">Explorar las 6 vidrieras ↓</a>
+            <a class="btn btn-dark" href="https://somospopups.github.io/Mi-Tienda/" target="_blank" rel="noopener">Probar demo en vivo ↗</a>
+          </div>
+          <div class="hero-swatches" aria-label="Acceso rápido a las 6 vidrieras">
+            <span>Vidrieras:</span>
+            <button type="button" class="swatch-chip" data-jump-front="tech"><i style="background:#7bc3e8"></i>Tech</button>
+            <button type="button" class="swatch-chip" data-jump-front="luma"><i style="background:#d9633c"></i>Boutique</button>
+            <button type="button" class="swatch-chip" data-jump-front="actitud"><i style="background:#e3a898"></i>Actitud</button>
+            <button type="button" class="swatch-chip" data-jump-front="ofertas"><i style="background:#2e3766"></i>Ofertas</button>
+            <button type="button" class="swatch-chip" data-jump-front="gamer"><i style="background:#1c2538"></i>Gamer</button>
+            <button type="button" class="swatch-chip" data-jump-front="libre"><i style="background:#1f8a57"></i>Libre</button>
+          </div>
+        </div>
+
+        <div class="hero-stage" aria-label="Vista real de Mi-Tienda: catálogo público y panel en tiempo real">
+          <div class="hero-stage-bar">
+            <span class="win-dots"><i></i><i></i><i></i></span>
+            <span class="stage-pill">6 vidrieras · 1 motor cloud</span>
+          </div>
+          <div class="hero-shots">
+            <div class="hero-shot-main">
+              <img src="assets/shot-catalogo.webp" alt="Vidriera editorial Boutique de Mi-Tienda" loading="eager">
+            </div>
+            <div class="hero-shot-panel">
+              <img src="assets/shot-panel.webp" alt="Panel operativo en tiempo real de Mi-Tienda" loading="eager">
+            </div>
+            <div class="hero-float-badge">
+              <span>●</span> <b>0 % comisión POPUPS</b> · Mercado Pago directo
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-strip">
+        <div class="kpi-card">
+          <div class="kpi-val accent">6</div>
+          <div class="kpi-lbl">Vidrieras reales listas para elegir sobre el mismo motor</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val green">0 %</div>
+          <div class="kpi-lbl">Comisión de POPUPS por venta (Mercado Pago directo a tu cuenta)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">25–200</div>
+          <div class="kpi-lbl">Productos activos con stock, costo y precio mayorista privado</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">100 %</div>
+          <div class="kpi-lbl">Autogestionable desde celular o PC con link propio en la nube</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SHOWROOM INTERACTIVO DE LAS 6 VIDRIERAS ============== -->
+  <section class="showroom-sec" id="vidrieras">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="sec-kicker">Showroom interactivo · 6 frentes reales</span>
+          <h2 class="sec-title">Mismo motor. <em>Seis personalidades.</em></h2>
+        </div>
+        <p class="sec-sub">
+          Tocá cada vidriera para ver cómo transforma por completo la experiencia de compra en escritorio o celular — y abrila <strong>en vivo en 1 clic</strong> en la demo real de Mi-Tienda.
+        </p>
+      </div>
+
+      <!-- 6 Selector Tabs -->
+      <div class="front-tabs" role="tablist" aria-label="Elegí una vidriera de Mi-Tienda">
+        <button type="button" class="front-tab is-active" role="tab" aria-selected="true" data-front="tech" style="--tab-accent:#7bc3e8">
+          <span class="ft-top"><span class="ft-dot" style="background:#B2DBF1"></span><span class="ft-num">01/06</span></span>
+          <span class="ft-name">Tech</span>
+          <span class="ft-tag">Celeste moderno</span>
+        </button>
+        <button type="button" class="front-tab" role="tab" aria-selected="false" data-front="luma" style="--tab-accent:#d9633c">
+          <span class="ft-top"><span class="ft-dot" style="background:#d9633c"></span><span class="ft-num">02/06</span></span>
+          <span class="ft-name">Boutique</span>
+          <span class="ft-tag">Editorial cálido</span>
+        </button>
+        <button type="button" class="front-tab" role="tab" aria-selected="false" data-front="actitud" style="--tab-accent:#e3a898">
+          <span class="ft-top"><span class="ft-dot" style="background:#e3a898"></span><span class="ft-num">03/06</span></span>
+          <span class="ft-name">Actitud</span>
+          <span class="ft-tag">Retro moderno</span>
+        </button>
+        <button type="button" class="front-tab" role="tab" aria-selected="false" data-front="ofertas" style="--tab-accent:#5666ba">
+          <span class="ft-top"><span class="ft-dot" style="background:#2e3766"></span><span class="ft-num">04/06</span></span>
+          <span class="ft-name">Ofertas</span>
+          <span class="ft-tag">Consumo y promos</span>
+        </button>
+        <button type="button" class="front-tab" role="tab" aria-selected="false" data-front="gamer" style="--tab-accent:#ff784f">
+          <span class="ft-top"><span class="ft-dot" style="background:#131926"></span><span class="ft-num">05/06</span></span>
+          <span class="ft-name">Gamer</span>
+          <span class="ft-tag">Hardware oscuro</span>
+        </button>
+        <button type="button" class="front-tab" role="tab" aria-selected="false" data-front="libre" style="--tab-accent:#34d399">
+          <span class="ft-top"><span class="ft-dot" style="background:#34d399"></span><span class="ft-num">06/06</span></span>
+          <span class="ft-name">Libre</span>
+          <span class="ft-tag">Constructor visual</span>
+        </button>
+      </div>
+
+      <!-- Main Showroom Stage -->
+      <div class="showroom-grid">
+        <!-- Left: Live Interactive Browser Frame -->
+        <div class="browser-shell">
+          <div class="browser-chrome">
+            <span class="win-dots"><i></i><i></i><i></i></span>
+            <div class="browser-url" aria-live="polite">
+              <span class="lock">●</span>
+              <span id="srUrlText">somospopups.github.io/Mi-Tienda/?front=tech</span>
+            </div>
+            <div class="vp-toggle" role="group" aria-label="Tamaño de vista previa">
+              <button type="button" class="vp-btn is-active" data-vp="desktop">Desktop</button>
+              <button type="button" class="vp-btn" data-vp="mobile">Celular</button>
+            </div>
+          </div>
+
+          <div class="browser-canvas-wrap">
+            <div class="browser-viewport" id="srViewport">
+
+              <!-- 01 · TECH -->
+              <div class="sf-panel sf-tech is-active" data-sf-panel="tech">
+                <div class="sf-tech-head">
+                  <div class="sf-tech-brand"><span></span> MI-TIENDA TECH</div>
+                  <div style="display:flex;gap:8px;font-size:11px;font-weight:700">
+                    <span>Buscar</span><span>·</span><span>Panel</span><span>·</span><span>Carrito (2)</span>
+                  </div>
+                </div>
+                <div class="sf-tech-cats">
+                  <span class="sf-tech-cat on">Todos</span>
+                  <span class="sf-tech-cat">Fundas</span>
+                  <span class="sf-tech-cat">Audio</span>
+                  <span class="sf-tech-cat">Cargadores</span>
+                  <span class="sf-tech-cat">Servicio Técnico</span>
+                </div>
+                <div class="sf-tech-hero">
+                  <div class="sf-tech-card">
+                    <small>ACCESORIOS + SERVICIO TÉCNICO</small>
+                    <h4>Tu equipo al 100%, hoy mismo.</h4>
+                    <p>Cabecera fusionada sticky, filtros instantáneos, foto intercambiable y bloque dedicado de reparaciones.</p>
+                    <span class="sf-tech-btn">Explorar catálogo →</span>
+                  </div>
+                  <div class="sf-tech-prods">
+                    <div class="sf-tech-prod">
+                      <img src="assets/prod-phone.webp" alt="Smartphone en vidriera Tech">
+                      <b>Funda MagSafe Pro</b>
+                      <span>$ 24.900</span>
+                    </div>
+                    <div class="sf-tech-prod">
+                      <img src="assets/prod-earbuds.webp" alt="Auriculares en vidriera Tech">
+                      <b>Auriculares ANC</b>
+                      <span>$ 58.500</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="sf-tech-foot">
+                  <span>STOCK EN VIVO</span>
+                  <span>MERCADO PAGO DIRECTO</span>
+                  <span>UBER DIRECT / RETIRO</span>
+                </div>
+              </div>
+
+              <!-- 02 · BOUTIQUE (LUMA) -->
+              <div class="sf-panel sf-luma" data-sf-panel="luma">
+                <div class="sf-luma-shot">
+                  <div class="sf-luma-img">
+                    <img src="assets/shot-catalogo.webp" alt="Captura real de la vidriera Boutique Editorial (Luma) de Mi-Tienda">
+                  </div>
+                  <div class="sf-luma-strip">
+                    <div class="sf-luma-pill">
+                      <small>Paleta orgánica</small>
+                      <b>Crema & Terracota</b>
+                    </div>
+                    <div class="sf-luma-pill">
+                      <small>Tipografía</small>
+                      <b>Editorial con alma</b>
+                    </div>
+                    <div class="sf-luma-pill">
+                      <small>Conversión</small>
+                      <b>Hero + producto flotante</b>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 03 · ACTITUD -->
+              <div class="sf-panel sf-actitud" data-sf-panel="actitud">
+                <div class="sf-act-ticker">ENVÍO GRATIS DESDE $100 ✳ TECNOLOGÍA CON ACTITUD ✳ COMPRA SEGURA · GARANTÍA REAL</div>
+                <div class="sf-act-head">
+                  <div class="sf-act-logo">ACTITUD STORE</div>
+                  <span class="sf-act-badge">CARRITO · 1</span>
+                </div>
+                <div class="sf-act-body">
+                  <div class="sf-act-hero">
+                    <div>
+                      <span>4 DESTACADOS EN HOME + CATÁLOGO BUSCADOR</span>
+                      <h4>DISEÑO CON CARÁCTER PROPIO</h4>
+                    </div>
+                    <img src="assets/prod-earbuds.webp" alt="Producto destacado Actitud" style="width:94px;height:64px;object-fit:contain">
+                  </div>
+                  <div class="sf-act-grid">
+                    <div class="sf-act-card">
+                      <img src="assets/prod-keyboard.webp" alt="Teclado mecánico Actitud">
+                      <b>Teclado 65%</b>
+                      <small>$ 89.000</small>
+                    </div>
+                    <div class="sf-act-card">
+                      <img src="assets/prod-mouse.webp" alt="Mouse inalámbrico Actitud">
+                      <b>Mouse Pro</b>
+                      <small>$ 46.500</small>
+                    </div>
+                    <div class="sf-act-card">
+                      <img src="assets/prod-charger.webp" alt="Cargador GaN Actitud">
+                      <b>GaN 65W</b>
+                      <small>$ 34.000</small>
+                    </div>
+                    <div class="sf-act-card">
+                      <img src="assets/prod-phone.webp" alt="Smartphone Actitud">
+                      <b>Case Drop</b>
+                      <small>$ 19.900</small>
+                    </div>
+                  </div>
+                  <div class="sf-act-more">VER CATÁLOGO COMPLETO CON FILTROS Y PAGINACIÓN →</div>
+                </div>
+              </div>
+
+              <!-- 04 · OFERTAS -->
+              <div class="sf-panel sf-ofertas" data-sf-panel="ofertas">
+                <div class="sf-ofr-hero">
+                  <span class="sf-ofr-flag">SEMANA DE OFERTAS</span>
+                  <h4>Tecnología al precio justo</h4>
+                  <p>Descuentos reales con stock confirmado, cuotas sin vuelta y fila automática de productos rebajados.</p>
+                </div>
+                <div class="sf-ofr-benefits">
+                  <div class="sf-ofr-ben"><b>Envíos a todo el país</b><span>Retiro gratis en local</span></div>
+                  <div class="sf-ofr-ben"><b>Hasta 18 cuotas</b><span>Con todas las tarjetas</span></div>
+                  <div class="sf-ofr-ben"><b>Compra protegida</b><span>Mercado Pago directo</span></div>
+                </div>
+                <div class="sf-ofr-grid">
+                  <div class="sf-ofr-card">
+                    <span class="sf-ofr-off">-25%</span>
+                    <img src="assets/prod-charger.webp" alt="Cargador en oferta">
+                    <b>Cargador Rápido 65W</b>
+                    <div><s>$45.000</s><strong>$33.750</strong></div>
+                  </div>
+                  <div class="sf-ofr-card">
+                    <span class="sf-ofr-off">-20%</span>
+                    <img src="assets/prod-earbuds.webp" alt="Auriculares en oferta">
+                    <b>Pods Bluetooth ANC</b>
+                    <div><s>$69.000</s><strong>$55.200</strong></div>
+                  </div>
+                  <div class="sf-ofr-card">
+                    <span class="sf-ofr-off">-18%</span>
+                    <img src="assets/prod-mouse.webp" alt="Mouse en oferta">
+                    <b>Mouse Ergo Silent</b>
+                    <div><s>$39.000</s><strong>$31.980</strong></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 05 · GAMER -->
+              <div class="sf-panel sf-gamer" data-sf-panel="gamer">
+                <div class="sf-gmr-bar">ENVÍOS 24/48 H · PAGÁ EN CUOTAS · SOPORTE ESPECIALIZADO · GARANTÍA OFICIAL</div>
+                <div class="sf-gmr-hero">
+                  <span class="sf-gmr-flag"><i></i> NUEVOS INGRESOS // STOCK REAL</span>
+                  <h4>ARMÁ TU SETUP</h4>
+                  <p>Componentes, PC armadas y periféricos de alto rendimiento sobre modo oscuro profundo y tarjetas técnicas.</p>
+                </div>
+                <div class="sf-gmr-grid">
+                  <div class="sf-gmr-card">
+                    <img src="assets/prod-gpu.webp" alt="Placa de video Gamer">
+                    <div>
+                      <small>// EN STOCK · 6 UNID.</small>
+                      <b>RTX Series 12GB OC</b>
+                      <span>$ 685.000</span>
+                    </div>
+                  </div>
+                  <div class="sf-gmr-card">
+                    <img src="assets/prod-keyboard.webp" alt="Teclado mecánico Gamer">
+                    <div>
+                      <small>// HOT-SWAP RGB</small>
+                      <b>Teclado Mecánico TKL</b>
+                      <span>$ 114.900</span>
+                    </div>
+                  </div>
+                  <div class="sf-gmr-card">
+                    <img src="assets/prod-mouse.webp" alt="Mouse ultraliviano Gamer">
+                    <div>
+                      <small>// 26K DPI · 54G</small>
+                      <b>Mouse Pro Wireless</b>
+                      <span>$ 79.500</span>
+                    </div>
+                  </div>
+                  <div class="sf-gmr-card">
+                    <img src="assets/prod-earbuds.webp" alt="Audio baja latencia Gamer">
+                    <div>
+                      <small>// LOW LATENCY</small>
+                      <b>In-Ear Esports 2.4GHz</b>
+                      <span>$ 64.000</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 06 · LIBRE (CONSTRUCTOR) -->
+              <div class="sf-panel sf-libre" data-sf-panel="libre">
+                <div class="sf-lib-bar">
+                  <span>CONSTRUCTOR VISUAL · MODO BLOQUES</span>
+                  <span class="sf-lib-pill">EDITABLE SIN CÓDIGO</span>
+                </div>
+                <div class="sf-lib-canvas">
+                  <div class="sf-lib-block">
+                    <div class="sf-lib-tag">
+                      <span>BLOQUE 01 · PORTADA PRINCIPAL</span>
+                      <span class="sf-lib-tools"><span>Editar</span><span>↑ ↓</span></span>
+                    </div>
+                    <div class="sf-lib-hero-in">
+                      <h4>Armá tu portada bloque por bloque</h4>
+                      <p>Portada, grilla de destacados, historia de marca, galería y mapa editables directo desde tu panel.</p>
+                    </div>
+                  </div>
+                  <div class="sf-lib-block">
+                    <div class="sf-lib-tag">
+                      <span>BLOQUE 02 · COLUMNAS Y DESTACADOS</span>
+                      <span class="sf-lib-tools"><span>Duplicar</span><span>Estilo</span></span>
+                    </div>
+                    <div class="sf-lib-cols">
+                      <div class="sf-lib-mini"><b>Showroom</b><span>Dirección, horarios y turnos</span></div>
+                      <div class="sf-lib-mini"><b>Catálogo vivo</b><span>Conectado a tu stock real</span></div>
+                      <div class="sf-lib-mini"><b>WhatsApp</b><span>Cierre directo por pedido</span></div>
+                    </div>
+                  </div>
+                  <div class="sf-lib-add">+ Agregar nuevo bloque (Hero · Galería · Texto · Catálogo · Beneficios)</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Dynamic Storefront Spec Panel -->
+        <aside class="spec-card" aria-live="polite">
+          <div>
+            <span class="spec-kicker" id="srKicker">Vidriera 01 · Tech</span>
+            <h3 class="spec-title" id="srTitle">Tech · Celeste Moderno</h3>
+            <p class="spec-desc" id="srDesc">
+              Vidriera limpia y luminosa diseñada para accesorios, celulares y electrónica, con barra superior fusionada, 5 accesos rápidos y bloque de servicio técnico.
+            </p>
+            <div class="spec-ideal">
+              <small>Ideal para</small>
+              <p id="srIdeal">Casas de celulares, accesorios tech, electrónica, audio y locales con servicio técnico.</p>
+            </div>
+            <ul class="spec-list" id="srBullets">
+              <li>Cabecera sticky fusionada con búsqueda, panel y carrito siempre a mano.</li>
+              <li>Hero con foto intercambiable, métricas de confianza y sección de reparaciones.</li>
+              <li>Paleta personalizable desde el panel manteniendo lectura nítida.</li>
+            </ul>
+            <div class="spec-palette" id="srPalette">
+              <span><i style="background:#B2DBF1"></i>#B2DBF1</span>
+              <span><i style="background:#333333"></i>#333333</span>
+              <span><i style="background:#ffffff"></i>#FFFFFF</span>
+            </div>
+          </div>
+
+          <div class="spec-actions">
+            <a id="srLiveBtn" class="btn btn-coral" href="https://somospopups.github.io/Mi-Tienda/?front=tech" target="_blank" rel="noopener">
+              Abrir vidriera Tech en vivo ↗
+            </a>
+            <button type="button" id="srChooseBtn" class="btn btn-outline-dark">
+              Quiero mi tienda con esta vidriera →
+            </button>
+          </div>
+        </aside>
+      </div>
+
+      <!-- 6-Card Side-by-Side Comparison Strip -->
+      <div class="compare-strip" aria-label="Resumen rápido de las 6 vidrieras">
+        <button type="button" class="cmp-card" data-jump-front="tech">
+          <div class="cmp-left">
+            <span class="cmp-swatch" style="background:linear-gradient(135deg,#B2DBF1,#68b5de)"></span>
+            <div><h4>Tech · Celeste Moderno</h4><p>Electrónica, accesorios y servicio técnico</p></div>
+          </div>
+          <span class="cmp-link">Ver →</span>
+        </button>
+        <button type="button" class="cmp-card" data-jump-front="luma">
+          <div class="cmp-left">
+            <span class="cmp-swatch" style="background:linear-gradient(135deg,#f4efe6,#d9633c)"></span>
+            <div><h4>Boutique · Editorial</h4><p>Indumentaria, deco, hogar y marcas de autor</p></div>
+          </div>
+          <span class="cmp-link">Ver →</span>
+        </button>
+        <button type="button" class="cmp-card" data-jump-front="actitud">
+          <div class="cmp-left">
+            <span class="cmp-swatch" style="background:linear-gradient(135deg,#e3a898,#efc415)"></span>
+            <div><h4>Actitud · Retro Moderno</h4><p>Streetwear, diseño y catálogo estilo ML</p></div>
+          </div>
+          <span class="cmp-link">Ver →</span>
+        </button>
+        <button type="button" class="cmp-card" data-jump-front="ofertas">
+          <div class="cmp-left">
+            <span class="cmp-swatch" style="background:linear-gradient(135deg,#161a2e,#d9633c)"></span>
+            <div><h4>Ofertas · Consumo</h4><p>Bazar, promos, cuotas y alto volumen</p></div>
+          </div>
+          <span class="cmp-link">Ver →</span>
+        </button>
+        <button type="button" class="cmp-card" data-jump-front="gamer">
+          <div class="cmp-left">
+            <span class="cmp-swatch" style="background:linear-gradient(135deg,#0b0e14,#ff784f)"></span>
+            <div><h4>Gamer · Hardware</h4><p>PC, placas, periféricos y modo oscuro</p></div>
+          </div>
+          <span class="cmp-link">Ver →</span>
+        </button>
+        <button type="button" class="cmp-card" data-jump-front="libre">
+          <div class="cmp-left">
+            <span class="cmp-swatch" style="background:linear-gradient(135deg,#20221e,#34d399)"></span>
+            <div><h4>Libre · Constructor</h4><p>Bloques editables a tu medida sin código</p></div>
+          </div>
+          <span class="cmp-link">Ver →</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== PANEL REAL UNIFICADO ============== -->
+  <section class="panel-sec" id="panel">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="sec-kicker">Panel en tiempo real · Capturas reales</span>
+          <h2 class="sec-title">Cambie la vidriera que cambie, <em>tu operación es una sola.</em></h2>
+        </div>
+        <p class="sec-sub">
+          No importa cuál de las 6 vidrieras elijas: por detrás operás siempre con el mismo panel ágil, ordenado y pensado para usar desde el mostrador o el celular.
+        </p>
+      </div>
+
+      <div class="panel-tabs" role="tablist" aria-label="Pantallas del panel de Mi-Tienda">
+        <button type="button" class="panel-tab is-active" data-ptab="resumen">1. Resumen en vivo</button>
+        <button type="button" class="panel-tab" data-ptab="productos">2. Productos, Mayorista & PDF</button>
+        <button type="button" class="panel-tab" data-ptab="pedidos">3. Pedidos & WhatsApp</button>
+        <button type="button" class="panel-tab" data-ptab="cobros">4. Mercado Pago (0 % comisión)</button>
+      </div>
+
+      <div class="panel-showcase">
+        <div class="panel-frame">
+          <img id="panelShot" src="assets/shot-panel.webp" alt="Panel en tiempo real de Mi-Tienda">
+        </div>
+        <div class="panel-info" aria-live="polite">
+          <span class="sec-kicker" id="panelKicker">01 · Resumen operativo</span>
+          <h3 id="panelTitle">Todo el pulso de tu comercio en un vistazo.</h3>
+          <p id="panelDesc">
+            Apenas entrás al panel ves ventas registradas, pedidos del día, unidades activas en stock y alertas automáticas antes de quedarte sin mercadería.
+          </p>
+          <ul class="panel-bullets" id="panelBullets">
+            <li><b>●</b><span>Stock sincronizado en tiempo real con la vidriera pública.</span></li>
+            <li><b>●</b><span>Alertas de stock bajo o agotado para reponer a tiempo.</span></li>
+            <li><b>●</b><span>Guía PDF descargable y acceso a edición visual directa sobre la tienda.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== COBROS, ENVÍOS & OPERACIÓN REAL ============== -->
+  <section class="ops-sec" id="operacion">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="sec-kicker">Hecho para vender en serio</span>
+          <h2 class="sec-title">Todo lo que un comercio necesita <em>desde el día uno.</em></h2>
+        </div>
+        <p class="sec-sub">
+          Sin comisiones ocultas por transacción, sin plugins pagos ni configuraciones eternas.
+        </p>
+      </div>
+
+      <div class="ops-grid">
+        <article class="ops-card featured">
+          <div>
+            <span class="ops-icon">0%</span>
+            <h3 style="margin-top:14px">Mercado Pago directo a tu cuenta</h3>
+            <p style="margin-top:8px">Conectás tu propia cuenta en 5 pasos. El dinero de cada venta entra directo a tu Mercado Pago — <strong>POPUPS nunca retiene ni comisiona tus ventas</strong>.</p>
+          </div>
+          <span class="ops-tag">Solo abonás tu mensualidad</span>
+        </article>
+
+        <article class="ops-card">
+          <div>
+            <span class="ops-icon">ENV</span>
+            <h3 style="margin-top:14px">Envíos con Uber Direct + Retiro</h3>
+            <p style="margin-top:8px">Sumá envío con courier integrado en el checkout, retiro gratis en tu sucursal o cierre asistido directo por WhatsApp.</p>
+          </div>
+          <span class="ops-tag">Checkout flexible</span>
+        </article>
+
+        <article class="ops-card">
+          <div>
+            <span class="ops-icon">PDF</span>
+            <h3 style="margin-top:14px">Lista de precios PDF + Mayorista</h3>
+            <p style="margin-top:8px">Cargá precio público, precio mayorista privado y costo. Generá una lista de precios en PDF prolija en 1 clic para enviar por WhatsApp.</p>
+          </div>
+          <span class="ops-tag">Minorista + Mayorista</span>
+        </article>
+
+        <article class="ops-card">
+          <div>
+            <span class="ops-icon">EDIT</span>
+            <h3 style="margin-top:14px">Modo Edición visual sobre tu tienda</h3>
+            <p style="margin-top:8px">Desde el panel tocás «Ver tienda» y editás títulos, destacados y textos directamente sobre tu vidriera publicada.</p>
+          </div>
+          <span class="ops-tag">Cero dependencia técnica</span>
+        </article>
+
+        <article class="ops-card">
+          <div>
+            <span class="ops-icon">SCAN</span>
+            <h3 style="margin-top:14px">Reponer stock + Finanzas por cuenta</h3>
+            <p style="margin-top:8px">Controlá reposiciones rápidas con escáner, registrá clientes frecuentes y llevá caja por medio de cobro.</p>
+          </div>
+          <span class="ops-tag">Gestión de mostrador</span>
+        </article>
+
+        <article class="ops-card">
+          <div>
+            <span class="ops-icon">CLD</span>
+            <h3 style="margin-top:14px">Link propio cloud y clave segura</h3>
+            <p style="margin-top:8px">Cada negocio vive aislado en Supabase con su propia URL, vidriera guardada sin pantallazos y clave validada en servidor.</p>
+          </div>
+          <span class="ops-tag">Multi-tienda real</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== PLANES & CONFIGURADOR DE CONSULTA ============== -->
+  <section class="plans-sec" id="planes">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="sec-kicker">Escalá según tu catálogo</span>
+          <h2 class="sec-title">Elegís tu cupo de productos, <em>las 6 vidrieras vienen incluidas.</em></h2>
+        </div>
+        <p class="sec-sub">
+          Todos los planes incluyen panel en tiempo real, 0 % de comisión por venta, Mercado Pago directo, lista de precios PDF y soporte de POPUPS.
+        </p>
+      </div>
+
+      <div class="plans-grid">
+        <article class="plan-card">
+          <div>
+            <span class="plan-pill">Inicial</span>
+            <h3>Hasta 25 productos</h3>
+            <p class="plan-cap">Ideal para emprender, marcas cápsula o catálogos curados.</p>
+            <div class="plan-price">Consultar <small>/ mes</small></div>
+            <ul class="plan-feats">
+              <li>Cualquiera de las 6 vidrieras</li>
+              <li>0 % comisión por venta</li>
+              <li>Mercado Pago + WhatsApp</li>
+              <li>Panel en tiempo real + PDF</li>
+            </ul>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm" data-pick-plan="Hasta 25 productos">Elegir este plan →</button>
+        </article>
+
+        <article class="plan-card popular">
+          <div>
+            <span class="plan-pill">Más elegido</span>
+            <h3>Hasta 50 productos</h3>
+            <p class="plan-cap">El punto justo para comercios locales con rotación activa.</p>
+            <div class="plan-price">$ 50.000 <small>/ mes</small></div>
+            <ul class="plan-feats">
+              <li>Cualquiera de las 6 vidrieras</li>
+              <li>0 % comisión por venta</li>
+              <li>Mercado Pago + Uber Direct</li>
+              <li>Mayorista + Lista PDF + Escáner</li>
+            </ul>
+          </div>
+          <button type="button" class="btn btn-coral btn-sm" data-pick-plan="Hasta 50 productos ($50.000/mes)">Arrancar con 50 productos →</button>
+        </article>
+
+        <article class="plan-card">
+          <div>
+            <span class="plan-pill">Comercio activo</span>
+            <h3>Hasta 100 productos</h3>
+            <p class="plan-cap">Para tiendas con variedad de líneas, talles o accesorios.</p>
+            <div class="plan-price">Consultar <small>/ mes</small></div>
+            <ul class="plan-feats">
+              <li>Cualquiera de las 6 vidrieras</li>
+              <li>0 % comisión por venta</li>
+              <li>Catálogo buscador con filtros</li>
+              <li>Soporte prioritario POPUPS</li>
+            </ul>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm" data-pick-plan="Hasta 100 productos">Elegir este plan →</button>
+        </article>
+
+        <article class="plan-card">
+          <div>
+            <span class="plan-pill">Catálogo amplio</span>
+            <h3>Hasta 200 productos</h3>
+            <p class="plan-cap">Distribuidoras, casas de hardware, bazar y mayoristas.</p>
+            <div class="plan-price">Consultar <small>/ mes</small></div>
+            <ul class="plan-feats">
+              <li>Cualquiera de las 6 vidrieras</li>
+              <li>0 % comisión por venta</li>
+              <li>Paginación veloz + Lista PDF</li>
+              <li>Acompañamiento de puesta online</li>
+            </ul>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm" data-pick-plan="Hasta 200 productos">Elegir este plan →</button>
+        </article>
+      </div>
+
+      <!-- Interactive WhatsApp Configurator -->
+      <div class="quote-box" id="contacto">
+        <div>
+          <span class="sec-kicker" style="color:var(--coral-hi)">Lanzá tu tienda con POPUPS</span>
+          <h2>¿Con cuál de las 6 vidrieras <em>querés salir a vender?</em></h2>
+          <p>
+            Elegí el estilo que más te gustó y el tamaño aproximado de tu catálogo. Te respondemos por WhatsApp con el link de demo listo para probar y te la dejamos online en pocos días.
+          </p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn btn-outline-dark btn-sm" href="https://somospopups.github.io/Mi-Tienda/" target="_blank" rel="noopener">Abrir demo general ↗</a>
+            <a class="btn btn-outline-dark btn-sm" href="mailto:somospopups@gmail.com?subject=Consulta%20por%20Mi-Tienda%20POPUPS">Escribir por mail</a>
+          </div>
+        </div>
+
+        <div class="quote-form">
+          <div class="q-field">
+            <label for="qFront">Vidriera que te gustó</label>
+            <select id="qFront">
+              <option value="Tech · Celeste Moderno">Tech · Celeste Moderno</option>
+              <option value="Boutique · Editorial (Luma)">Boutique · Editorial (Luma)</option>
+              <option value="Actitud · Retro Moderno">Actitud · Retro Moderno</option>
+              <option value="Ofertas · Consumo">Ofertas · Consumo</option>
+              <option value="Gamer · Hardware">Gamer · Hardware</option>
+              <option value="Libre · Constructor visual">Libre · Constructor visual</option>
+              <option value="Todavía no decidí, ayúdenme a elegir">Todavía no decidí, ayúdenme a elegir</option>
+            </select>
+          </div>
+          <div class="q-field">
+            <label for="qPlan">Tamaño de catálogo</label>
+            <select id="qPlan">
+              <option value="Hasta 25 productos">Hasta 25 productos</option>
+              <option value="Hasta 50 productos ($50.000/mes)" selected>Hasta 50 productos ($50.000/mes)</option>
+              <option value="Hasta 100 productos">Hasta 100 productos</option>
+              <option value="Hasta 200 productos">Hasta 200 productos</option>
+            </select>
+          </div>
+          <div class="q-field">
+            <label for="qBiz">Nombre de tu comercio o rubro (opcional)</label>
+            <input id="qBiz" type="text" placeholder="Ej: Casa Norte · Accesorios y Audio" maxlength="80">
+          </div>
+          <div class="q-actions">
+            <a id="qWaBtn" class="btn btn-coral" href="https://wa.me/5493516452258" target="_blank" rel="noopener">
+              Pedir mi Mi-Tienda por WhatsApp ↗
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== ARCHITECTURE SUMMARY ============== -->
+  <section class="arch-sec" aria-label="Arquitectura técnica de Mi-Tienda">
+    <div class="wrap">
+      <div class="arch-grid">
+        <div class="arch-item">
+          <small>Arquitectura</small>
+          <b>Motor único · 6 frentes aislados</b>
+          <p>Un mismo núcleo de catálogo, carrito y checkout sirve 6 identidades visuales sin duplicar mantenimiento.</p>
+        </div>
+        <div class="arch-item">
+          <small>Cloud & Multi-tenant</small>
+          <b>Supabase por slug + anti-flash</b>
+          <p>Cada tienda carga su vidriera real desde el primer frame sin pantallazos ni mezcla de datos entre comercios.</p>
+        </div>
+        <div class="arch-item">
+          <small>Seguridad</small>
+          <b>Validación RPC en servidor</b>
+          <p>Las claves de dueño y administración se validan por RPC en memoria, nunca persistidas en el navegador.</p>
+        </div>
+        <div class="arch-item">
+          <small>Calidad</small>
+          <b>Suite de pruebas automatizadas</b>
+          <p>Flujos críticos de carrito, checkout, aislamiento de vidrieras y seguridad validados antes de cada release.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== CIRCULAR CASE NAVIGATION (03 <- 04 -> 05) ============== -->
+  <footer class="next-case">
+    <div class="wrap next-bar">
+      <a class="next-prev" href="../mis-sellos/">← ANTERIOR · 03 MIS SELLOS</a>
+      <a class="next-prev" href="../index.html#proyectos">Volver al Portfolio POPUPS</a>
+      <a class="next-forward" href="../mi-entrenador/">
+        <div>
+          <small>SIGUIENTE CASO · 05</small>
+          <b>Mi Entrenador · Entrenamiento & Gestión →</b>
+        </div>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var FRONTS = {
+        tech: {
+          kicker: 'Vidriera 01 · Tech',
+          title: 'Tech · Celeste Moderno',
+          selectLabel: 'Tech · Celeste Moderno',
+          desc: 'Vidriera luminosa y precisa pensada para electrónica, celulares y accesorios, con barra fusionada sticky, categorías rápidas y bloque dedicado de servicio técnico.',
+          ideal: 'Casas de celulares, accesorios tech, audio, computación liviana y locales con servicio técnico.',
+          bullets: [
+            'Cabecera fusionada con buscador, panel y carrito visibles en todo momento.',
+            'Hero con fotografía intercambiable, métricas de respaldo y módulo de reparaciones.',
+            'Adaptable a la paleta de tu marca conservando contraste de lectura limpio.'
+          ],
+          palette: ['#B2DBF1', '#333333', '#FFFFFF'],
+          liveLabel: 'Abrir vidriera Tech en vivo ↗'
+        },
+        luma: {
+          kicker: 'Vidriera 02 · Boutique',
+          title: 'Boutique · Editorial',
+          selectLabel: 'Boutique · Editorial (Luma)',
+          desc: 'Estética cálida y cuidada sobre crema y terracota, tipografía editorial serif y foco absoluto en fotografía de producto para marcas que venden deseo y detalle.',
+          ideal: 'Indumentaria, decoración, hogar, panaderías de autor, cosmética natural y objetos de diseño.',
+          bullets: [
+            'Hero editorial con fotografía protagónica y tarjeta flotante del producto más elegido.',
+            'Navegación serena que eleva la percepción de marca y ticket promedio.',
+            'Perfecta para colecciones curadas con historia, novedades y newsletter.'
+          ],
+          palette: ['#F4EFE6', '#D9633C', '#20221E'],
+          liveLabel: 'Abrir vidriera Boutique en vivo ↗'
+        },
+        actitud: {
+          kicker: 'Vidriera 03 · Actitud',
+          title: 'Actitud · Retro Moderno',
+          selectLabel: 'Actitud · Retro Moderno',
+          desc: 'Identidad audaz con paleta coral/limón, tipografías de impacto, ticker rotativo, 4 destacados curados en portada y catálogo buscador completo estilo Mercado Libre.',
+          ideal: 'Streetwear, marcas jóvenes, gadgets con onda, diseño independiente y tiendas con comunidad fuerte.',
+          bullets: [
+            'Portada fija con 4 destacados elegidos desde el panel para que la home nunca se estire.',
+            'Catálogo overlay con búsqueda instantánea, chips por categoría con contador y orden por precio.',
+            'Paginación ágil de a 20 productos para catálogos medianos y grandes sin perder velocidad.'
+          ],
+          palette: ['#E3A898', '#EFC415', '#2D2A26'],
+          liveLabel: 'Abrir vidriera Actitud en vivo ↗'
+        },
+        ofertas: {
+          kicker: 'Vidriera 04 · Ofertas',
+          title: 'Ofertas · Consumo',
+          selectLabel: 'Ofertas · Consumo',
+          desc: 'Diseñada para convertir rápido: banner promocional en azul marino, franja de beneficios (cuotas, envíos, compra protegida) y módulo automático de productos con descuento.',
+          ideal: 'Bazar, consumo masivo, ferreterías, distribuidoras y comercios que rotan promociones cada semana.',
+          bullets: [
+            'Detecta automáticamente productos con precio tachado y arma la fila de ofertas.',
+            'Franja de confianza arriba de todo: hasta 18 cuotas, envío y retiro gratis.',
+            'Lectura escaneable pensada para compras impulsivas y pedidos multi-producto.'
+          ],
+          palette: ['#161A2E', '#2E3766', '#D9633C'],
+          liveLabel: 'Abrir vidriera Ofertas en vivo ↗'
+        },
+        gamer: {
+          kicker: 'Vidriera 05 · Gamer',
+          title: 'Gamer · Hardware',
+          selectLabel: 'Gamer · Hardware',
+          desc: 'Modo oscuro profundo estilo casa de hardware profesional: alto contraste, grilla por categoría con stock real actualizado y estética técnica para armar setups.',
+          ideal: 'Casas de computación, hardware, periféricos gamer, audio profesional e iluminación LED.',
+          bullets: [
+            'Interfaz oscura completa (tienda, carrito y checkout) sin deslumbrar.',
+            'Grilla visual de categorías con íconos técnicos y stock en tiempo real.',
+            'Franja de garantía oficial, cuotas y soporte especializado.'
+          ],
+          palette: ['#0B0E14', '#131926', '#D9633C'],
+          liveLabel: 'Abrir vidriera Gamer en vivo ↗'
+        },
+        libre: {
+          kicker: 'Vidriera 06 · Libre',
+          title: 'Libre · Constructor',
+          selectLabel: 'Libre · Constructor visual',
+          desc: 'Constructor modular por bloques estilo Google Sites para combinar portada, historia, galerías, columnas y catálogo exactamente en el orden que tu negocio necesita.',
+          ideal: 'Showrooms, estudios creativos, marcas con storytelling propio y negocios que renuevan su portada seguido.',
+          bullets: [
+            'Armá y reordená bloques desde el panel sin depender de programación.',
+            'Combina narrativa editorial, galerías y el mismo carrito conectado al stock real.',
+            'Flexibilidad total manteniendo velocidad de carga y versión móvil prolija.'
+          ],
+          palette: ['#FAF8F4', '#20221E', '#34D399'],
+          liveLabel: 'Abrir vidriera Libre en vivo ↗'
+        }
+      };
+
+      var activeFront = 'tech';
+      var tabs = Array.prototype.slice.call(document.querySelectorAll('.front-tab'));
+      var panels = Array.prototype.slice.call(document.querySelectorAll('.sf-panel'));
+      var urlEl = document.getElementById('srUrlText');
+      var kickerEl = document.getElementById('srKicker');
+      var titleEl = document.getElementById('srTitle');
+      var descEl = document.getElementById('srDesc');
+      var idealEl = document.getElementById('srIdeal');
+      var bulletsEl = document.getElementById('srBullets');
+      var paletteEl = document.getElementById('srPalette');
+      var liveBtn = document.getElementById('srLiveBtn');
+      var chooseBtn = document.getElementById('srChooseBtn');
+      var viewport = document.getElementById('srViewport');
+      var qFront = document.getElementById('qFront');
+      var qPlan = document.getElementById('qPlan');
+      var qBiz = document.getElementById('qBiz');
+      var qWaBtn = document.getElementById('qWaBtn');
+
+      function selectFront(key) {
+        if (!FRONTS[key]) return;
+        activeFront = key;
+        var f = FRONTS[key];
+
+        tabs.forEach(function (t) {
+          var on = t.getAttribute('data-front') === key;
+          t.classList.toggle('is-active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        panels.forEach(function (p) {
+          p.classList.toggle('is-active', p.getAttribute('data-sf-panel') === key);
+        });
+
+        urlEl.textContent = 'somospopups.github.io/Mi-Tienda/?front=' + key;
+        kickerEl.textContent = f.kicker;
+        titleEl.textContent = f.title;
+        descEl.textContent = f.desc;
+        idealEl.textContent = f.ideal;
+        bulletsEl.innerHTML = f.bullets.map(function (b) { return '<li>' + b + '</li>'; }).join('');
+        paletteEl.innerHTML = f.palette.map(function (hex) {
+          return '<span><i style="background:' + hex + '"></i>' + hex + '</span>';
+        }).join('');
+        liveBtn.href = 'https://somospopups.github.io/Mi-Tienda/?front=' + key;
+        liveBtn.textContent = f.liveLabel;
+      }
+
+      tabs.forEach(function (t) {
+        t.addEventListener('click', function () {
+          selectFront(t.getAttribute('data-front'));
+        });
+      });
+
+      document.querySelectorAll('[data-jump-front]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var key = btn.getAttribute('data-jump-front');
+          selectFront(key);
+          var sec = document.getElementById('vidrieras');
+          if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      document.querySelectorAll('[data-vp]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var mode = btn.getAttribute('data-vp');
+          document.querySelectorAll('[data-vp]').forEach(function (b) {
+            b.classList.toggle('is-active', b === btn);
+          });
+          viewport.classList.toggle('is-mobile', mode === 'mobile');
+        });
+      });
+
+      chooseBtn.addEventListener('click', function () {
+        var f = FRONTS[activeFront];
+        if (qFront && f) qFront.value = f.selectLabel;
+        updateWaLink();
+        var ct = document.getElementById('contacto');
+        if (ct) ct.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      /* ============== REAL ADMIN PANEL TABS ============== */
+      var PANEL_TABS = {
+        resumen: {
+          img: 'assets/shot-panel.webp',
+          alt: 'Panel resumen en tiempo real de Mi-Tienda',
+          kicker: '01 · Resumen operativo',
+          title: 'Todo el pulso de tu comercio en un vistazo.',
+          desc: 'Apenas entrás al panel ves ventas registradas, pedidos del día, unidades activas en stock y alertas automáticas antes de quedarte sin mercadería.',
+          bullets: [
+            'Stock sincronizado en tiempo real con cualquiera de las 6 vidrieras.',
+            'Alertas automáticas de productos con stock bajo o agotado.',
+            'Acceso en 1 clic a Modo Edición visual y a tu Guía PDF de bienvenida.'
+          ]
+        },
+        productos: {
+          img: 'assets/shot-productos.webp',
+          alt: 'Gestión de productos, mayorista, costos y lista de precios PDF en Mi-Tienda',
+          kicker: '02 · Catálogo, Mayorista & PDF',
+          title: 'Minorista, mayorista, costo y lista PDF en un solo lugar.',
+          desc: 'Administrás precios públicos y privados sin hojas de cálculo aparte, reponés stock rápido con lector y generás una lista de precios en PDF lista para mandar por WhatsApp.',
+          bullets: [
+            'Campos privados de precio mayorista y precio de costo visibles solo para el dueño.',
+            'Botón «Reponer stock» ágil para actualizar ingresos de mercadería al instante.',
+            'Generador integrado de Lista de Precios en PDF para clientes y revendedores.'
+          ]
+        },
+        pedidos: {
+          img: 'assets/shot-pedidos.webp',
+          alt: 'Listado de pedidos con actualización automática y WhatsApp en Mi-Tienda',
+          kicker: '03 · Pedidos & Clientes',
+          title: 'Pedidos ordenados con actualización automática.',
+          desc: 'Cada compra entra numerada con detalle de productos, medio de pago y datos del cliente, lista para buscar por nombre o teléfono y coordinar por WhatsApp.',
+          bullets: [
+            'Filtros por estado del pedido y buscador instantáneo por cliente o teléfono.',
+            'Historial de clientes frecuentes y trazabilidad completa de cada venta.',
+            'Envío de confirmación y seguimiento por WhatsApp en un toque.'
+          ]
+        },
+        cobros: {
+          img: 'assets/shot-cobros.webp',
+          alt: 'Configuración de cobros directos con Mercado Pago sin comisión de POPUPS',
+          kicker: '04 · Cobros directos',
+          title: 'El dinero entra directo a tu Mercado Pago.',
+          desc: 'Conectás tu cuenta propia en 5 pasos guiados. POPUPS no toca tus cobros ni te cobra porcentaje por venta: solo abonás tu mensualidad fija.',
+          bullets: [
+            '0 % de comisión de POPUPS sobre tus ventas con tarjeta, débito o dinero en cuenta.',
+            'Guía paso a paso integrada dentro del panel para conectar tus credenciales en 10 minutos.',
+            'Compatible además con pago al retirar, transferencia o coordinación por WhatsApp.'
+          ]
+        }
+      };
+
+      var pShot = document.getElementById('panelShot');
+      var pKicker = document.getElementById('panelKicker');
+      var pTitle = document.getElementById('panelTitle');
+      var pDesc = document.getElementById('panelDesc');
+      var pBullets = document.getElementById('panelBullets');
+
+      document.querySelectorAll('.panel-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          var key = tab.getAttribute('data-ptab');
+          var data = PANEL_TABS[key];
+          if (!data) return;
+          document.querySelectorAll('.panel-tab').forEach(function (b) {
+            b.classList.toggle('is-active', b === tab);
+          });
+          pShot.src = data.img;
+          pShot.alt = data.alt;
+          pKicker.textContent = data.kicker;
+          pTitle.textContent = data.title;
+          pDesc.textContent = data.desc;
+          pBullets.innerHTML = data.bullets.map(function (b) {
+            return '<li><b>●</b><span>' + b + '</span></li>';
+          }).join('');
+        });
+      });
+
+      /* ============== PLANS & WHATSAPP CONFIGURATOR ============== */
+      function updateWaLink() {
+        var front = qFront ? qFront.value : 'Tech · Celeste Moderno';
+        var plan = qPlan ? qPlan.value : 'Hasta 50 productos ($50.000/mes)';
+        var biz = qBiz ? qBiz.value.trim() : '';
+        var msg = '¡Hola POPUPS! Quiero consultar por Mi-Tienda.%0A'
+          + '• Vidriera que me gustó: ' + encodeURIComponent(front) + '%0A'
+          + '• Plan de catálogo: ' + encodeURIComponent(plan);
+        if (biz) msg += '%0A• Mi negocio / rubro: ' + encodeURIComponent(biz);
+        if (qWaBtn) qWaBtn.href = 'https://wa.me/5493516452258?text=' + msg;
+      }
+
+      document.querySelectorAll('[data-pick-plan]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (qPlan) qPlan.value = btn.getAttribute('data-pick-plan');
+          updateWaLink();
+          var ct = document.getElementById('contacto');
+          if (ct) ct.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      if (qFront) qFront.addEventListener('change', updateWaLink);
+      if (qPlan) qPlan.addEventListener('change', updateWaLink);
+      if (qBiz) qBiz.addEventListener('input', updateWaLink);
+      updateWaLink();
+    })();
+  </script>
+</body>
+</html>
